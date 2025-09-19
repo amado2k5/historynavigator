@@ -3,7 +3,6 @@ import { Header } from './components/Header.tsx';
 import { MainContent } from './components/MainContent.tsx';
 import { Timeline } from './components/Timeline.tsx';
 import { RightSidebar } from './components/RightSidebar.tsx';
-import { AmbientMusicPlayer } from './components/AmbientMusicPlayer.tsx';
 import { CharacterDetailsModal } from './components/CharacterDetailsModal.tsx';
 import { WarDetailsModal } from './components/WarDetailsModal.tsx';
 import { TopicDetailsModal } from './components/TopicDetailsModal.tsx';
@@ -11,7 +10,7 @@ import { ProfileModal } from './components/ProfileModal.tsx';
 import { FavoritesModal } from './components/FavoritesModal.tsx';
 import { SharesModal } from './components/SharesModal.tsx';
 import { TourGuide } from './components/TourGuide.tsx';
-import { fetchCivilizations, fetchCivilizationData, fetchTopicCategory } from './services/geminiService.ts';
+import { fetchCivilizations, fetchCivilizationData, fetchTopicCategory, generateMapData } from './services/geminiService.ts';
 import type { Civilization, TimelineEvent, Character, War, Topic, User, Favorite, Share, TelemetryContext } from './types.ts';
 import { themes } from './themes.ts';
 import { ViewModeToggle } from './components/ViewModeToggle.tsx';
@@ -19,9 +18,7 @@ import { ThreeDView } from './components/ThreeDView.tsx';
 import { trackEvent } from './services/telemetryService.ts';
 import { SidebarToggle } from './components/SidebarToggle.tsx';
 import { EventDetailsModal } from './components/EventDetailsModal.tsx';
-import { MapModal } from './components/MapModal.tsx';
 import { AIPromptModal } from './components/AIPromptModal.tsx';
-import { AudioModal } from './components/AudioModal.tsx';
 import { Footer } from './components/Footer.tsx';
 import { LanguageModal } from './components/LanguageModal.tsx';
 import { LANGUAGES } from './constants.ts';
@@ -49,8 +46,6 @@ export type ModalState =
     | { type: 'war', name: string }
     | { type: 'topic', name: string }
     | { type: 'eventDetails', name: string }
-    | { type: 'map', name: string }
-    | { type: 'audio', name: string }
     | { type: 'aiPrompt', name: string, prompt?: string }
     | { type: 'profile' }
     | { type: 'favorites' }
@@ -62,7 +57,7 @@ interface ShareTarget {
     civilizationName: string;
     eventId: string;
     viewMode: '2D' | '3D';
-    modalType: ModalState['type'] | 'hotspot' | 'none';
+    modalType: ModalState['type'] | 'hotspot' | 'none' | 'map';
     modalId: string;
     prompt?: string;
 }
@@ -88,6 +83,7 @@ function App() {
     const isLargeScreen = useMediaQuery('(min-width: 1024px)');
     const [isSidebarVisible, setIsSidebarVisible] = useState(isLargeScreen);
     const [showLoginPrompt, setShowLoginPrompt] = useState(true);
+    const [configError, setConfigError] = useState<string | null>(null);
     
     // Refs to track previous state for telemetry
     const prevLanguageRef = useRef(language);
@@ -95,6 +91,17 @@ function App() {
     const demoTimeoutRef = useRef<number | null>(null);
     const demoUserRef = useRef<User | null>(null);
     const lastActionTimestampRef = useRef<number>(0);
+
+    // --- Configuration Check & Script Loading ---
+    useEffect(() => {
+        const geminiKey = process.env.GEMINI_API_KEY;
+    
+        if (!geminiKey) {
+            console.error("FATAL: Gemini API key is not configured. Please set the GEMINI_API_KEY environment variable in your deployment settings.");
+            setConfigError("The Google Gemini API key is missing. Please set the `GEMINI_API_KEY` environment variable in your hosting provider's settings.");
+        } 
+    }, []);
+
 
     // Sync sidebar visibility with screen size changes
     useEffect(() => {
@@ -433,14 +440,32 @@ function App() {
                 setCurrentEvent(event);
                 setViewMode(shareTarget.viewMode);
 
-                if (shareTarget.modalType !== 'hotspot' && shareTarget.modalType !== 'none') {
+                // Handle map links by opening them directly
+                if (shareTarget.modalType === 'map') {
+                    const openMapFromShare = async () => {
+                        try {
+                            const mapData = await generateMapData(event, selectedCivilization.name, language, isKidsMode);
+                            if (mapData?.centerCoordinates) {
+                                const { lat, lng } = mapData.centerCoordinates;
+                                const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+                                window.open(url, '_blank', 'noopener,noreferrer');
+                            } else {
+                                throw new Error("No coordinates found in map data.");
+                            }
+                        } catch (e) {
+                            console.error("Failed to open map from share link", e);
+                            setError("Could not generate map link from the shared URL.");
+                        }
+                    };
+                    openMapFromShare();
+                } else if (shareTarget.modalType !== 'hotspot' && shareTarget.modalType !== 'none') {
                      setActiveModal({ type: shareTarget.modalType as ModalState['type'], name: shareTarget.modalId, prompt: shareTarget.prompt });
                 }
 
                 setShareTarget(null);
             }
         }
-    }, [selectedCivilization, shareTarget]);
+    }, [selectedCivilization, shareTarget, language, isKidsMode]);
 
 
     useEffect(() => {
@@ -509,7 +534,7 @@ function App() {
         setSelectedCharacter(null);
     }, [isActionAllowed, isDemoMode, track]);
 
-    const handleOpenModal = (type: 'eventDetails' | 'map' | 'aiPrompt' | 'audio') => {
+    const handleOpenModal = (type: 'eventDetails' | 'aiPrompt') => {
         if (currentEvent) {
             track('open_modal', { type });
             setActiveModal({ type, name: currentEvent.id });
@@ -549,6 +574,22 @@ function App() {
     };
 
     const languageFullName = LANGUAGES.find(l => l.code === language)?.name || 'English';
+
+    if (configError) {
+        return (
+           <div className="flex items-center justify-center h-screen bg-[var(--color-background)] text-[var(--color-foreground)] p-8">
+               <div className="text-center max-w-2xl bg-[var(--color-background-light)] p-8 rounded-lg border" style={{borderColor: 'var(--color-primary)'}}>
+                   <h1 className="text-3xl font-bold font-heading mb-4" style={{color: 'var(--color-accent)'}}>Configuration Error</h1>
+                   <p className="text-lg mb-6 text-[var(--color-secondary)]">
+                       {configError}
+                   </p>
+                    <p className="text-sm text-[var(--color-secondary)]">
+                       Please refer to the deployment instructions in the <code>README.md</code> file for more information.
+                   </p>
+               </div>
+           </div>
+       );
+   }
 
     return (
         <I18nProvider language={language}>
@@ -671,15 +712,6 @@ function App() {
                     </div>
                 )}
                 
-                {currentEvent && selectedCivilization && (
-                    <AmbientMusicPlayer 
-                        event={currentEvent} 
-                        civilizationName={selectedCivilization.name}
-                        isKidsMode={isKidsMode}
-                        track={track}
-                    />
-                )}
-                
                 {activeModal?.type === 'eventDetails' && currentEvent && selectedCivilization && (
                     <EventDetailsModal
                         isOpen={true}
@@ -688,18 +720,6 @@ function App() {
                         character={selectedCharacter}
                         language={languageFullName}
                         civilizationName={selectedCivilization.name}
-                        isKidsMode={isKidsMode}
-                        logShare={logShare}
-                        track={track}
-                    />
-                )}
-                {activeModal?.type === 'map' && currentEvent && selectedCivilization && (
-                    <MapModal
-                        isOpen={true}
-                        onClose={() => setActiveModal(null)}
-                        event={currentEvent}
-                        civilizationName={selectedCivilization.name}
-                        language={languageFullName}
                         isKidsMode={isKidsMode}
                         logShare={logShare}
                         track={track}
@@ -714,19 +734,6 @@ function App() {
                         language={languageFullName}
                         isKidsMode={isKidsMode}
                         initialPrompt={activeModal.prompt}
-                        logShare={logShare}
-                        track={track}
-                    />
-                )}
-                {activeModal?.type === 'audio' && currentEvent && selectedCivilization && (
-                    <AudioModal
-                        isOpen={true}
-                        onClose={() => setActiveModal(null)}
-                        event={currentEvent}
-                        character={selectedCharacter}
-                        civilizationName={selectedCivilization.name}
-                        language={languageFullName}
-                        isKidsMode={isKidsMode}
                         logShare={logShare}
                         track={track}
                     />

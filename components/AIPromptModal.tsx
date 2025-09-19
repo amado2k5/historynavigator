@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { LightbulbIcon } from './Icons.tsx';
-import { fetchAIHistorianResponse, generateImage } from '../services/geminiService.ts';
+import { fetchAIHistorianResponse, findImageOnWeb } from '../services/geminiService.ts';
 import type { TimelineEvent, Share } from '../types.ts';
 import { ShareButton } from './ShareButton.tsx';
 import { useI18n } from '../contexts/I18nContext.tsx';
@@ -43,9 +43,9 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
         try {
             const textPromise = fetchAIHistorianResponse(prompt, event, civilizationName, language, isKidsMode);
 
-            const imageStyle = isKidsMode ? "Style: friendly, colorful cartoon." : "Style: evocative, artistic painting.";
-            const imagePrompt = `An artistic image visualizing the concept of: "${prompt}". Context: ${civilizationName}, during the time of ${event.title}. ${imageStyle}`;
-            const imagePromise = generateImage(imagePrompt, '4:3');
+            const imageStyle = isKidsMode ? "Style: friendly, colorful cartoon." : "Style: professional, high-resolution stock photo.";
+            const imagePrompt = `An image visualizing the concept of: "${prompt}". Context: ${civilizationName}, during the time of ${event.title}. ${imageStyle}`;
+            const imagePromise = findImageOnWeb(imagePrompt, '4:3');
 
             const [textResponse, generatedImageUrl] = await Promise.all([textPromise, imagePromise]);
 
@@ -157,7 +157,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
                                 // Placeholder while image loads after text is ready
                                 <div className="flex items-center justify-center flex-col gap-2">
                                     <LoadingSpinner />
-                                    <span className="text-sm text-[var(--color-secondary)]">{t('mainContent.generatingVista')}</span>
+                                    <span className="text-sm text-[var(--color-secondary)]">{t('mainContent.findingVista')}</span>
                                 </div>
                             )}
                         </div>

@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "모든 주제 탐색",
+    "exploreSubtext": "인물, 사건, 장소... 타임라인이 기다립니다",
+    "kidsMode": "어린이",
+    "tourButton": "투어하기",
+    "exitDemoButton": "데모 종료",
+    "loginButton": "로그인 / 가입",
+    "searchPlaceholder": "인물, 사건 또는 장소를 검색하세요...",
+    "loading": "로드 중..."
+  },
+  "footer": {
+    "contact": "문의하기",
+    "copyright": "저작권 2025 timelineThis.app",
+    "disclaimer": "면책 조항(이 애플리케이션은 Google AI Studio를 사용하여 개발되었습니다. 데모 목적으로만 사용되며 프로덕션 용도로는 사용되어서는 안 됩니다)."
+  },
+  "login": {
+    "welcome": "에 오신 것을 환영합니다",
+    "signInPrompt": "발견 사항을 저장하고 여정을 개인화하려면 로그인하세요.",
+    "signInWith": "{{provider}}(으)로 로그인"
+  },
+  "mainContent": {
+    "welcomeMessage": "환영합니다, {{name}}님",
+    "explorer": "탐험가",
+    "selectCivilization": "여정을 시작하려면 문명을 선택하세요.",
+    "exploreCivilization": "{{name}} 탐험하기",
+    "selectEvent": "자세히 알아보려면 아래 타임라인에서 이벤트를 선택하세요.",
+    "generatingVista": "역사적 풍경 생성 중...",
+    "findingVista": "역사적 풍경 찾는 중..."
+  },
+  "eventBubble": {
+    "readDetails": "세부 정보 읽기",
+    "viewOnMap": "지도에서 보기",
+    "askAI": "AI에게 물어보기",
+    "loadingMap": "지도 로드 중..."
+  },
+  "sidebar": {
+    "keyCharacters": "주요 인물",
+    "majorWars": "주요 전쟁",
+    "culturalTopics": "문화적 주제",
+    "sources": "출처",
+    "myFavorites": "내 즐겨찾기",
+    "relatedLinks": "관련 링크",
+    "exploreOn": "{{platform}}에서 탐색하기"
+  },
+  "ambientPlayer": {
+    "findingMusic": "배경 음악 찾는 중..."
+  },
+  "modals": {
+    "close": "닫기",
+    "historicalOverview": "역사적 개요",
+    "perspective": "{{characterName}}의 관점",
+    "error": "세부 정보를 로드할 수 없습니다. 다시 시도해 주세요.",
+    "imageError": "이미지를 생성할 수 없습니다.",
+    "playNarration": "내레이션 재생",
+    "stopNarration": "내레이션 중지",
+    "eventDetailsTitle": "이벤트 세부 정보",
+    "mapTitle": "{{eventName}}의 지도",
+    "location": "위치",
+    "pointsOfInterest": "관심 지점",
+    "loadingRecords": "역사 기록 검색 중...",
+    "drawingMaps": "고대 지도 그리는 중...",
+    "selectPOI": "자세히 알아보려면 관심 지점을 선택하세요.",
+    "aiPromptTitle": "역사학자 AI에게 물어보세요",
+    "aiPromptSubtext": "\"{{eventName}}\"에 대한 구체적인 질문이 있으신가요? 물어보세요!",
+    "aiPromptPlaceholder": "예: 평민의 일상은 어땠나요?",
+    "ask": "질문하기",
+    "thinking": "생각 중...",
+    "aiError": "AI로부터 응답을 받지 못했습니다. 다시 시도해 주세요.",
+    "consultingArchives": "기록 보관소 참조 중...",
+    "paintingDiscovery": "당신의 발견을 그리는 중...",
+    "audioTitle": "오디오 경험: {{eventName}}",
+    "audioSubtext": "이 이벤트에 대한 이야기를 들어보세요.",
+    "audioError": "오디오 경험을 만들 수 없습니다. 다시 시도해 주세요.",
+    "profileTitle": "프로필",
+    "signedInWith": "{{provider}}(으)로 로그인됨",
+    "favorites": "즐겨찾기",
+    "shares": "공유",
+    "favoritesTitle": "내 즐겨찾기",
+    "noFavorites": "아직 즐겨찾기한 항목이 없습니다. 이벤트나 주제의 별 아이콘을 클릭하여 여기에 저장하세요.",
+    "sharesTitle": "내 공유 기록",
+    "noShares": "아직 공유한 항목이 없습니다. 링크를 생성하려면 콘텐츠의 공유 아이콘을 사용하세요.",
+    "sharedOn": "{{date}}에 공유됨",
+    "copyLink": "링크 복사",
+    "copied": "복사됨!",
+    "languageTitle": "언어 선택",
+    "visualizing": "시각화 중: {{eventName}}",
+    "videoError": "비디오를 생성하지 못했습니다. 현재 아카이브가 봉인되었을 수 있습니다.",
+    "conjuringVisions": "과거의 환영을 불러내는 중...",
+    "gatheringPigments": "역사적 안료 수집 중...",
+    "consultingCinematographers": "천상의 촬영 감독과 상담 중...",
+    "weavingTime": "시간의 실을 필름으로 엮는 중...",
+    "patience": "1~2분 정도 걸릴 수 있습니다. 기다려 주셔서 감사합니다!",
+    "renderingLandscapes": "고대 풍경 렌더링 중...",
+    "animatingFigures": "역사적 인물 애니메이션화 중..."
+  },
+  "userProfile": {
+    "profile": "프로필",
+    "favorites": "즐겨찾기",
+    "shares": "공유",
+    "signOut": "로그아웃"
+  },
+  "tooltips": {
+    "favorite": "즐겨찾기",
+    "unfavorite": "즐겨찾기 해제",
+    "share": "공유하기",
+    "linkCopied": "링크가 복사되었습니다!"
+  },
+  "threeDView": {
+    "sceneError": "몰입형 장면을 만들 수 없습니다. 다른 이벤트를 시도해 주세요.",
+    "generatingVista": "역사적 풍경 생성 중...",
+    "findingVista": "역사적 풍경 찾는 중...",
+    "populatingScene": "장면에 캐릭터 채우는 중...",
+    "interactWith": "{{hotspotName}}와(과) 상호작용하기",
+    "nothingToSay": "할 말이 없습니다."
+  },
+  "tour": {
+    "welcome": "환영합니다! 투어가 시작됩니다...",
+    "start": "고전 문명인 고대 로마를 탐험하며 시작해 봅시다.",
+    "timeline": "타임라인입니다. 이벤트를 선택해 봅시다.",
+    "readDetails": "이 이벤트에 대한 자세한 내용을 읽을 수 있습니다.",
+    "canFavorite": "흥미로운 항목을 즐겨찾기에 저장할 수 있습니다.",
+    "viewFavorites": "저장된 즐겨찾기를 봅시다.",
+    "sharing": "고유한 링크로 발견 사항을 쉽게 공유할 수 있습니다.",
+    "shareHistory": "공유 기록은 프로필에도 저장됩니다.",
+    "sidebar": "오른쪽 사이드바에는 탐색할 더 많은 주제가 있습니다.",
+    "keyCharacter": "주요 인물에 대해 알아봅시다.",
+    "majorConflict": "그리고 주요 분쟁에 대해서도...",
+    "threeDView": "이제 몰입형 3D 뷰로!",
+    "hotspots": "장면과 상호작용하려면 핫스팟을 클릭할 수 있습니다.",
+    "dynamicSearch": "현대적인 주제에 대한 동적 검색을 시도해 봅시다.",
+    "restarting": "이제 투어가 다시 시작됩니다. 언제든지 종료할 수 있습니다."
+  }
+}

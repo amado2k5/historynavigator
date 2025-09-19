@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-// FIX: Added generateImage import.
-import { fetchTopicDetails, generateImage } from '../services/geminiService.ts';
+// FIX: Added findImageOnWeb import.
+import { fetchTopicDetails, findImageOnWeb } from '../services/geminiService.ts';
 import { ShareButton } from './ShareButton.tsx';
 import type { TimelineEvent, Share } from '../types.ts';
 import { useI18n } from '../contexts/I18nContext.tsx';
@@ -55,8 +55,8 @@ export const TopicDetailsModal: React.FC<TopicDetailsModalProps> = ({ isOpen, on
 
                     const imagePrompt = isKidsMode
                         ? `A colorful and simple cartoon illustration about ${topicName} in ${civilizationName}. Style: educational, for kids.`
-                        : `An evocative and symbolic image representing the cultural topic of ${topicName} within the ${civilizationName} civilization. Style: artistic, metaphorical.`;
-                    const imageUrlPromise = generateImage(imagePrompt, '4:3');
+                        : `An evocative and symbolic image representing the cultural topic of ${topicName} within the ${civilizationName} civilization. Style: high-quality, professional stock photo.`;
+                    const imageUrlPromise = findImageOnWeb(imagePrompt, '4:3');
 
                     const [detailedText, url] = await Promise.all([detailedTextPromise, imageUrlPromise]);
                     

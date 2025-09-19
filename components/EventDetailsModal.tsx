@@ -3,10 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-import { fetchEventDetails, generateImage, fetchVoiceDescription } from '../services/geminiService.ts';
-import { speak, cancelSpeech } from '../services/voiceService.ts';
-import type { TimelineEvent, Character, VoiceDescription, Share } from '../types.ts';
-import { PlayIcon, PauseIcon } from './Icons.tsx';
+import { fetchEventDetails, findImageOnWeb } from '../services/geminiService.ts';
+import type { TimelineEvent, Character, Share } from '../types.ts';
 import { ShareButton } from './ShareButton.tsx';
 import { useI18n } from '../contexts/I18nContext.tsx';
 
@@ -28,8 +26,6 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
     const [error, setError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
-    const [isNarrating, setIsNarrating] = useState(false);
-    const [voiceDescription, setVoiceDescription] = useState<VoiceDescription | null>(null);
     const { t, language: langCode } = useI18n();
 
     const generateShareUrl = () => {
@@ -46,11 +42,6 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
     };
 
     useEffect(() => {
-        const cleanup = () => {
-            cancelSpeech();
-            setIsNarrating(false);
-        };
-
         if (isOpen) {
             const loadDetails = async () => {
                 setIsLoading(true);
@@ -58,25 +49,18 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
                 setError(null);
                 setDetails('');
                 setImageUrl(null);
-                setVoiceDescription(null);
                 try {
                     const detailedTextPromise = fetchEventDetails(event, character, civilizationName, language, isKidsMode);
 
                     const imagePrompt = isKidsMode
                         ? `A vibrant and friendly cartoon illustration of the historical event: "${event.title}" from the ${civilizationName} civilization. Style: children's storybook.`
-                        : `A photorealistic and cinematic scene visualizing the historical event: "${event.title}" from the ${civilizationName} civilization. Style: detailed, atmospheric.`;
-                    const imageUrlPromise = generateImage(imagePrompt, '16:9');
-
-                    const voiceContext = character 
-                        ? `${character.name} narrating the event "${event.title}" in ${civilizationName}.`
-                        : `A historical narrator describing the event "${event.title}" in ${civilizationName}.`;
-                    const voiceDescPromise = fetchVoiceDescription(voiceContext, language, isKidsMode);
-
-                    const [detailedText, url, voiceDesc] = await Promise.all([detailedTextPromise, imageUrlPromise, voiceDescPromise]);
+                        : `A cinematic scene visualizing the historical event: "${event.title}" from the ${civilizationName} civilization. Style: detailed, atmospheric, high-quality stock photo.`;
+                    const imageUrlPromise = findImageOnWeb(imagePrompt, '16:9');
+                    
+                    const [detailedText, url] = await Promise.all([detailedTextPromise, imageUrlPromise]);
 
                     setDetails(detailedText);
                     setImageUrl(url);
-                    setVoiceDescription(voiceDesc);
 
                 } catch (e) {
                     console.error("Failed to fetch event details or image:", e);
@@ -88,29 +72,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
             };
             loadDetails();
         }
-
-        return cleanup;
     }, [isOpen, event, character, civilizationName, language, isKidsMode, t]);
-
-    const handleToggleNarration = () => {
-        if (!details || !voiceDescription) return;
-
-        if (isNarrating) {
-            track('narration_stopped', { source: 'eventDetails', character: character?.name || 'narrator' });
-            cancelSpeech();
-            setIsNarrating(false);
-        } else {
-            track('narration_started', { source: 'eventDetails', character: character?.name || 'narrator' });
-            speak(details, voiceDescription, {
-                onend: () => setIsNarrating(false),
-                onerror: (e) => {
-                    console.error("Speech synthesis error", e);
-                    setIsNarrating(false);
-                }
-            });
-            setIsNarrating(true);
-        }
-    };
 
     const perspective = character ? t('modals.perspective', { characterName: character.name }) : t('modals.historicalOverview');
 
@@ -129,17 +91,6 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
                         onShareClick={() => track('share_content', { type: 'eventDetails', id: event.id })}
                         onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                     />
-                    <button
-                        onClick={handleToggleNarration}
-                        disabled={isLoading || !details}
-                        className="p-2 rounded-full hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        aria-label={isNarrating ? t('modals.stopNarration') : t('modals.playNarration')}
-                    >
-                        {isNarrating
-                            ? <PauseIcon className="w-6 h-6 text-[var(--color-accent)]" />
-                            : <PlayIcon className="w-6 h-6 text-[var(--color-secondary)]" />
-                        }
-                    </button>
                 </div>
             </div>
 

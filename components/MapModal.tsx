@@ -1,16 +1,74 @@
-
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-// FIX: Added .ts extension to the import path.
 import type { TimelineEvent, MapData, Share } from '../types.ts';
-// FIX: Added .ts extension to the import path.
-import { generateMapData, generateImage } from '../services/geminiService.ts';
-// FIX: Added .tsx extension to the import path.
+import { generateMapData } from '../services/geminiService.ts';
 import { MapPinIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
 import { useI18n } from '../contexts/I18nContext.tsx';
+
+// FIX: Add namespace declarations for the Google Maps API to resolve TypeScript errors.
+// This provides type information for the `google` object loaded from an external script.
+declare namespace google {
+    namespace maps {
+        interface LatLngLiteral {
+            lat: number;
+            lng: number;
+        }
+
+        interface MapOptions {
+            center?: LatLngLiteral;
+            zoom?: number;
+            mapTypeId?: string;
+            disableDefaultUI?: boolean;
+            zoomControl?: boolean;
+            streetViewControl?: boolean;
+            mapTypeControl?: boolean;
+            styles?: any[];
+        }
+
+        class Map {
+            constructor(mapDiv: HTMLDivElement | null, opts?: MapOptions);
+            panTo(latLng: LatLngLiteral): void;
+        }
+
+        enum Animation {
+            DROP = 1,
+        }
+
+        interface MarkerOptions {
+            position?: LatLngLiteral;
+            map?: Map;
+            title?: string;
+            animation?: Animation;
+        }
+
+        class Marker {
+            constructor(opts?: MarkerOptions);
+            setMap(map: Map | null): void;
+            getTitle(): string | null;
+            addListener(eventName: string, handler: (...args: any[]) => void): MapsEventListener;
+        }
+
+        interface MapsEventListener {
+            remove(): void;
+        }
+
+        class InfoWindow {
+            constructor(opts?: any);
+            setContent(content: string): void;
+            open(map?: Map, anchor?: Marker): void;
+        }
+    }
+}
+
+
+// Extend the window interface to include google.maps
+declare global {
+    interface Window {
+        google: typeof google;
+    }
+}
 
 interface MapModalProps {
     isOpen: boolean;
@@ -25,12 +83,15 @@ interface MapModalProps {
 
 export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civilizationName, language, isKidsMode, logShare, track }) => {
     const [mapData, setMapData] = useState<MapData | null>(null);
-    const [mapImageUrl, setMapImageUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingImage, setIsLoadingImage] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedPoi, setSelectedPoi] = useState<MapData['pointsOfInterest'][0] | null>(null);
     const { t, language: langCode } = useI18n();
+
+    const mapRef = useRef<HTMLDivElement>(null);
+    const mapInstance = useRef<google.maps.Map | null>(null);
+    const markersRef = useRef<google.maps.Marker[]>([]);
+    const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
 
      const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -48,44 +109,101 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
     const handlePoiSelect = (poi: MapData['pointsOfInterest'][0]) => {
         track('select_poi', { name: poi.name });
         setSelectedPoi(poi);
+        if (mapInstance.current && poi.coordinates) {
+            mapInstance.current.panTo(poi.coordinates);
+            const marker = markersRef.current.find(m => m.getTitle() === poi.name);
+            if(marker && infoWindowRef.current) {
+                infoWindowRef.current.setContent(`
+                    <div style="color: black; font-family: sans-serif;">
+                        <h4 style="font-weight: bold; margin-bottom: 4px;">${poi.name}</h4>
+                        <p>${poi.description}</p>
+                    </div>
+                `);
+                infoWindowRef.current.open(mapInstance.current, marker);
+            }
+        }
+    };
+    
+    // Cleanup function to remove markers from map
+    const clearMarkers = () => {
+        markersRef.current.forEach(marker => marker.setMap(null));
+        markersRef.current = [];
     };
 
     useEffect(() => {
         if (isOpen) {
-            const fetchMapDataAndImage = async () => {
+            const fetchMapDetails = async () => {
                 setIsLoading(true);
-                setIsLoadingImage(true);
                 setError(null);
                 setSelectedPoi(null);
                 setMapData(null);
-                setMapImageUrl(null);
+                clearMarkers();
 
                 try {
                     const data = await generateMapData(event, civilizationName, language, isKidsMode);
                     setMapData(data);
-                    
-                    setIsLoading(false);
-
-                    if (data) {
-                        const poiList = data.pointsOfInterest.map(p => p.name).join(', ');
-                        const prompt = isKidsMode 
-                            ? `A fun, colorful cartoon treasure map illustrating the area for the historical event "${event.title}". The map should feel adventurous and show these key locations in a playful style: ${poiList}. The overall style should be a simple, hand-drawn illustration suitable for kids.`
-                            : `A stylized, atmospheric, and ancient-looking aerial map depicting the key locations for the historical event "${event.title}". The map should show the geography described as "${data.mapDescription}" and include these points of interest: ${poiList}. The style should resemble an old, hand-drawn cartograph from the ${civilizationName} era. Avoid using modern text labels.`;
-                        
-                        const imageUrl = await generateImage(prompt, '1:1');
-                        setMapImageUrl(imageUrl);
-                    }
                 } catch (err) {
                     setError(t('modals.error'));
                     console.error(err);
-                    setIsLoading(false);
                 } finally {
-                    setIsLoadingImage(false);
+                    setIsLoading(false);
                 }
             };
-            fetchMapDataAndImage();
+            fetchMapDetails();
+        } else {
+             // Cleanup on close
+            clearMarkers();
+            mapInstance.current = null;
         }
     }, [isOpen, event, civilizationName, language, isKidsMode, t]);
+
+    // Google Maps initialization effect
+    useEffect(() => {
+        if (!isOpen || !mapData || isLoading) return;
+
+        if (window.google && mapRef.current && !mapInstance.current) {
+            const mapOptions: google.maps.MapOptions = {
+                center: mapData.centerCoordinates,
+                zoom: 12,
+                mapTypeId: 'satellite', // Aerial view
+                disableDefaultUI: true,
+                zoomControl: true,
+                streetViewControl: false,
+                mapTypeControl: false,
+                styles: [ // Custom styles to better fit the dark theme
+                    { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+                    { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
+                    { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+                    {
+                        featureType: 'administrative.locality',
+                        elementType: 'labels.text.fill',
+                        stylers: [{ color: '#d59563' }],
+                    },
+                    // ... other styles
+                ]
+            };
+
+            mapInstance.current = new window.google.maps.Map(mapRef.current, mapOptions);
+            infoWindowRef.current = new window.google.maps.InfoWindow();
+
+            // Add markers for points of interest
+            mapData.pointsOfInterest.forEach(poi => {
+                if (poi.coordinates) {
+                    const marker = new window.google.maps.Marker({
+                        position: poi.coordinates,
+                        map: mapInstance.current,
+                        title: poi.name,
+                        animation: window.google.maps.Animation.DROP
+                    });
+                    
+                    marker.addListener('click', () => {
+                        handlePoiSelect(poi);
+                    });
+                    markersRef.current.push(marker);
+                }
+            });
+        }
+    }, [isOpen, isLoading, mapData]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -100,22 +218,20 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                 />
             </div>
 
-            {(isLoading || isLoadingImage) && (
+            {isLoading && (
                 <div className="flex justify-center items-center h-96 flex-col">
                     <LoadingSpinner />
-                    <p className="mt-4 text-[var(--color-secondary)]">
-                        {isLoading ? t('modals.loadingRecords') : t('modals.drawingMaps')}
-                    </p>
+                    <p className="mt-4 text-[var(--color-secondary)]">{t('modals.loadingRecords')}</p>
                 </div>
             )}
             {error && <p className="text-red-400 text-center py-10">{error}</p>}
-            {!isLoading && !isLoadingImage && mapData && (
+            {!isLoading && mapData && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="md:col-span-1">
                         <h3 className="font-bold text-lg font-heading mb-2">{t('modals.location')}</h3>
                         <p className="text-[var(--color-secondary)] mb-4">{mapData.mapDescription}</p>
                         <h3 className="font-bold text-lg font-heading mb-2">{t('modals.pointsOfInterest')}</h3>
-                         <ul className="text-sm text-[var(--color-secondary)] space-y-2">
+                         <ul className="text-sm text-[var(--color-secondary)] space-y-2 max-h-[350px] overflow-y-auto">
                             {mapData.pointsOfInterest.map((poi, index) => (
                                 <li key={index}>
                                      <button 
@@ -129,37 +245,9 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                             ))}
                         </ul>
                     </div>
-                     <div className="md:col-span-2 bg-gray-800 rounded-lg min-h-[400px] flex items-center justify-center p-4 relative overflow-hidden">
-                        
-                        {mapImageUrl ? (
-                            <img src={mapImageUrl} alt={`Map for ${event.title}`} className="absolute inset-0 w-full h-full object-cover rounded-lg" />
-                        ) : (
-                             <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{backgroundImage: 'url(https://www.transparenttextures.com/patterns/subtle-carbon.png)'}}></div>
-                        )}
-                        
-                        <div className="absolute inset-0 bg-black bg-opacity-20 rounded-lg"></div>
-
-                        {selectedPoi ? (
-                            <div className="relative z-10 p-6 max-w-md animate-fade-in text-center backdrop-blur-sm bg-black/30 rounded-lg">
-                                <button 
-                                    onClick={() => setSelectedPoi(null)} 
-                                    className="absolute top-2 right-2 p-1 bg-black bg-opacity-30 rounded-full text-white hover:bg-opacity-50 transition-colors"
-                                    aria-label={t('modals.close')}
-                                >
-                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                                 <h4 className="text-2xl font-bold font-heading mb-2 text-white drop-shadow-lg" style={{color: 'var(--color-accent)'}}>
-                                     {selectedPoi.name}
-                                 </h4>
-                                 <p className="text-white leading-relaxed drop-shadow-md">
-                                     {selectedPoi.description}
-                                 </p>
-                            </div>
-                        ) : (
-                             <p className="text-white relative z-10 drop-shadow-lg">{t('modals.selectPOI')}</p>
-                        )}
+                     <div className="md:col-span-2 bg-[var(--color-background-light)] rounded-lg min-h-[400px] flex items-center justify-center p-4 relative overflow-hidden">
+                        <div ref={mapRef} className="absolute inset-0 w-full h-full" />
+                        {!window.google && <p className="text-center text-red-400">{t('modals.error')}</p>}
                     </div>
                 </div>
             )}

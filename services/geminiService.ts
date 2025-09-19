@@ -1,12 +1,12 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import type { TimelineEvent, Character, Civilization, MapData, MusicParameters, SceneHotspot, VoiceDescription } from '../types.ts';
+// FIX: Added VoiceDescription to the type import.
+import type { TimelineEvent, Character, Civilization, MapData, SceneHotspot, VoiceDescription } from '../types.ts';
 import { withCache } from './cacheService.ts';
 
 // Guideline: Always use new GoogleGenAI({apiKey: process.env.API_KEY});
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const textModel = 'gemini-2.5-flash';
-const imageModel = 'imagen-4.0-generate-001';
 
 // FIX: Added a robust retry mechanism to handle API rate limiting (429 errors).
 const MAX_RETRIES = 4;
@@ -344,63 +344,127 @@ export const fetchTopicDetails = async (topicName: string, civilizationName: str
     });
 };
 
-export const generateImage = async (prompt: string, aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4'): Promise<string> => {
-    return withCache(['image', prompt, aspectRatio], async () => {
-        // --- Primary Method: AI Image Generation ---
+export const findAmbientMusicOnWeb = async (event: TimelineEvent, civilizationName: string, isKidsMode: boolean): Promise<string | null> => {
+    return withCache(['ambientMusic', event.id, civilizationName, isKidsMode], async () => {
+        const kidStyle = isKidsMode ? "happy, playful, and simple instrumental" : "atmospheric, cinematic, and emotional";
+        const prompt = `Find a direct URL to a publicly accessible, royalty-free audio file (.mp3, .wav, .ogg) for ambient background music. 
+        The music should be suitable for the historical event: "${event.title}" (${event.date}) from ${civilizationName}.
+        The overall mood should be related to this summary: "${event.summary}".
+        The style should be ${kidStyle}.
+        Prioritize instrumental music.
+        Prioritize sources like Pixabay, Free Music Archive, or Wikimedia Commons that allow direct linking.
+        Respond with ONLY the raw URL and nothing else. If no suitable URL is found, respond with "null".
+        Example response: https://cdn.pixabay.com/audio/some-file.mp3
+        `;
+
         try {
-            const response = await apiCallWithRetry(() => ai.models.generateImages({
-                model: imageModel,
-                prompt: prompt,
+            const response = await apiCallWithRetry(() => ai.models.generateContent({
+                model: textModel,
+                contents: prompt,
                 config: {
-                  numberOfImages: 1,
-                  outputMimeType: 'image/jpeg',
-                  aspectRatio: aspectRatio,
+                    tools: [{ googleSearch: {} }],
                 },
             }));
-            const base64ImageBytes: string = response.generatedImages[0].image.imageBytes;
-            return `data:image/jpeg;base64,${base64ImageBytes}`;
-        } catch (e) {
-            console.warn(`AI image generation failed. Attempting fallback with web search.`, e);
-            
-            // --- Fallback Method: Web Search for Image URL ---
-            const MAX_FALLBACK_ATTEMPTS = 2;
-            for (let i = 0; i < MAX_FALLBACK_ATTEMPTS; i++) {
-                try {
-                    const attemptSuffix = i > 0 ? ` Please provide a different image source than before.` : '';
-                    const fallbackPrompt = `Find a URL for a high-quality, non-AI-generated, public domain or Creative Commons licensed image that visually represents: "${prompt}". The image must be directly usable as a src in an <img> tag. Respond with ONLY the raw URL and nothing else. Pick an image from a reliable source like Wikipedia, Wikimedia Commons, Unsplash, or Pexels.${attemptSuffix}`;
-                    
-                    const response = await apiCallWithRetry(() => ai.models.generateContent({
-                        model: textModel,
-                        contents: fallbackPrompt,
-                        config: {
-                            tools: [{ googleSearch: {} }],
-                        },
-                    }));
 
-                    // More robustly parse the response to find a URL
-                    const responseText = response.text.trim();
-                    const urlRegex = /(https?:\/\/[^\s"'`)]+\.(?:jpg|jpeg|png|gif|webp))/i;
-                    const match = responseText.match(urlRegex);
-                    
-                    if (match && match[0]) {
-                        const imageUrl = match[0];
-                        console.log(`Fallback image found (Attempt ${i + 1}): ${imageUrl}`);
-                        return imageUrl;
-                    } else {
-                        console.warn(`Fallback attempt ${i + 1} did not return a valid image URL. Response: "${responseText}"`);
-                    }
-                } catch (fallbackError) {
-                    console.error(`Fallback image search attempt ${i + 1} failed with an error.`, fallbackError);
-                    if (i === MAX_FALLBACK_ATTEMPTS - 1) {
-                        throw fallbackError; // Re-throw the final error after all attempts fail
-                    }
-                }
+            const responseText = response.text.trim();
+            if (responseText.toLowerCase() === 'null' || !responseText.startsWith('http')) {
+                console.warn(`Could not find an ambient music URL for "${event.title}". Response: ${responseText}`);
+                return null;
             }
-            // If the loop finishes without returning, all attempts failed to produce a valid URL.
-            throw new Error("All fallback attempts failed to produce a valid image URL.");
+
+            // Basic validation for an audio URL
+            const urlRegex = /(https?:\/\/[^\s"'`)]+\.(?:mp3|wav|ogg|m4a))/i;
+            const match = responseText.match(urlRegex);
+
+            if (match && match[0]) {
+                console.log(`Found ambient music URL: ${match[0]}`);
+                return match[0];
+            } else {
+                 console.warn(`Response did not contain a valid audio URL: ${responseText}`);
+                 return null;
+            }
+        } catch (error) {
+            console.error(`Error finding ambient music for "${event.title}":`, error);
+            return null; // Return null on error to fail gracefully
         }
     });
 };
+
+// FIX: Added generateAudioScript function for audio modal narration.
+export const generateAudioScript = async (event: TimelineEvent, character: Character | null, civilizationName: string, language: string, isKidsMode: boolean): Promise<string> => {
+    return withCache(['audioScript', event.id, character?.name, civilizationName, language, isKidsMode], () => {
+        const prefix = getPromptPrefix(language, isKidsMode);
+        const perspective = character ? ` from the first-person perspective of ${character.name}` : ` from the perspective of a historical narrator`;
+        const prompt = `${prefix}Create a short, engaging audio narration script (2-3 paragraphs) for the event: "${event.title}" (${event.date}) within the context of ${civilizationName}. The script should be written ${perspective}. It should be vivid and descriptive, suitable for being read aloud.`;
+        return generateTextWithFallback(prompt);
+    });
+};
+
+// FIX: Added fetchVoiceDescription function for audio modal narration.
+export const fetchVoiceDescription = async (context: string, language: string, isKidsMode: boolean): Promise<VoiceDescription> => {
+    return withCache(['voiceDescription', context, language, isKidsMode], () => {
+        const kidModePrompt = isKidsMode ? `The voice should be friendly, warm, and expressive, suitable for a child. A medium pitch and rate is preferred.` : `The voice should match the historical context. It could be serious, scholarly, or dramatic as appropriate.`;
+        const prompt = `Based on the context "${context}", describe the ideal voice for a narration.
+        ${kidModePrompt}
+        - The language code for ${language} must be used for the accent. For example, for English, use "en-US"; for Spanish, use "es-ES".
+        - Choose a suitable gender, pitch, and rate.
+        Provide the data in the specified JSON format.
+        `;
+        const schema = {
+            type: Type.OBJECT,
+            properties: {
+                pitch: { type: Type.STRING, enum: ['very low', 'low', 'medium', 'high', 'very high'] },
+                rate: { type: Type.STRING, enum: ['very slow', 'slow', 'medium', 'fast', 'very fast'] },
+                accentLanguage: { type: Type.STRING, description: "An IETF language tag, e.g., 'en-US', 'fr-FR'" },
+                gender: { type: Type.STRING, enum: ['male', 'female', 'neutral'] },
+            },
+            required: ['pitch', 'rate', 'accentLanguage', 'gender']
+        };
+        return generateAndParseJson(prompt, schema);
+    });
+};
+
+export const findImageOnWeb = async (prompt: string, aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4'): Promise<string> => {
+    // Note: aspectRatio is no longer directly used but kept for signature compatibility to minimize changes in calling components.
+    return withCache(['webImage', prompt], async () => {
+        console.log(`Searching for image on the web for prompt: "${prompt}"`);
+        
+        const MAX_FALLBACK_ATTEMPTS = 2;
+        for (let i = 0; i < MAX_FALLBACK_ATTEMPTS; i++) {
+            try {
+                const attemptSuffix = i > 0 ? ` Please provide a different image source than before.` : '';
+                const webSearchPrompt = `Find a URL for a professional, high-quality, non-AI-generated, photorealistic stock photo that visually represents: "${prompt}". The image must be from a source that allows direct hotlinking (e.g., Wikipedia, Wikimedia Commons, Pexels, Unsplash) and have a public domain or Creative Commons license. The image must be directly usable as a 'src' in an <img> tag without causing CORS or 403 Forbidden errors. Do not return results from sites that use watermarks (like Shutterstock previews, Getty, etc.) or require logins. Respond with ONLY the raw, direct image URL and nothing else.${attemptSuffix}`;
+                
+                const response = await apiCallWithRetry(() => ai.models.generateContent({
+                    model: textModel,
+                    contents: webSearchPrompt,
+                    config: {
+                        tools: [{ googleSearch: {} }],
+                    },
+                }));
+
+                const responseText = response.text.trim();
+                const urlRegex = /(https?:\/\/[^\s"'`)]+\.(?:jpg|jpeg|png|gif|webp))/i;
+                const match = responseText.match(urlRegex);
+                
+                if (match && match[0]) {
+                    const imageUrl = match[0];
+                    console.log(`Web image found (Attempt ${i + 1}): ${imageUrl}`);
+                    return imageUrl;
+                } else {
+                    console.warn(`Web search attempt ${i + 1} did not return a valid image URL. Response: "${responseText}"`);
+                }
+            } catch (searchError) {
+                console.error(`Web image search attempt ${i + 1} failed with an error.`, searchError);
+                if (i === MAX_FALLBACK_ATTEMPTS - 1) {
+                    throw searchError;
+                }
+            }
+        }
+        throw new Error("All web search attempts failed to produce a valid image URL.");
+    });
+};
+
 
 // FIX: Added generateVideo function to resolve missing export error.
 export const generateVideo = async (event: TimelineEvent, character: Character | null, civilizationName: string, language: string, isKidsMode: boolean): Promise<string> => {
@@ -441,24 +505,10 @@ export const generateVideo = async (event: TimelineEvent, character: Character |
     });
 };
 
-export const generateAudioScript = async (event: TimelineEvent, character: Character | null, civilizationName:string, language: string, isKidsMode: boolean): Promise<string> => {
-    return withCache(['audioScript', event.id, character?.name, civilizationName, language, isKidsMode], () => {
-        const prefix = getPromptPrefix(language, isKidsMode);
-        const perspective = character ? ` from the perspective of ${character.name}` : '';
-        const kidModeStyle = isKidsMode
-            ? ` The script should be simple, engaging, and told in a friendly storytelling style suitable for a 5-year-old. It can be a short story or a simple explanation.`
-            : ` The script could be a dramatic first-person monologue, a short dialogue between two people witnessing the event, or a formal news report from that era. Be creative and evocative.`;
-
-        const prompt = `${prefix}You are a historical scriptwriter. Create a short audio script for the historical event: "${event.title}" (${event.date}) for the context of ${civilizationName}${perspective}. Event summary: ${event.summary}. The script should be a few paragraphs long (about 100-150 words).${kidModeStyle} The output should be only the script text, without any labels like "Script:" or character names if it's a monologue.`;
-
-        return generateTextWithFallback(prompt);
-    });
-};
-
 export const generateMapData = async (event: TimelineEvent, civilizationName: string, language: string, isKidsMode: boolean): Promise<MapData> => {
     return withCache(['mapData', event.id, civilizationName, language, isKidsMode], () => {
         const prefix = getPromptPrefix(language, isKidsMode);
-        const prompt = `${prefix}For the historical event "${event.title}" (${event.date}) in the context of ${civilizationName}, describe the geographical setting and identify 3-5 key points of interest relevant to the event. Provide the data in the specified JSON format. Descriptions should be concise.`;
+        const prompt = `${prefix}For the historical event "${event.title}" (${event.date}) in ${civilizationName}, determine its central geographic coordinates (latitude and longitude). Also identify 3-5 key points of interest with their coordinates. Provide the data in the specified JSON format. Descriptions must be concise.`;
         const schema = {
             type: Type.OBJECT,
             properties: {
@@ -466,87 +516,32 @@ export const generateMapData = async (event: TimelineEvent, civilizationName: st
                     type: Type.STRING,
                     description: "A brief, one-sentence description of the overall geographical area."
                 },
+                centerCoordinates: {
+                    type: Type.OBJECT,
+                    properties: {
+                        lat: { type: Type.NUMBER },
+                        lng: { type: Type.NUMBER }
+                    }
+                },
                 pointsOfInterest: {
                     type: Type.ARRAY,
                     items: {
                         type: Type.OBJECT,
                         properties: {
                             name: { type: Type.STRING },
-                            description: { type: Type.STRING, description: "A one or two-sentence description of the location's significance to the event." }
-                        }
-                    }
-                }
-            }
-        };
-        return generateAndParseJson(prompt, schema);
-    });
-};
-
-export const fetchMusicDescription = async (event: TimelineEvent, civilizationName: string, isKidsMode: boolean): Promise<string> => {
-    return withCache(['musicDescription', event.id, civilizationName, isKidsMode], () => {
-        const kidModePrompt = isKidsMode
-            ? "The music should be simple, cheerful, and light, like a classical piece for children (e.g., 'Peter and the Wolf'). Use major keys and a playful mood."
-            : "The music should be instrumental, in a classical style that is evocative of the historical period. It should be emotionally resonant with the event, whether somber, majestic, tense, or celebratory.";
-        const prompt = `
-            Describe a short, looping piece of classical instrumental music for the historical event: "${event.title}" (${event.date}) from the context of ${civilizationName}.
-            Event summary: ${event.summary}.
-            ${kidModePrompt}
-            The description should be a single paragraph. Specify the mood, tempo (e.g., slow, moderate, fast), a primary instrument (e.g., flute, violin, piano, harp), and a simple harmonic background (e.g., gentle string pads, sparse piano chords). Be creative and evocative. For example: "A slow, somber piece in a minor key, featuring a lonely cello melody over a bed of low, sustained string chords, reflecting the gravity of the event."
-        `;
-        return generateTextWithFallback(prompt);
-    });
-};
-
-export const generateMusicParameters = async (musicDescription: string, isKidsMode: boolean): Promise<MusicParameters> => {
-    return withCache(['musicParameters', musicDescription, isKidsMode], () => {
-        const kidModePrompt = isKidsMode 
-            ? "The music should be simple and cheerful. Use sine or triangle waves for a gentle sound. The harmony should be simple major chords."
-            : "The music should be atmospheric and classical in style. Use oscillator types to mimic instruments (e.g., triangle for flute, sawtooth for strings, sine for a soft pad). Create a clear distinction between melody and harmony layers.";
-        const prompt = `
-            Based on the following classical music description, generate parameters for a procedural instrumental piece using the Web Audio API.
-            Music Description: "${musicDescription}"
-            Translate the description into synthesizer layers to create a short, looping piece of classical-style music.
-            - Create a 'melody' layer using an oscillator. Give it a distinct frequency and oscillator type to represent the lead instrument. Use an LFO for vibrato if appropriate (e.g., for a 'violin' sound).
-            - Create 2-3 'harmony' layers using oscillators to form simple chords or pads that support the melody. Their frequencies should be harmonically related (e.g., forming a major or minor triad).
-            - Avoid using the 'noise' type unless specifically requested for a percussive effect.
-            ${kidModePrompt}
-            Provide the data in the specified JSON format.
-            - Melodic frequencies should be between 200 and 1200 Hz.
-            - Harmonic frequencies should be between 80 and 500 Hz.
-            - LFO frequencies for vibrato should be between 4 and 8 Hz, with a small depth (2-10).
-            - Gains should be very low, between 0.01 and 0.1, to keep the music subtle and ambient. The melody layer can have a slightly higher gain than the harmony layers.
-            - Create 3 to 5 layers in total.
-        `;
-        const schema = {
-            type: Type.OBJECT,
-            properties: {
-                layers: {
-                    type: Type.ARRAY,
-                    items: {
-                        type: Type.OBJECT,
-                        properties: {
-                            type: { type: Type.STRING, enum: ['oscillator', 'noise'] },
-                            oscillatorType: { type: Type.STRING, enum: ['sine', 'square', 'sawtooth', 'triangle'], description: "Required if type is 'oscillator'" },
-                            frequency: { type: Type.NUMBER, description: "Required if type is 'oscillator'" },
-                            gain: { type: Type.NUMBER },
-                            lfo: {
+                            description: { type: Type.STRING, description: "A one or two-sentence description of the location's significance." },
+                            coordinates: {
                                 type: Type.OBJECT,
                                 properties: {
-                                    frequency: { type: Type.NUMBER },
-                                    depth: { type: Type.NUMBER },
+                                    lat: { type: Type.NUMBER },
+                                    lng: { type: Type.NUMBER }
                                 }
-                            },
-                            filter: {
-                               type: Type.OBJECT,
-                               properties: {
-                                   type: { type: Type.STRING, enum: ['lowpass', 'highpass', 'bandpass'] },
-                                   frequency: { type: Type.NUMBER },
-                               }
                             }
                         }
                     }
                 }
-            }
+            },
+            required: ["mapDescription", "centerCoordinates", "pointsOfInterest"]
         };
         return generateAndParseJson(prompt, schema);
     });
@@ -600,23 +595,6 @@ export const fetchSceneHotspots = async (event: TimelineEvent, civilizationName:
     });
 };
 
-export const fetchHotspotDialogue = async (hotspotName: string, event: TimelineEvent, civilizationName: string, language: string, isKidsMode: boolean): Promise<string> => {
-    return withCache(['hotspotDialogue', hotspotName, event.id, civilizationName, language, isKidsMode], async () => {
-        const sanitizedHotspotName = sanitizeInput(hotspotName);
-        if (isRateLimited('hotspotDialogue', 1500)) {
-           return "Please wait a moment before interacting again.";
-        }
-        const prefix = getPromptPrefix(language, isKidsMode);
-        const kidModePrompt = isKidsMode ? "Your tone should be very simple, friendly, and engaging for a 5-year-old child." : "Your tone should be authentic to your character and the historical period.";
-        const prompt = `${prefix}You are ${sanitizedHotspotName}, a character or object within a scene depicting the event "${event.title}" in the context of ${civilizationName}.
-        A person is interacting with you. Respond with a single, short, first-person sentence. What might you say?
-        ${kidModePrompt}
-        Do not add quotation marks or any prefixes like your name. Just provide the sentence you would speak.`;
-        const text = await generateTextWithFallback(prompt);
-        return text.trim().replace(/^"|"$/g, '');
-    });
-};
-
 export const fetchAIHistorianResponse = async (prompt: string, event: TimelineEvent, civilizationName: string, language: string, isKidsMode: boolean): Promise<string> => {
     const sanitizedPrompt = sanitizeInput(prompt);
     return withCache(['aiHistorian', sanitizedPrompt, event.id, civilizationName, language, isKidsMode], () => {
@@ -627,32 +605,5 @@ export const fetchAIHistorianResponse = async (prompt: string, event: TimelineEv
         const context = `The user is asking a question in the context of the event "${event.title}" (${event.date}) which is part of the history of ${civilizationName}.`;
         const fullPrompt = `${prefix} ${context} The user's question is: "${sanitizedPrompt}". Answer the question in a few paragraphs, as a helpful historian AI.`;
         return generateTextWithFallback(fullPrompt);
-    });
-};
-
-export const fetchVoiceDescription = async (contextPrompt: string, language: string, isKidsMode: boolean): Promise<VoiceDescription> => {
-    return withCache(['voiceDescription', contextPrompt, language, isKidsMode], () => {
-        const kidModePrompt = isKidsMode
-            ? "For kids mode, the voice should be friendly, clear, and engaging. Avoid very low pitches or very slow/fast rates."
-            : "";
-        const prompt = `
-            Based on the following character or narrator description, define a suitable voice profile for text-to-speech.
-            Description: "${contextPrompt}"
-            The target language for speech is ${language}. The accentLanguage should be a BCP 47 language tag that best fits the description and the target language. For example, for English, you might choose 'en-US', 'en-GB', 'en-AU', etc., based on historical or geographical context. If no specific accent is relevant, default to a standard accent for the language (e.g., 'en-US' for English, 'fr-FR' for French).
-            ${kidModePrompt}
-            Provide the data in the specified JSON format.
-        `;
-        const schema = {
-            type: Type.OBJECT,
-            properties: {
-                gender: { type: Type.STRING, enum: ['male', 'female', 'neutral'] },
-                age: { type: Type.STRING, enum: ['child', 'young', 'middle-aged', 'elderly'] },
-                pitch: { type: Type.STRING, enum: ['very low', 'low', 'medium', 'high', 'very high'] },
-                rate: { type: Type.STRING, enum: ['very slow', 'slow', 'medium', 'fast', 'very fast'] },
-                accentLanguage: { type: Type.STRING, description: "A BCP 47 language tag, e.g., en-US" }
-            },
-            required: ["gender", "age", "pitch", "rate", "accentLanguage"]
-        };
-        return generateAndParseJson(prompt, schema);
     });
 };

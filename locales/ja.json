@@ -25,13 +25,14 @@
     "selectCivilization": "旅を始めるために文明を選択してください。",
     "exploreCivilization": "{{name}}を探索",
     "selectEvent": "下のタイムラインからイベントを選択して詳細をご覧ください。",
-    "generatingVista": "歴史的景観を生成中..."
+    "generatingVista": "歴史的景観を生成中...",
+    "findingVista": "歴史的な風景を検索中..."
   },
   "eventBubble": {
     "readDetails": "詳細を読む",
-    "createAudio": "音声を作成",
     "viewOnMap": "地図で見る",
-    "askAI": "AIに質問"
+    "askAI": "AIに質問",
+    "loadingMap": "地図を読み込み中..."
   },
   "sidebar": {
     "keyCharacters": "主要人物",
@@ -41,6 +42,9 @@
     "myFavorites": "お気に入り",
     "relatedLinks": "関連リンク",
     "exploreOn": "{{platform}}で探る"
+  },
+  "ambientPlayer": {
+    "findingMusic": "アンビエント音楽を検索中..."
   },
   "modals": {
     "close": "閉じる",
@@ -105,6 +109,7 @@
   "threeDView": {
     "sceneError": "没入型シーンを作成できませんでした。別のイベントをお試しください。",
     "generatingVista": "歴史的景観を生成中...",
+    "findingVista": "歴史的な風景を検索中...",
     "populatingScene": "シーンにキャラクターを配置中...",
     "interactWith": "{{hotspotName}}と対話する",
     "nothingToSay": "何も言うことはありません。"

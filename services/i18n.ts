@@ -1,4 +1,5 @@
 // services/i18n.ts
+import { LANGUAGES } from '../constants.ts';
 
 // Since we can't statically import for type inference, define a generic type.
 type Translations = Record<string, any>;
@@ -11,35 +12,40 @@ const translations: { [key: string]: Translations } = {};
  */
 export const initializeI18n = async (): Promise<void> => {
     try {
-        const [enRes, esRes, frRes, jaRes] = await Promise.all([
-            fetch('/locales/en.json'),
-            fetch('/locales/es.json'),
-            fetch('/locales/fr.json'),
-            fetch('/locales/ja.json'),
-        ]);
+        const fetchPromises = LANGUAGES.map(lang => 
+            fetch(`/locales/${lang.code}.json`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`Failed to fetch ${lang.code}.json`);
+                    }
+                    return res.json();
+                })
+                .catch(err => {
+                    console.error(err);
+                    return null; // Return null on failure to not break Promise.all
+                })
+        );
 
-        if (!enRes.ok || !esRes.ok || !frRes.ok || !jaRes.ok) {
-            throw new Error('Failed to fetch one or more translation files.');
+        const loadedTranslations = await Promise.all(fetchPromises);
+        
+        LANGUAGES.forEach((lang, index) => {
+            if (loadedTranslations[index]) {
+                translations[lang.code] = loadedTranslations[index];
+            }
+        });
+        
+        if (!translations['en']) {
+            throw new Error('Critical: English translation file failed to load.');
         }
 
-        const [en, es, fr, ja] = await Promise.all([
-            enRes.json(),
-            esRes.json(),
-            frRes.json(),
-            jaRes.json(),
-        ]);
-
-        translations['en'] = en;
-        translations['es'] = es;
-        translations['fr'] = fr;
-        translations['ja'] = ja;
     } catch (error) {
-        console.error('Could not initialize i18n. Loading English as a fallback.', error);
-        // Attempt to load English so the app is at least partially functional.
+        console.error('Could not initialize i18n.', error);
+        // Fallback in case the whole process fails
         try {
             const enRes = await fetch('/locales/en.json');
             if (enRes.ok) {
                 translations['en'] = await enRes.json();
+                 console.log('Successfully loaded fallback English translation.');
             } else {
                  throw new Error('Fallback to English also failed.');
             }

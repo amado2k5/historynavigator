@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-import { generateAudioScript, generateImage, fetchVoiceDescription } from '../services/geminiService.ts';
+// FIX: Replaced non-existent 'generateImage' with 'findImageOnWeb' and added missing imports.
+import { generateAudioScript, findImageOnWeb, fetchVoiceDescription } from '../services/geminiService.ts';
 import { speak, cancelSpeech } from '../services/voiceService.ts';
 import type { TimelineEvent, Character, VoiceDescription, Share } from '../types.ts';
 import { PlayIcon, PauseIcon } from './Icons.tsx';
@@ -68,8 +69,9 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
                     // Now generate image and voice description in parallel
                     const imagePrompt = isKidsMode
                         ? `A vibrant and friendly cartoon illustration of the historical event: "${event.title}" from the ${civilizationName} civilization, as a backdrop for an audio story. Style: children's storybook.`
-                        : `A photorealistic and atmospheric scene visualizing the historical event: "${event.title}" from the ${civilizationName} civilization, to accompany an audio narration. Style: detailed, cinematic.`;
-                    const imageUrlPromise = generateImage(imagePrompt, '16:9');
+                        : `An atmospheric scene visualizing the historical event: "${event.title}" from the ${civilizationName} civilization, to accompany an audio narration. Style: detailed, cinematic, high-quality stock photo.`;
+                    // FIX: Changed generateImage to findImageOnWeb.
+                    const imageUrlPromise = findImageOnWeb(imagePrompt, '16:9');
 
                     const voiceContext = character
                         ? `${character.name} narrating a story about "${event.title}".`

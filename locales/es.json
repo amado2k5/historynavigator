@@ -25,13 +25,14 @@
     "selectCivilization": "Por favor, selecciona una civilización para comenzar tu viaje.",
     "exploreCivilization": "Explorar {{name}}",
     "selectEvent": "Selecciona un evento de la línea de tiempo para saber más.",
-    "generatingVista": "Generando vista histórica..."
+    "generatingVista": "Generando vista histórica...",
+    "findingVista": "Buscando vista histórica..."
   },
   "eventBubble": {
     "readDetails": "Leer Detalles",
-    "createAudio": "Crear Audio",
     "viewOnMap": "Ver en Mapa",
-    "askAI": "Preguntar a la IA"
+    "askAI": "Preguntar a la IA",
+    "loadingMap": "Cargando Mapa..."
   },
   "sidebar": {
     "keyCharacters": "Personajes Clave",
@@ -41,6 +42,9 @@
     "myFavorites": "Mis Favoritos",
     "relatedLinks": "Enlaces Relacionados",
     "exploreOn": "Explorar en {{platform}}"
+  },
+  "ambientPlayer": {
+    "findingMusic": "Buscando música ambiental..."
   },
   "modals": {
     "close": "Cerrar",
@@ -105,6 +109,7 @@
   "threeDView": {
     "sceneError": "No se pudo crear la escena inmersiva. Por favor, intenta con otro evento.",
     "generatingVista": "Generando vista histórica...",
+    "findingVista": "Buscando vista histórica...",
     "populatingScene": "Poblando la escena con personajes...",
     "interactWith": "Interactuar con {{hotspotName}}",
     "nothingToSay": "No tengo nada que decir."

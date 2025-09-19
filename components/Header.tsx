@@ -51,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
     const { t } = useI18n();
 
     const SettingsControls = () => (
-        <>
+        <div className="flex items-center gap-4">
             <button 
                 onClick={onLanguageIconClick} 
                 className="p-2 rounded-full hover:bg-[var(--color-primary)] transition-colors"
@@ -70,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <span className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${isKidsMode ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
             </div>
-        </>
+        </div>
     );
 
     return (
@@ -111,20 +111,18 @@ export const Header: React.FC<HeaderProps> = ({
                     />
                 </div>
                 
+                <SettingsControls />
+
                 {user ? (
-                    <>
-                        <SettingsControls />
-                        <UserProfile
-                            user={user}
-                            onLogout={onLogout}
-                            onProfileClick={onProfileClick}
-                            onFavoritesClick={onFavoritesClick}
-                            onSharesClick={onSharesClick}
-                        />
-                    </>
+                    <UserProfile
+                        user={user}
+                        onLogout={onLogout}
+                        onProfileClick={onProfileClick}
+                        onFavoritesClick={onFavoritesClick}
+                        onSharesClick={onSharesClick}
+                    />
                 ) : (
                     <>
-                       <SettingsControls />
                        {!showLoginPrompt && (
                             <button
                                 onClick={onLoginButtonClick}

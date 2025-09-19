@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "استكشف أي موضوع",
+    "exploreSubtext": "شخص، حدث، مكان... خط زمني ينتظر",
+    "kidsMode": "أطفال",
+    "tourButton": "قم بجولة",
+    "exitDemoButton": "إنهاء العرض التوضيحي",
+    "loginButton": "تسجيل الدخول / اشتراك",
+    "searchPlaceholder": "ابحث عن شخص، حدث، أو مكان...",
+    "loading": "جار التحميل..."
+  },
+  "footer": {
+    "contact": "اتصل بنا",
+    "copyright": "حقوق النشر 2025 timelineThis.app",
+    "disclaimer": "إخلاء مسؤولية (تم تطوير هذا التطبيق باستخدام Google AI Studio. هذا لأغراض العرض فقط ولا ينبغي استخدامه لأي أغراض إنتاجية)."
+  },
+  "login": {
+    "welcome": "أهلاً بك في",
+    "signInPrompt": "سجل الدخول لحفظ اكتشافاتك وتخصيص رحلتك.",
+    "signInWith": "تسجيل الدخول باستخدام {{provider}}"
+  },
+  "mainContent": {
+    "welcomeMessage": "أهلاً بك، {{name}}",
+    "explorer": "مستكشف",
+    "selectCivilization": "يرجى تحديد حضارة لبدء رحلتك.",
+    "exploreCivilization": "استكشف {{name}}",
+    "selectEvent": "اختر حدثًا من الخط الزمني أدناه لمعرفة المزيد.",
+    "generatingVista": "جارٍ إنشاء المنظر التاريخي...",
+    "findingVista": "جارٍ البحث عن منظر تاريخي..."
+  },
+  "eventBubble": {
+    "readDetails": "اقرأ التفاصيل",
+    "viewOnMap": "عرض على الخريطة",
+    "askAI": "اسأل الذكاء الاصطناعي",
+    "loadingMap": "جاري تحميل الخريطة..."
+  },
+  "sidebar": {
+    "keyCharacters": "الشخصيات الرئيسية",
+    "majorWars": "الحروب الكبرى",
+    "culturalTopics": "مواضيع ثقافية",
+    "sources": "المصادر",
+    "myFavorites": "مفضلاتي",
+    "relatedLinks": "روابط ذات صلة",
+    "exploreOn": "استكشف على {{platform}}"
+  },
+  "ambientPlayer": {
+    "findingMusic": "جارٍ البحث عن موسيقى هادئة..."
+  },
+  "modals": {
+    "close": "إغلاق",
+    "historicalOverview": "نظرة تاريخية عامة",
+    "perspective": "من منظور {{characterName}}",
+    "error": "تعذر تحميل التفاصيل. يرجى المحاولة مرة أخرى.",
+    "imageError": "تعذر إنشاء الصورة.",
+    "playNarration": "تشغيل السرد",
+    "stopNarration": "إيقاف السرد",
+    "eventDetailsTitle": "تفاصيل الحدث",
+    "mapTitle": "خريطة {{eventName}}",
+    "location": "الموقع",
+    "pointsOfInterest": "نقاط الاهتمام",
+    "loadingRecords": "جارٍ استرداد السجلات التاريخية...",
+    "drawingMaps": "جارٍ رسم الخرائط القديمة...",
+    "selectPOI": "اختر نقطة اهتمام لمعرفة المزيد.",
+    "aiPromptTitle": "اسأل المؤرخ الذكي",
+    "aiPromptSubtext": "هل لديك سؤال محدد حول \"{{eventName}}\"؟ تفضل بالسؤال!",
+    "aiPromptPlaceholder": "مثال: كيف كانت الحياة اليومية للشخص العادي؟",
+    "ask": "اسأل",
+    "thinking": "جارٍ التفكير...",
+    "aiError": "فشل في الحصول على رد من الذكاء الاصطناعي. يرجى المحاولة مرة أخرى.",
+    "consultingArchives": "جارٍ مراجعة الأرشيف...",
+    "paintingDiscovery": "جارٍ رسم اكتشافك...",
+    "audioTitle": "تجربة صوتية: {{eventName}}",
+    "audioSubtext": "استمع إلى قصة عن هذا الحدث.",
+    "audioError": "تعذر إنشاء التجربة الصوتية. يرجى المحاولة مرة أخرى.",
+    "profileTitle": "الملف الشخصي",
+    "signedInWith": "تم تسجيل الدخول باستخدام {{provider}}",
+    "favorites": "المفضلات",
+    "shares": "المشاركات",
+    "favoritesTitle": "مفضلاتي",
+    "noFavorites": "لم تقم بتفضيل أي شيء بعد. انقر على أيقونة النجمة في الأحداث أو المواضيع لحفظها هنا.",
+    "sharesTitle": "سجل مشاركاتي",
+    "noShares": "لم تقم بمشاركة أي شيء بعد. استخدم أيقونة المشاركة على أي محتوى لإنشاء رابط.",
+    "sharedOn": "تمت المشاركة في {{date}}",
+    "copyLink": "نسخ الرابط",
+    "copied": "تم النسخ!",
+    "languageTitle": "اختر لغة",
+    "visualizing": "تصور: {{eventName}}",
+    "videoError": "فشل في إنشاء الفيديو. قد تكون المحفوظات مغلقة في الوقت الحالي.",
+    "conjuringVisions": "استحضار رؤى من الماضي...",
+    "gatheringPigments": "جمع الأصباغ التاريخية...",
+    "consultingCinematographers": "استشارة المصورين السماويين...",
+    "weavingTime": "نسج خيوط الزمن في فيلم...",
+    "patience": "قد يستغرق هذا دقيقة أو دقيقتين، شكرًا لصبرك!",
+    "renderingLandscapes": "عرض المناظر الطبيعية القديمة...",
+    "animatingFigures": "تحريك الشخصيات التاريخية..."
+  },
+  "userProfile": {
+    "profile": "الملف الشخصي",
+    "favorites": "المفضلات",
+    "shares": "المشاركات",
+    "signOut": "تسجيل الخروج"
+  },
+  "tooltips": {
+    "favorite": "تفضيل",
+    "unfavorite": "إلغاء التفضيل",
+    "share": "مشاركة",
+    "linkCopied": "تم نسخ الرابط!"
+  },
+  "threeDView": {
+    "sceneError": "تعذر إنشاء المشهد الغامر. يرجى تجربة حدث آخر.",
+    "generatingVista": "جارٍ إنشاء المنظر التاريخي...",
+    "findingVista": "جارٍ البحث عن منظر تاريخي...",
+    "populatingScene": "ملء المشهد بالشخصيات...",
+    "interactWith": "تفاعل مع {{hotspotName}}",
+    "nothingToSay": "ليس لدي ما أقوله."
+  },
+  "tour": {
+    "welcome": "أهلاً بك! الجولة ستبدأ...",
+    "start": "لنبدأ باستكشاف حضارة كلاسيكية: روما القديمة.",
+    "timeline": "هذا هو الخط الزمني. لنختر حدثًا.",
+    "readDetails": "يمكننا قراءة المزيد من التفاصيل حول هذا الحدث.",
+    "canFavorite": "يمكنك حفظ العناصر المثيرة للاهتمام في مفضلاتك.",
+    "viewFavorites": "لنلقِ نظرة على مفضلاتك المحفوظة.",
+    "sharing": "مشاركة الاكتشافات سهلة باستخدام رابط فريد.",
+    "shareHistory": "يتم حفظ سجل مشاركاتك أيضًا في ملفك الشخصي.",
+    "sidebar": "الشريط الجانبي الأيمن يحتوي على المزيد من المواضيع للاستكشاف.",
+    "keyCharacter": "لنتعرف على شخصية رئيسية.",
+    "majorConflict": "وصراع كبير...",
+    "threeDView": "والآن إلى العرض الثلاثي الأبعاد الغامر!",
+    "hotspots": "يمكنك النقر على النقاط الساخنة للتفاعل مع المشهد.",
+    "dynamicSearch": "لنجرب بحثًا ديناميكيًا عن موضوع حديث.",
+    "restarting": "ستتم إعادة تشغيل الجولة الآن. يمكنك الخروج في أي وقت."
+  }
+}

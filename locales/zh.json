@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "探索任何主题",
+    "exploreSubtext": "人物、事件、地点...时间线等待着您",
+    "kidsMode": "儿童",
+    "tourButton": "参加导览",
+    "exitDemoButton": "退出演示",
+    "loginButton": "登录/注册",
+    "searchPlaceholder": "搜索人物、事件或地点...",
+    "loading": "加载中..."
+  },
+  "footer": {
+    "contact": "联系我们",
+    "copyright": "版权所有 2025 timelineThis.app",
+    "disclaimer": "免责声明（此应用程序是使用 Google AI Studio 开发的。仅供演示之用，不应用于任何生产用途）。"
+  },
+  "login": {
+    "welcome": "欢迎来到",
+    "signInPrompt": "登录以保存您的发现并个性化您的旅程。",
+    "signInWith": "使用 {{provider}} 登录"
+  },
+  "mainContent": {
+    "welcomeMessage": "欢迎，{{name}}",
+    "explorer": "探险家",
+    "selectCivilization": "请选择一个文明开始您的旅程。",
+    "exploreCivilization": "探索{{name}}",
+    "selectEvent": "从下面的时间线中选择一个事件以了解更多信息。",
+    "generatingVista": "正在生成历史景观...",
+    "findingVista": "正在寻找历史景观..."
+  },
+  "eventBubble": {
+    "readDetails": "阅读详情",
+    "viewOnMap": "在地图上查看",
+    "askAI": "询问AI",
+    "loadingMap": "正在加载地图..."
+  },
+  "sidebar": {
+    "keyCharacters": "关键人物",
+    "majorWars": "主要战争",
+    "culturalTopics": "文化主题",
+    "sources": "来源",
+    "myFavorites": "我的收藏",
+    "relatedLinks": "相关链接",
+    "exploreOn": "在{{platform}}上探索"
+  },
+  "ambientPlayer": {
+    "findingMusic": "正在寻找背景音乐..."
+  },
+  "modals": {
+    "close": "关闭",
+    "historicalOverview": "历史概览",
+    "perspective": "{{characterName}}的视角",
+    "error": "无法加载详细信息。请重试。",
+    "imageError": "无法生成图像。",
+    "playNarration": "播放旁白",
+    "stopNarration": "停止旁白",
+    "eventDetailsTitle": "事件详情",
+    "mapTitle": "{{eventName}}的地图",
+    "location": "地点",
+    "pointsOfInterest": "兴趣点",
+    "loadingRecords": "正在检索历史记录...",
+    "drawingMaps": "正在绘制古代地图...",
+    "selectPOI": "选择一个兴趣点以了解更多信息。",
+    "aiPromptTitle": "询问历史学家AI",
+    "aiPromptSubtext": "对“{{eventName}}”有具体问题吗？尽管问！",
+    "aiPromptPlaceholder": "例如，普通人的日常生活是什么样的？",
+    "ask": "询问",
+    "thinking": "思考中...",
+    "aiError": "无法从AI获取回应。请重试。",
+    "consultingArchives": "正在查阅档案...",
+    "paintingDiscovery": "正在描绘您的发现...",
+    "audioTitle": "音频体验：{{eventName}}",
+    "audioSubtext": "听一个关于这个事件的故事。",
+    "audioError": "无法创建音频体验。请重试。",
+    "profileTitle": "个人资料",
+    "signedInWith": "已使用{{provider}}登录",
+    "favorites": "收藏",
+    "shares": "分享",
+    "favoritesTitle": "我的收藏",
+    "noFavorites": "您还没有收藏任何内容。点击事件或主题上的星形图标将它们保存在这里。",
+    "sharesTitle": "我的分享历史",
+    "noShares": "您还没有分享任何内容。使用任何内容上的分享图标生成链接。",
+    "sharedOn": "分享于{{date}}",
+    "copyLink": "复制链接",
+    "copied": "已复制！",
+    "languageTitle": "选择一种语言",
+    "visualizing": "正在可视化：{{eventName}}",
+    "videoError": "生成视频失败。档案目前可能已被封存。",
+    "conjuringVisions": "正在召唤过去的景象...",
+    "gatheringPigments": "正在收集历史颜料...",
+    "consultingCinematographers": "正在咨询天体摄影师...",
+    "weavingTime": "正在将时间的线索编织成电影...",
+    "patience": "这可能需要一两分钟，感谢您的耐心等待！",
+    "renderingLandscapes": "正在渲染古代景观...",
+    "animatingFigures": "正在为历史人物制作动画..."
+  },
+  "userProfile": {
+    "profile": "个人资料",
+    "favorites": "收藏",
+    "shares": "分享",
+    "signOut": "登出"
+  },
+  "tooltips": {
+    "favorite": "收藏",
+    "unfavorite": "取消收藏",
+    "share": "分享",
+    "linkCopied": "链接已复制！"
+  },
+  "threeDView": {
+    "sceneError": "无法创建沉浸式场景。请尝试其他事件。",
+    "generatingVista": "正在生成历史景观...",
+    "findingVista": "正在寻找历史景观...",
+    "populatingScene": "正在用角色填充场景...",
+    "interactWith": "与{{hotspotName}}互动",
+    "nothingToSay": "我无话可说。"
+  },
+  "tour": {
+    "welcome": "欢迎！导览即将开始...",
+    "start": "让我们从探索一个经典文明开始：古罗马。",
+    "timeline": "这是时间线。让我们选择一个事件。",
+    "readDetails": "我们可以阅读有关此事件的更多详细信息。",
+    "canFavorite": "您可以将有趣的条目保存到您的收藏中。",
+    "viewFavorites": "让我们查看您保存的收藏。",
+    "sharing": "通过唯一的链接可以轻松分享发现。",
+    "shareHistory": "您的分享历史也会保存到您的个人资料中。",
+    "sidebar": "右侧边栏有更多主题可供探索。",
+    "keyCharacter": "让我们了解一个关键人物。",
+    "majorConflict": "以及一场重大冲突...",
+    "threeDView": "现在进入沉浸式3D视图！",
+    "hotspots": "您可以点击热点与场景互动。",
+    "dynamicSearch": "让我们尝试对一个现代主题进行动态搜索。",
+    "restarting": "导览现在将重新开始。您可以随时退出。"
+  }
+}

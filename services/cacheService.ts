@@ -1,4 +1,5 @@
-import type { TimelineEvent, Character, Civilization, MapData, MusicParameters, SceneHotspot, VoiceDescription } from '../types.ts';
+// FIX: Removed unused 'MusicParameters' type as it is not exported from types.ts.
+import type { TimelineEvent, Character, Civilization, MapData, SceneHotspot, VoiceDescription } from '../types.ts';
 
 const CACHE_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
 

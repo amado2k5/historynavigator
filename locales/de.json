@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "Jedes Thema erkunden",
+    "exploreSubtext": "Person, Ereignis, Ort... eine Zeitleiste wartet",
+    "kidsMode": "Kinder",
+    "tourButton": "Machen Sie eine Tour",
+    "exitDemoButton": "Demo beenden",
+    "loginButton": "Anmelden / Registrieren",
+    "searchPlaceholder": "Suchen Sie nach einer Person, einem Ereignis oder einem Ort...",
+    "loading": "Wird geladen..."
+  },
+  "footer": {
+    "contact": "Kontaktieren Sie uns",
+    "copyright": "Copyright 2025 timelineThis.app",
+    "disclaimer": "Haftungsausschluss (Diese Anwendung wurde mit Google AI Studio entwickelt. Sie dient nur zu Demozwecken und sollte nicht für Produktionszwecke verwendet werden)."
+  },
+  "login": {
+    "welcome": "Willkommen bei",
+    "signInPrompt": "Melden Sie sich an, um Ihre Entdeckungen zu speichern und Ihre Reise zu personalisieren.",
+    "signInWith": "Mit {{provider}} anmelden"
+  },
+  "mainContent": {
+    "welcomeMessage": "Willkommen, {{name}}",
+    "explorer": "Entdecker",
+    "selectCivilization": "Bitte wählen Sie eine Zivilisation, um Ihre Reise zu beginnen.",
+    "exploreCivilization": "{{name}} erkunden",
+    "selectEvent": "Wählen Sie ein Ereignis aus der Zeitleiste unten, um mehr zu erfahren.",
+    "generatingVista": "Historische Ansicht wird generiert...",
+    "findingVista": "Historische Ansicht wird gesucht..."
+  },
+  "eventBubble": {
+    "readDetails": "Details lesen",
+    "viewOnMap": "Auf Karte ansehen",
+    "askAI": "KI fragen",
+    "loadingMap": "Karte wird geladen..."
+  },
+  "sidebar": {
+    "keyCharacters": "Schlüsselfiguren",
+    "majorWars": "Große Kriege",
+    "culturalTopics": "Kulturelle Themen",
+    "sources": "Quellen",
+    "myFavorites": "Meine Favoriten",
+    "relatedLinks": "Verwandte Links",
+    "exploreOn": "Auf {{platform}} erkunden"
+  },
+  "ambientPlayer": {
+    "findingMusic": "Suche nach Umgebungsgeräuschen..."
+  },
+  "modals": {
+    "close": "Schließen",
+    "historicalOverview": "Historischer Überblick",
+    "perspective": "Perspektive von {{characterName}}",
+    "error": "Die Details konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+    "imageError": "Bild konnte nicht generiert werden.",
+    "playNarration": "Erzählung abspielen",
+    "stopNarration": "Erzählung anhalten",
+    "eventDetailsTitle": "Ereignisdetails",
+    "mapTitle": "Karte von {{eventName}}",
+    "location": "Ort",
+    "pointsOfInterest": "Sehenswürdigkeiten",
+    "loadingRecords": "Historische Aufzeichnungen werden abgerufen...",
+    "drawingMaps": "Antike Karten werden gezeichnet...",
+    "selectPOI": "Wählen Sie eine Sehenswürdigkeit, um mehr zu erfahren.",
+    "aiPromptTitle": "Fragen Sie den Historiker-KI",
+    "aiPromptSubtext": "Haben Sie eine spezielle Frage zu \"{{eventName}}\"? Fragen Sie einfach!",
+    "aiPromptPlaceholder": "z.B. Wie sah das tägliche Leben eines einfachen Bürgers aus?",
+    "ask": "Fragen",
+    "thinking": "Denke...",
+    "aiError": "Antwort von der KI konnte nicht abgerufen werden. Bitte versuchen Sie es erneut.",
+    "consultingArchives": "Archive werden konsultiert...",
+    "paintingDiscovery": "Ihre Entdeckung wird gemalt...",
+    "audioTitle": "Audio-Erlebnis: {{eventName}}",
+    "audioSubtext": "Hören Sie eine Geschichte über dieses Ereignis.",
+    "audioError": "Das Audio-Erlebnis konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+    "profileTitle": "Profil",
+    "signedInWith": "Angemeldet mit {{provider}}",
+    "favorites": "Favoriten",
+    "shares": "Teilungen",
+    "favoritesTitle": "Meine Favoriten",
+    "noFavorites": "Sie haben noch nichts favorisiert. Klicken Sie auf das Sternsymbol bei Ereignissen oder Themen, um sie hier zu speichern.",
+    "sharesTitle": "Mein Freigabeverlauf",
+    "noShares": "Sie haben noch nichts geteilt. Verwenden Sie das Freigabesymbol bei Inhalten, um einen Link zu generieren.",
+    "sharedOn": "Geteilt am {{date}}",
+    "copyLink": "Link kopieren",
+    "copied": "Kopiert!",
+    "languageTitle": "Sprache auswählen",
+    "visualizing": "Visualisierung: {{eventName}}",
+    "videoError": "Video konnte nicht generiert werden. Die Archive sind möglicherweise im Moment versiegelt.",
+    "conjuringVisions": "Beschwörung von Visionen der Vergangenheit...",
+    "gatheringPigments": "Sammeln historischer Pigmente...",
+    "consultingCinematographers": "Rücksprache mit den himmlischen Kameraleuten...",
+    "weavingTime": "Weben von Zeitfäden zu einem Film...",
+    "patience": "Dies kann ein oder zwei Minuten dauern, danke für Ihre Geduld!",
+    "renderingLandscapes": "Rendern antiker Landschaften...",
+    "animatingFigures": "Animieren historischer Figuren..."
+  },
+  "userProfile": {
+    "profile": "Profil",
+    "favorites": "Favoriten",
+    "shares": "Teilungen",
+    "signOut": "Abmelden"
+  },
+  "tooltips": {
+    "favorite": "Favorisieren",
+    "unfavorite": "Entfavorisieren",
+    "share": "Teilen",
+    "linkCopied": "Link kopiert!"
+  },
+  "threeDView": {
+    "sceneError": "Die immersive Szene konnte nicht erstellt werden. Bitte versuchen Sie ein anderes Ereignis.",
+    "generatingVista": "Historische Ansicht wird generiert...",
+    "findingVista": "Historische Ansicht wird gesucht...",
+    "populatingScene": "Szene wird mit Charakteren bevölkert...",
+    "interactWith": "Interagiere mit {{hotspotName}}",
+    "nothingToSay": "Ich habe nichts zu sagen."
+  },
+  "tour": {
+    "welcome": "Willkommen! Die Tour beginnt...",
+    "start": "Beginnen wir mit der Erkundung einer klassischen Zivilisation: dem alten Rom.",
+    "timeline": "Hier ist die Zeitleiste. Wählen wir ein Ereignis aus.",
+    "readDetails": "Wir können mehr Details über dieses Ereignis lesen.",
+    "canFavorite": "Sie können interessante Elemente zu Ihren Favoriten hinzufügen.",
+    "viewFavorites": "Schauen wir uns Ihre gespeicherten Favoriten an.",
+    "sharing": "Das Teilen von Entdeckungen ist mit einem einzigartigen Link einfach.",
+    "shareHistory": "Ihr Freigabeverlauf wird auch in Ihrem Profil gespeichert.",
+    "sidebar": "Die rechte Seitenleiste enthält weitere Themen zum Erkunden.",
+    "keyCharacter": "Lassen Sie uns etwas über eine Schlüsselfigur lernen.",
+    "majorConflict": "Und einen großen Konflikt...",
+    "threeDView": "Jetzt zur immersiven 3D-Ansicht!",
+    "hotspots": "Sie können auf Hotspots klicken, um mit der Szene zu interagieren.",
+    "dynamicSearch": "Versuchen wir eine dynamische Suche nach einem modernen Thema.",
+    "restarting": "Die Tour wird jetzt neu gestartet. Sie können jederzeit aussteigen."
+  }
+}

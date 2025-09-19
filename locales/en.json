@@ -25,13 +25,14 @@
     "selectCivilization": "Please select a civilization to begin your journey.",
     "exploreCivilization": "Explore {{name}}",
     "selectEvent": "Select an event from the timeline below to learn more.",
-    "generatingVista": "Generating historical vista..."
+    "generatingVista": "Generating historical vista...",
+    "findingVista": "Finding historical vista..."
   },
   "eventBubble": {
     "readDetails": "Read Details",
-    "createAudio": "Create Audio",
     "viewOnMap": "View on Map",
-    "askAI": "Ask AI"
+    "askAI": "Ask AI",
+    "loadingMap": "Loading Map..."
   },
   "sidebar": {
     "keyCharacters": "Key Characters",
@@ -41,6 +42,9 @@
     "myFavorites": "My Favorites",
     "relatedLinks": "Related Links",
     "exploreOn": "Explore on {{platform}}"
+  },
+  "ambientPlayer": {
+    "findingMusic": "Finding ambient music..."
   },
   "modals": {
     "close": "Close",
@@ -105,6 +109,7 @@
   "threeDView": {
     "sceneError": "Could not create the immersive scene. Please try another event.",
     "generatingVista": "Generating historical vista...",
+    "findingVista": "Finding historical vista...",
     "populatingScene": "Populating scene with characters...",
     "interactWith": "Interact with {{hotspotName}}",
     "nothingToSay": "I have nothing to say."

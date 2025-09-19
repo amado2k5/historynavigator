@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 // FIX: Added .tsx extension to the import path to fix module resolution error.

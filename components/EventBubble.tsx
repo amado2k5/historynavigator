@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { TimelineEvent, User, Share } from '../types.ts';
-import { BookOpenIcon, MapIcon, LightbulbIcon, VolumeUpIcon } from './Icons.tsx';
+import { BookOpenIcon, MapIcon, LightbulbIcon } from './Icons.tsx';
 import { FavoriteIcon } from './FavoriteIcon.tsx';
 import { ShareButton } from './ShareButton.tsx';
 import { useI18n } from '../contexts/I18nContext.tsx';
+import { generateMapData } from '../services/geminiService.ts';
 
 interface EventBubbleProps {
     event: TimelineEvent;
@@ -15,11 +16,12 @@ interface EventBubbleProps {
     toggleFavorite: () => void;
     logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
-    onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'audio') => void;
+    onOpenModal: (type: 'eventDetails' | 'aiPrompt') => void;
 }
 
 export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civilizationName, isKidsMode, user, isFavorited, toggleFavorite, logShare, track, onOpenModal }) => {
     const { t, language: langCode } = useI18n();
+    const [isMapLoading, setIsMapLoading] = useState(false);
 
     const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -32,6 +34,25 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
+    };
+    
+    const handleMapClick = async () => {
+        setIsMapLoading(true);
+        track('view_on_map_clicked', { eventId: event.id });
+        try {
+            const mapData = await generateMapData(event, civilizationName, language, isKidsMode);
+            if (mapData && mapData.centerCoordinates) {
+                const { lat, lng } = mapData.centerCoordinates;
+                const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+                window.open(url, '_blank', 'noopener,noreferrer');
+            } else {
+                console.error("No map coordinates found for this event.");
+            }
+        } catch (error) {
+            console.error("Failed to generate map link:", error);
+        } finally {
+            setIsMapLoading(false);
+        }
     };
 
     return (
@@ -62,13 +83,9 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
                             <BookOpenIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">{t('eventBubble.readDetails')}</span>
                         </button>
-                         <button onClick={() => onOpenModal('audio')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
-                            <VolumeUpIcon className="w-10 h-10" />
-                            <span className="mt-2 text-sm">{t('eventBubble.createAudio')}</span>
-                        </button>
-                        <button onClick={() => onOpenModal('map')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
+                        <button onClick={handleMapClick} disabled={isMapLoading} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2 disabled:opacity-60 disabled:cursor-wait">
                             <MapIcon className="w-10 h-10" />
-                            <span className="mt-2 text-sm">{t('eventBubble.viewOnMap')}</span>
+                            <span className="mt-2 text-sm">{isMapLoading ? t('eventBubble.loadingMap') : t('eventBubble.viewOnMap')}</span>
                         </button>
                         <button onClick={() => onOpenModal('aiPrompt')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <LightbulbIcon className="w-10 h-10" />

@@ -3,10 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-import { fetchCharacterDetails, generateImage, fetchVoiceDescription } from '../services/geminiService.ts';
-import { speak, cancelSpeech } from '../services/voiceService.ts';
-import type { VoiceDescription, TimelineEvent, Share } from '../types.ts';
-import { PlayIcon, PauseIcon } from './Icons.tsx';
+import { fetchCharacterDetails, findImageOnWeb } from '../services/geminiService.ts';
+import type { TimelineEvent, Share } from '../types.ts';
 import { ShareButton } from './ShareButton.tsx';
 import { useI18n } from '../contexts/I18nContext.tsx';
 
@@ -28,8 +26,6 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
     const [error, setError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
-    const [isNarrating, setIsNarrating] = useState(false);
-    const [voiceDescription, setVoiceDescription] = useState<VoiceDescription | null>(null);
     const { t, language: langCode } = useI18n();
 
     const generateShareUrl = () => {
@@ -46,11 +42,6 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
     };
 
     useEffect(() => {
-        const cleanup = () => {
-            cancelSpeech();
-            setIsNarrating(false);
-        };
-
         if (isOpen) {
             const loadDetails = async () => {
                 setIsLoading(true);
@@ -58,23 +49,18 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
                 setError(null);
                 setDetails('');
                 setImageUrl(null);
-                setVoiceDescription(null);
                 try {
                     const detailedTextPromise = fetchCharacterDetails(characterName, civilizationName, language, isKidsMode);
                     
                     const imagePrompt = isKidsMode
                         ? `A friendly, colorful cartoon portrait of ${characterName} from ${civilizationName}. Style: storybook illustration.`
-                        : `A realistic, historically-inspired portrait of ${characterName} from the ${civilizationName} civilization, reflecting their era and role. Style: cinematic, detailed painting.`;
-                    const imageUrlPromise = generateImage(imagePrompt, '4:3');
+                        : `A realistic, historically-inspired portrait of ${characterName} from the ${civilizationName} civilization, reflecting their era and role. Style: cinematic, detailed, photorealistic stock photo.`;
+                    const imageUrlPromise = findImageOnWeb(imagePrompt, '4:3');
 
-                    const voiceContext = `${characterName} from ${civilizationName}, telling their own story.`;
-                    const voiceDescPromise = fetchVoiceDescription(voiceContext, language, isKidsMode);
-
-                    const [detailedText, url, voiceDesc] = await Promise.all([detailedTextPromise, imageUrlPromise, voiceDescPromise]);
+                    const [detailedText, url] = await Promise.all([detailedTextPromise, imageUrlPromise]);
 
                     setDetails(detailedText);
                     setImageUrl(url);
-                    setVoiceDescription(voiceDesc);
 
                 } catch (e) {
                     console.error("Failed to fetch character details or image:", e);
@@ -86,29 +72,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
             };
             loadDetails();
         }
-
-        return cleanup;
     }, [isOpen, characterName, civilizationName, language, isKidsMode, t]);
-
-    const handleToggleNarration = () => {
-        if (!details || !voiceDescription) return;
-
-        if (isNarrating) {
-            track('narration_stopped', { source: 'characterDetails', character: characterName });
-            cancelSpeech();
-            setIsNarrating(false);
-        } else {
-            track('narration_started', { source: 'characterDetails', character: characterName });
-            speak(details, voiceDescription, {
-                onend: () => setIsNarrating(false),
-                onerror: (e) => {
-                    console.error("Speech synthesis error", e);
-                    setIsNarrating(false);
-                }
-            });
-            setIsNarrating(true);
-        }
-    };
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -122,17 +86,6 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
                         onShareClick={() => track('share_content', { type: 'character', id: characterName })}
                         onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                     />
-                    <button
-                        onClick={handleToggleNarration}
-                        disabled={isLoading || !details}
-                        className="p-2 rounded-full hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        aria-label={isNarrating ? t('modals.stopNarration') : t('modals.playNarration')}
-                    >
-                        {isNarrating
-                            ? <PauseIcon className="w-6 h-6 text-[var(--color-accent)]" />
-                            : <PlayIcon className="w-6 h-6 text-[var(--color-secondary)]" />
-                        }
-                    </button>
                 </div>
             </div>
             

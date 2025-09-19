@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "Jelajahi topik apa pun",
+    "exploreSubtext": "Orang, peristiwa, tempat... garis waktu menanti",
+    "kidsMode": "Anak-anak",
+    "tourButton": "Ikuti tur",
+    "exitDemoButton": "Keluar dari Demo",
+    "loginButton": "Masuk / Daftar",
+    "searchPlaceholder": "Cari orang, peristiwa, atau tempat...",
+    "loading": "Memuat..."
+  },
+  "footer": {
+    "contact": "Hubungi Kami",
+    "copyright": "hak cipta 2025 timelineThis.app",
+    "disclaimer": "Sanggahan (Aplikasi ini dikembangkan menggunakan Google AI Studio. Ini hanya untuk tujuan demo dan tidak boleh digunakan untuk tujuan produksi apa pun)."
+  },
+  "login": {
+    "welcome": "Selamat Datang di",
+    "signInPrompt": "Masuk untuk menyimpan penemuan Anda dan mempersonalisasi perjalanan Anda.",
+    "signInWith": "Masuk dengan {{provider}}"
+  },
+  "mainContent": {
+    "welcomeMessage": "Selamat datang, {{name}}",
+    "explorer": "Penjelajah",
+    "selectCivilization": "Silakan pilih peradaban untuk memulai perjalanan Anda.",
+    "exploreCivilization": "Jelajahi {{name}}",
+    "selectEvent": "Pilih peristiwa dari garis waktu di bawah ini untuk mempelajari lebih lanjut.",
+    "generatingVista": "Menghasilkan pemandangan bersejarah...",
+    "findingVista": "Mencari pemandangan bersejarah..."
+  },
+  "eventBubble": {
+    "readDetails": "Baca Detail",
+    "viewOnMap": "Lihat di Peta",
+    "askAI": "Tanya AI",
+    "loadingMap": "Memuat Peta..."
+  },
+  "sidebar": {
+    "keyCharacters": "Karakter Kunci",
+    "majorWars": "Perang Besar",
+    "culturalTopics": "Topik Budaya",
+    "sources": "Sumber",
+    "myFavorites": "Favorit Saya",
+    "relatedLinks": "Tautan Terkait",
+    "exploreOn": "Jelajahi di {{platform}}"
+  },
+  "ambientPlayer": {
+    "findingMusic": "Mencari musik ambien..."
+  },
+  "modals": {
+    "close": "Tutup",
+    "historicalOverview": "Tinjauan Sejarah",
+    "perspective": "Perspektif {{characterName}}",
+    "error": "Tidak dapat memuat detail. Silakan coba lagi.",
+    "imageError": "Gambar tidak dapat dibuat.",
+    "playNarration": "Putar narasi",
+    "stopNarration": "Hentikan narasi",
+    "eventDetailsTitle": "Detail Peristiwa",
+    "mapTitle": "Peta {{eventName}}",
+    "location": "Lokasi",
+    "pointsOfInterest": "Tempat Menarik",
+    "loadingRecords": "Mengambil catatan sejarah...",
+    "drawingMaps": "Menggambar peta kuno...",
+    "selectPOI": "Pilih tempat menarik untuk mempelajari lebih lanjut.",
+    "aiPromptTitle": "Tanya Sejarawan AI",
+    "aiPromptSubtext": "Punya pertanyaan spesifik tentang \"{{eventName}}\"? Tanyakan saja!",
+    "aiPromptPlaceholder": "misalnya, Seperti apa kehidupan sehari-hari orang biasa?",
+    "ask": "Tanya",
+    "thinking": "Berpikir...",
+    "aiError": "Gagal mendapatkan respons dari AI. Silakan coba lagi.",
+    "consultingArchives": "Mengkonsultasikan arsip...",
+    "paintingDiscovery": "Melukis penemuan Anda...",
+    "audioTitle": "Pengalaman Audio: {{eventName}}",
+    "audioSubtext": "Dengarkan cerita tentang peristiwa ini.",
+    "audioError": "Tidak dapat membuat pengalaman audio. Silakan coba lagi.",
+    "profileTitle": "Profil",
+    "signedInWith": "Masuk dengan {{provider}}",
+    "favorites": "Favorit",
+    "shares": "Bagikan",
+    "favoritesTitle": "Favorit Saya",
+    "noFavorites": "Anda belum memfavoritkan apa pun. Klik ikon bintang pada acara atau topik untuk menyimpannya di sini.",
+    "sharesTitle": "Riwayat Berbagi Saya",
+    "noShares": "Anda belum membagikan apa pun. Gunakan ikon bagikan pada konten apa pun untuk membuat tautan.",
+    "sharedOn": "Dibagikan pada {{date}}",
+    "copyLink": "Salin Tautan",
+    "copied": "Disalin!",
+    "languageTitle": "Pilih Bahasa",
+    "visualizing": "Memvisualisasikan: {{eventName}}",
+    "videoError": "Gagal membuat video. Arsip mungkin disegel saat ini.",
+    "conjuringVisions": "Menyulap visi masa lalu...",
+    "gatheringPigments": "Mengumpulkan pigmen bersejarah...",
+    "consultingCinematographers": "Berkonsultasi dengan sinematografer selestial...",
+    "weavingTime": "Menenun benang waktu menjadi film...",
+    "patience": "Ini bisa memakan waktu satu atau dua menit, terima kasih atas kesabaran Anda!",
+    "renderingLandscapes": "Merender lanskap kuno...",
+    "animatingFigures": "Menganimasikan tokoh-tokoh sejarah..."
+  },
+  "userProfile": {
+    "profile": "Profil",
+    "favorites": "Favorit",
+    "shares": "Bagikan",
+    "signOut": "Keluar"
+  },
+  "tooltips": {
+    "favorite": "Favorit",
+    "unfavorite": "Batal favorit",
+    "share": "Bagikan",
+    "linkCopied": "Tautan Disalin!"
+  },
+  "threeDView": {
+    "sceneError": "Tidak dapat membuat adegan imersif. Silakan coba acara lain.",
+    "generatingVista": "Menghasilkan pemandangan bersejarah...",
+    "findingVista": "Mencari pemandangan bersejarah...",
+    "populatingScene": "Mengisi adegan dengan karakter...",
+    "interactWith": "Berinteraksi dengan {{hotspotName}}",
+    "nothingToSay": "Saya tidak punya apa-apa untuk dikatakan."
+  },
+  "tour": {
+    "welcome": "Selamat datang! Tur dimulai...",
+    "start": "Mari kita mulai dengan menjelajahi peradaban klasik: Roma Kuno.",
+    "timeline": "Ini garis waktunya. Mari kita pilih sebuah peristiwa.",
+    "readDetails": "Kita bisa membaca lebih banyak detail tentang peristiwa ini.",
+    "canFavorite": "Anda dapat menyimpan item menarik ke favorit Anda.",
+    "viewFavorites": "Mari kita lihat favorit Anda yang tersimpan.",
+    "sharing": "Berbagi penemuan mudah dengan tautan unik.",
+    "shareHistory": "Riwayat berbagi Anda juga disimpan ke profil Anda.",
+    "sidebar": "Bilah sisi kanan memiliki lebih banyak topik untuk dijelajahi.",
+    "keyCharacter": "Mari kita belajar tentang karakter kunci.",
+    "majorConflict": "Dan konflik besar...",
+    "threeDView": "Sekarang untuk tampilan 3D yang imersif!",
+    "hotspots": "Anda dapat mengklik hotspot untuk berinteraksi dengan adegan.",
+    "dynamicSearch": "Mari kita coba pencarian dinamis untuk topik modern.",
+    "restarting": "Tur akan dimulai ulang sekarang. Anda dapat keluar kapan saja."
+  }
+}

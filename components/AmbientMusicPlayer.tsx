@@ -1,11 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-// FIX: Added .ts extension to the import path.
-import type { TimelineEvent, MusicParameters, MusicLayer } from '../types.ts';
-// FIX: Added .ts extension to the import path.
-import { generateMusicParameters, fetchMusicDescription } from '../services/geminiService.ts';
-// FIX: Added .tsx extension to the import path.
+import type { TimelineEvent } from '../types.ts';
+import { findAmbientMusicOnWeb } from '../services/geminiService.ts';
 import { VolumeUpIcon, VolumeOffIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface AmbientMusicPlayerProps {
     event: TimelineEvent;
@@ -14,181 +12,142 @@ interface AmbientMusicPlayerProps {
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-type AudioSource = OscillatorNode | AudioBufferSourceNode;
-
 export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, civilizationName, isKidsMode, track }) => {
     const [isMuted, setIsMuted] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [loadingMessage, setLoadingMessage] = useState("Initializing audio engine...");
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const fadeIntervalRef = useRef<number | null>(null);
+    const { t } = useI18n();
 
-    const audioContextRef = useRef<AudioContext | null>(null);
-    const masterGainRef = useRef<GainNode | null>(null);
-    const activeSourcesRef = useRef<AudioSource[]>([]);
+    const MAX_VOLUME = 0.4; // Keep it subtle
 
-    const FADE_TIME = 1.5; // seconds for fade in/out
-    const MAX_GAIN = 0.1; // Max volume to keep it subtle
-
-    // Function to stop all current sounds with a fade-out
-    const stopCurrentSound = async () => {
-        if (masterGainRef.current && audioContextRef.current) {
-            masterGainRef.current.gain.exponentialRampToValueAtTime(0.0001, audioContextRef.current.currentTime + FADE_TIME);
-            await new Promise(resolve => setTimeout(resolve, FADE_TIME * 1000));
-            
-            activeSourcesRef.current.forEach(source => {
-                source.stop();
-                source.disconnect();
-            });
-            activeSourcesRef.current = [];
+    const clearFadeInterval = () => {
+        if (fadeIntervalRef.current) {
+            clearInterval(fadeIntervalRef.current);
+            fadeIntervalRef.current = null;
         }
     };
-    
-    // Function to create and play a new soundscape
-    const playNewSound = (params: MusicParameters) => {
-        if (!audioContextRef.current || !masterGainRef.current) return;
-        
-        const ac = audioContextRef.current;
-        const masterGain = masterGainRef.current;
-        
-        const newSources: AudioSource[] = [];
 
-        // Helper to validate numbers and provide fallbacks
-        const validate = (value: any, fallback: number): number => {
-            return typeof value === 'number' && isFinite(value) ? value : fallback;
-        };
+    const fadeAudio = (direction: 'in' | 'out', duration: number, callback?: () => void) => {
+        clearFadeInterval();
+        const audio = audioRef.current;
+        if (!audio) return;
 
-        params.layers.forEach(layer => {
-            if (layer.type === 'oscillator') {
-                const osc = ac.createOscillator();
-                const gainNode = ac.createGain();
-                
-                osc.type = layer.oscillatorType;
-                osc.frequency.setValueAtTime(validate(layer.frequency, 440), ac.currentTime);
-                gainNode.gain.setValueAtTime(validate(layer.gain, 0.1), ac.currentTime);
-                
-                if(layer.lfo) {
-                    const lfo = ac.createOscillator();
-                    const lfoGain = ac.createGain();
-                    lfo.frequency.setValueAtTime(validate(layer.lfo.frequency, 5), ac.currentTime);
-                    lfoGain.gain.setValueAtTime(validate(layer.lfo.depth, 20), ac.currentTime);
-                    lfo.connect(lfoGain);
-                    lfoGain.connect(osc.frequency);
-                    lfo.start();
-                    newSources.push(lfo);
+        const targetVolume = direction === 'in' ? MAX_VOLUME : 0;
+        const startVolume = audio.volume;
+        // Avoid division by zero if already at target
+        if (startVolume === targetVolume) {
+            if (callback) callback();
+            return;
+        }
+
+        const stepTime = 50;
+        const steps = Math.max(1, duration / stepTime);
+        const volumeStep = (targetVolume - startVolume) / steps;
+
+        fadeIntervalRef.current = window.setInterval(() => {
+            const newVolume = audio.volume + volumeStep;
+            if ((direction === 'in' && newVolume >= targetVolume) || (direction === 'out' && newVolume <= targetVolume)) {
+                audio.volume = targetVolume;
+                if (direction === 'out' && audio) {
+                    audio.pause();
                 }
-
-                osc.connect(gainNode);
-                gainNode.connect(masterGain);
-                osc.start();
-                newSources.push(osc);
-            } else if (layer.type === 'noise') {
-                const bufferSize = 2 * ac.sampleRate;
-                const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
-                const output = buffer.getChannelData(0);
-                // Simple brown noise generation
-                let lastOut = 0.0;
-                for (let i = 0; i < bufferSize; i++) {
-                    const white = Math.random() * 2 - 1;
-                    output[i] = (lastOut + (0.02 * white)) / 1.02;
-                    lastOut = output[i];
-                    output[i] *= 3.5; // (roughly) compensate for gain
-                }
-
-                const noiseSource = ac.createBufferSource();
-                noiseSource.buffer = buffer;
-                noiseSource.loop = true;
-                
-                const gainNode = ac.createGain();
-                gainNode.gain.setValueAtTime(validate(layer.gain, 0.05), ac.currentTime);
-
-                let connectionNode: AudioNode = gainNode;
-
-                if(layer.filter) {
-                    const filter = ac.createBiquadFilter();
-                    filter.type = layer.filter.type;
-                    filter.frequency.setValueAtTime(validate(layer.filter.frequency, 1000), ac.currentTime);
-                    gainNode.connect(filter);
-                    connectionNode = filter;
-                }
-
-                noiseSource.connect(gainNode);
-                connectionNode.connect(masterGain);
-                noiseSource.start();
-                newSources.push(noiseSource);
+                clearFadeInterval();
+                if (callback) callback();
+            } else if (audio) {
+                audio.volume = newVolume;
             }
-        });
-        
-        activeSourcesRef.current = newSources;
-
-        if (!isMuted) {
-            masterGain.gain.exponentialRampToValueAtTime(MAX_GAIN, ac.currentTime + FADE_TIME);
-        }
+        }, stepTime);
     };
     
-    // Main effect to generate and play music on event change
     useEffect(() => {
         let isCancelled = false;
 
-        const initializeAndPlay = async () => {
-            if (!audioContextRef.current) {
-                 audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-                 masterGainRef.current = audioContextRef.current.createGain();
-                 masterGainRef.current.connect(audioContextRef.current.destination);
-                 masterGainRef.current.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-            }
-            
+        const changeTrack = async () => {
             setIsLoading(true);
             setError(null);
-
-            await stopCurrentSound();
             
-            try {
-                if (isCancelled) return;
-                setLoadingMessage("Reading historical sheet music...");
-                const description = await fetchMusicDescription(event, civilizationName, isKidsMode);
-                
-                if (isCancelled) return;
-                setLoadingMessage("Composing classical score...");
-                const params = await generateMusicParameters(description, isKidsMode);
-                
-                if (isCancelled) return;
-                playNewSound(params);
+            const audio = audioRef.current;
+            if (audio && !audio.paused) {
+                await new Promise<void>(resolve => fadeAudio('out', 1000, resolve));
+            }
 
-            } catch(err) {
-                console.error("Failed to generate music:", err);
-                if (!isCancelled) setError("Could not generate music.");
+            if (isCancelled) return;
+
+            try {
+                const musicUrl = await findAmbientMusicOnWeb(event, civilizationName, isKidsMode);
+                if (isCancelled) return;
+
+                if (musicUrl && audio) {
+                    audio.src = musicUrl;
+                    audio.load();
+                    // Play returns a promise which can be used to detect if autoplay was blocked
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            if (!isMuted && !isCancelled) {
+                                fadeAudio('in', 1500);
+                            }
+                        }).catch(error => {
+                            console.warn("Autoplay was prevented. Muting audio until user interaction.", error);
+                             if (!isCancelled) {
+                                setIsMuted(true);
+                                audio.muted = true;
+                            }
+                        });
+                    }
+                } else {
+                    console.warn("No music was found for this event.");
+                }
+            } catch (err) {
+                console.error("Failed to find or play ambient music:", err);
+                if (!isCancelled) setError(t('modals.audioError'));
             } finally {
                 if (!isCancelled) setIsLoading(false);
             }
         };
 
-        initializeAndPlay();
+        if (!audioRef.current) {
+            audioRef.current = new Audio();
+            audioRef.current.loop = true;
+            audioRef.current.volume = 0;
+            audioRef.current.muted = isMuted;
+        }
+
+        changeTrack();
         
-        // Cleanup on unmount
         return () => {
             isCancelled = true;
-            stopCurrentSound();
+            clearFadeInterval();
+            if (audioRef.current) {
+                fadeAudio('out', 500, () => {
+                    if (audioRef.current) {
+                        audioRef.current.src = "";
+                    }
+                });
+            }
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event, civilizationName, isKidsMode]);
     
-    // Effect for handling mute/unmute
-    useEffect(() => {
-        if (masterGainRef.current && audioContextRef.current) {
-            if (isMuted) {
-                masterGainRef.current.gain.exponentialRampToValueAtTime(0.0001, audioContextRef.current.currentTime + 0.5);
-            } else {
-                 masterGainRef.current.gain.exponentialRampToValueAtTime(MAX_GAIN, audioContextRef.current.currentTime + 1);
-            }
-        }
-    }, [isMuted]);
-
     const handleMuteToggle = () => {
-        if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-            audioContextRef.current.resume();
+        const audio = audioRef.current;
+        if (!audio) return;
+        
+        const newMutedState = !isMuted;
+        
+        // On first unmute, try to play if paused. This is a user interaction.
+        if (audio.paused && newMutedState === false) {
+             audio.play().catch(e => console.error("Could not play audio on unmute:", e));
         }
-        track(isMuted ? 'music_unmuted' : 'music_muted');
-        setIsMuted(!isMuted);
+
+        audio.muted = newMutedState;
+        track(newMutedState ? 'music_muted' : 'music_unmuted');
+        setIsMuted(newMutedState);
     };
+
+    const loadingMessage = t('ambientPlayer.findingMusic');
 
     return (
         <div className="fixed bottom-16 right-4 z-40 group">

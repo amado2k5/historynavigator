@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "Herhangi bir konuyu keşfedin",
+    "exploreSubtext": "Kişi, olay, yer... bir zaman çizelgesi bekliyor",
+    "kidsMode": "Çocuklar",
+    "tourButton": "Tura katılın",
+    "exitDemoButton": "Demodan Çık",
+    "loginButton": "Giriş Yap / Kaydol",
+    "searchPlaceholder": "Bir kişi, olay veya yer arayın...",
+    "loading": "Yükleniyor..."
+  },
+  "footer": {
+    "contact": "Bize Ulaşın",
+    "copyright": "telif hakkı 2025 timelineThis.app",
+    "disclaimer": "Yasal Uyarı (Bu uygulama Google AI Studio kullanılarak geliştirilmiştir. Yalnızca demo amaçlıdır ve herhangi bir üretim amacıyla kullanılmamalıdır)."
+  },
+  "login": {
+    "welcome": "Hoş Geldiniz",
+    "signInPrompt": "Keşiflerinizi kaydetmek ve yolculuğunuzu kişiselleştirmek için giriş yapın.",
+    "signInWith": "{{provider}} ile giriş yapın"
+  },
+  "mainContent": {
+    "welcomeMessage": "Hoş geldiniz, {{name}}",
+    "explorer": "Kaşif",
+    "selectCivilization": "Yolculuğunuza başlamak için lütfen bir medeniyet seçin.",
+    "exploreCivilization": "{{name}}'i Keşfedin",
+    "selectEvent": "Daha fazla bilgi edinmek için aşağıdaki zaman çizelgesinden bir olay seçin.",
+    "generatingVista": "Tarihi manzara oluşturuluyor...",
+    "findingVista": "Tarihi manzara bulunuyor..."
+  },
+  "eventBubble": {
+    "readDetails": "Detayları Oku",
+    "viewOnMap": "Haritada Görüntüle",
+    "askAI": "Yapay Zekaya Sor",
+    "loadingMap": "Harita Yükleniyor..."
+  },
+  "sidebar": {
+    "keyCharacters": "Ana Karakterler",
+    "majorWars": "Büyük Savaşlar",
+    "culturalTopics": "Kültürel Konular",
+    "sources": "Kaynaklar",
+    "myFavorites": "Favorilerim",
+    "relatedLinks": "İlgili Bağlantılar",
+    "exploreOn": "{{platform}}'da keşfedin"
+  },
+  "ambientPlayer": {
+    "findingMusic": "Ortam müziği bulunuyor..."
+  },
+  "modals": {
+    "close": "Kapat",
+    "historicalOverview": "Tarihsel Genel Bakış",
+    "perspective": "{{characterName}}'in Perspektifi",
+    "error": "Ayrıntılar yüklenemedi. Lütfen tekrar deneyin.",
+    "imageError": "Görüntü oluşturulamadı.",
+    "playNarration": "Anlatımı oynat",
+    "stopNarration": "Anlatımı durdur",
+    "eventDetailsTitle": "Etkinlik Detayları",
+    "mapTitle": "{{eventName}} Haritası",
+    "location": "Konum",
+    "pointsOfInterest": "İlgi Çekici Noktalar",
+    "loadingRecords": "Tarihsel kayıtlar alınıyor...",
+    "drawingMaps": "Antik haritalar çiziliyor...",
+    "selectPOI": "Daha fazla bilgi edinmek için bir ilgi çekici nokta seçin.",
+    "aiPromptTitle": "Tarihçi Yapay Zekaya Sorun",
+    "aiPromptSubtext": "\"{{eventName}}\" hakkında özel bir sorunuz mu var? Sorun!",
+    "aiPromptPlaceholder": "Örn: Sıradan birinin günlük hayatı nasıldı?",
+    "ask": "Sor",
+    "thinking": "Düşünüyor...",
+    "aiError": "Yapay zekadan yanıt alınamadı. Lütfen tekrar deneyin.",
+    "consultingArchives": "Arşivlere danışılıyor...",
+    "paintingDiscovery": "Keşfiniz resmediliyor...",
+    "audioTitle": "Ses Deneyimi: {{eventName}}",
+    "audioSubtext": "Bu olay hakkında bir hikaye dinleyin.",
+    "audioError": "Ses deneyimi oluşturulamadı. Lütfen tekrar deneyin.",
+    "profileTitle": "Profil",
+    "signedInWith": "{{provider}} ile giriş yapıldı",
+    "favorites": "Favoriler",
+    "shares": "Paylaşımlar",
+    "favoritesTitle": "Favorilerim",
+    "noFavorites": "Henüz hiçbir şeyi favorilerinize eklemediniz. Etkinliklerdeki veya konulardaki yıldız simgesine tıklayarak onları buraya kaydedin.",
+    "sharesTitle": "Paylaşım Geçmişim",
+    "noShares": "Henüz hiçbir şey paylaşmadınız. Bir bağlantı oluşturmak için herhangi bir içerikteki paylaşım simgesini kullanın.",
+    "sharedOn": "{{date}} tarihinde paylaşıldı",
+    "copyLink": "Bağlantıyı Kopyala",
+    "copied": "Kopyalandı!",
+    "languageTitle": "Bir Dil Seçin",
+    "visualizing": "Görselleştiriliyor: {{eventName}}",
+    "videoError": "Video oluşturulamadı. Arşivler şu anda mühürlenmiş olabilir.",
+    "conjuringVisions": "Geçmişin vizyonları canlandırılıyor...",
+    "gatheringPigments": "Tarihi pigmentler toplanıyor...",
+    "consultingCinematographers": "Göksel görüntü yönetmenlerine danışılıyor...",
+    "weavingTime": "Zamanın iplikleri filme dokunuyor...",
+    "patience": "Bu bir veya iki dakika sürebilir, sabrınız için teşekkür ederiz!",
+    "renderingLandscapes": "Antik manzaralar işleniyor...",
+    "animatingFigures": "Tarihi figürler canlandırılıyor..."
+  },
+  "userProfile": {
+    "profile": "Profil",
+    "favorites": "Favoriler",
+    "shares": "Paylaşımlar",
+    "signOut": "Çıkış Yap"
+  },
+  "tooltips": {
+    "favorite": "Favori",
+    "unfavorite": "Favorilerden çıkar",
+    "share": "Paylaş",
+    "linkCopied": "Bağlantı Kopyalandı!"
+  },
+  "threeDView": {
+    "sceneError": "Sürükleyici sahne oluşturulamadı. Lütfen başka bir etkinlik deneyin.",
+    "generatingVista": "Tarihi manzara oluşturuluyor...",
+    "findingVista": "Tarihi manzara bulunuyor...",
+    "populatingScene": "Sahne karakterlerle dolduruluyor...",
+    "interactWith": "{{hotspotName}} ile etkileşime girin",
+    "nothingToSay": "Söyleyecek bir şeyim yok."
+  },
+  "tour": {
+    "welcome": "Hoş geldiniz! Tur başlıyor...",
+    "start": "Klasik bir medeniyeti keşfederek başlayalım: Antik Roma.",
+    "timeline": "İşte zaman çizelgesi. Bir olay seçelim.",
+    "readDetails": "Bu olay hakkında daha fazla detay okuyabiliriz.",
+    "canFavorite": "İlginç öğeleri favorilerinize kaydedebilirsiniz.",
+    "viewFavorites": "Kaydedilmiş favorilerinize bakalım.",
+    "sharing": "Benzersiz bir bağlantıyla keşifleri paylaşmak kolaydır.",
+    "shareHistory": "Paylaşım geçmişiniz de profilinize kaydedilir.",
+    "sidebar": "Sağ kenar çubuğunda keşfedilecek daha fazla konu var.",
+    "keyCharacter": "Ana bir karakter hakkında bilgi edinelim.",
+    "majorConflict": "Ve büyük bir çatışma...",
+    "threeDView": "Şimdi sürükleyici 3D görünüme geçelim!",
+    "hotspots": "Sahne ile etkileşime geçmek için sıcak noktalara tıklayabilirsiniz.",
+    "dynamicSearch": "Modern bir konu için dinamik bir arama deneyelim.",
+    "restarting": "Tur şimdi yeniden başlayacak. İstediğiniz zaman çıkabilirsiniz."
+  }
+}

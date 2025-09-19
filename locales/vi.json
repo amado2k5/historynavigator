@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "Khám phá bất kỳ chủ đề nào",
+    "exploreSubtext": "Người, sự kiện, địa điểm... một dòng thời gian đang chờ đợi",
+    "kidsMode": "Trẻ em",
+    "tourButton": "Tham quan",
+    "exitDemoButton": "Thoát Demo",
+    "loginButton": "Đăng nhập / Đăng ký",
+    "searchPlaceholder": "Tìm kiếm một người, sự kiện hoặc địa điểm...",
+    "loading": "Đang tải..."
+  },
+  "footer": {
+    "contact": "Liên hệ với chúng tôi",
+    "copyright": "bản quyền 2025 timelineThis.app",
+    "disclaimer": "Tuyên bố miễn trừ trách nhiệm (Ứng dụng này được phát triển bằng Google AI Studio. Nó chỉ dành cho mục đích demo và không nên được sử dụng cho bất kỳ mục đích sản xuất nào)."
+  },
+  "login": {
+    "welcome": "Chào mừng đến với",
+    "signInPrompt": "Đăng nhập để lưu các khám phá của bạn và cá nhân hóa hành trình của bạn.",
+    "signInWith": "Đăng nhập bằng {{provider}}"
+  },
+  "mainContent": {
+    "welcomeMessage": "Chào mừng, {{name}}",
+    "explorer": "Nhà thám hiểm",
+    "selectCivilization": "Vui lòng chọn một nền văn minh để bắt đầu hành trình của bạn.",
+    "exploreCivilization": "Khám phá {{name}}",
+    "selectEvent": "Chọn một sự kiện từ dòng thời gian bên dưới để tìm hiểu thêm.",
+    "generatingVista": "Đang tạo cảnh quan lịch sử...",
+    "findingVista": "Đang tìm kiếm cảnh quan lịch sử..."
+  },
+  "eventBubble": {
+    "readDetails": "Đọc chi tiết",
+    "viewOnMap": "Xem trên bản đồ",
+    "askAI": "Hỏi AI",
+    "loadingMap": "Đang tải bản đồ..."
+  },
+  "sidebar": {
+    "keyCharacters": "Nhân vật chính",
+    "majorWars": "Các cuộc chiến lớn",
+    "culturalTopics": "Chủ đề văn hóa",
+    "sources": "Nguồn",
+    "myFavorites": "Yêu thích của tôi",
+    "relatedLinks": "Liên kết liên quan",
+    "exploreOn": "Khám phá trên {{platform}}"
+  },
+  "ambientPlayer": {
+    "findingMusic": "Đang tìm kiếm nhạc nền..."
+  },
+  "modals": {
+    "close": "Đóng",
+    "historicalOverview": "Tổng quan lịch sử",
+    "perspective": "Góc nhìn của {{characterName}}",
+    "error": "Không thể tải chi tiết. Vui lòng thử lại.",
+    "imageError": "Không thể tạo hình ảnh.",
+    "playNarration": "Phát tường thuật",
+    "stopNarration": "Dừng tường thuật",
+    "eventDetailsTitle": "Chi tiết sự kiện",
+    "mapTitle": "Bản đồ của {{eventName}}",
+    "location": "Vị trí",
+    "pointsOfInterest": "Điểm quan tâm",
+    "loadingRecords": "Đang truy xuất hồ sơ lịch sử...",
+    "drawingMaps": "Đang vẽ bản đồ cổ...",
+    "selectPOI": "Chọn một điểm quan tâm để tìm hiểu thêm.",
+    "aiPromptTitle": "Hỏi nhà sử học AI",
+    "aiPromptSubtext": "Bạn có câu hỏi cụ thể nào về \"{{eventName}}\" không? Hãy hỏi đi!",
+    "aiPromptPlaceholder": "ví dụ: Cuộc sống hàng ngày của một người dân thường như thế nào?",
+    "ask": "Hỏi",
+    "thinking": "Đang suy nghĩ...",
+    "aiError": "Không thể nhận được phản hồi từ AI. Vui lòng thử lại.",
+    "consultingArchives": "Đang tham khảo kho lưu trữ...",
+    "paintingDiscovery": "Đang vẽ khám phá của bạn...",
+    "audioTitle": "Trải nghiệm âm thanh: {{eventName}}",
+    "audioSubtext": "Nghe một câu chuyện về sự kiện này.",
+    "audioError": "Không thể tạo trải nghiệm âm thanh. Vui lòng thử lại.",
+    "profileTitle": "Hồ sơ",
+    "signedInWith": "Đã đăng nhập bằng {{provider}}",
+    "favorites": "Yêu thích",
+    "shares": "Chia sẻ",
+    "favoritesTitle": "Yêu thích của tôi",
+    "noFavorites": "Bạn chưa yêu thích bất cứ điều gì. Nhấp vào biểu tượng ngôi sao trên các sự kiện hoặc chủ đề để lưu chúng ở đây.",
+    "sharesTitle": "Lịch sử chia sẻ của tôi",
+    "noShares": "Bạn chưa chia sẻ bất cứ điều gì. Sử dụng biểu tượng chia sẻ trên bất kỳ nội dung nào để tạo liên kết.",
+    "sharedOn": "Đã chia sẻ vào {{date}}",
+    "copyLink": "Sao chép liên kết",
+    "copied": "Đã sao chép!",
+    "languageTitle": "Chọn một ngôn ngữ",
+    "visualizing": "Đang hình dung: {{eventName}}",
+    "videoError": "Không thể tạo video. Kho lưu trữ có thể bị niêm phong vào lúc này.",
+    "conjuringVisions": "Đang gợi lên những viễn cảnh của quá khứ...",
+    "gatheringPigments": "Đang thu thập các sắc tố lịch sử...",
+    "consultingCinematographers": "Đang tham khảo ý kiến của các nhà quay phim thiên thể...",
+    "weavingTime": "Đang dệt những sợi chỉ thời gian thành phim...",
+    "patience": "Việc này có thể mất một hoặc hai phút, cảm ơn sự kiên nhẫn của bạn!",
+    "renderingLandscapes": "Đang kết xuất các cảnh quan cổ đại...",
+    "animatingFigures": "Đang tạo hoạt ảnh cho các nhân vật lịch sử..."
+  },
+  "userProfile": {
+    "profile": "Hồ sơ",
+    "favorites": "Yêu thích",
+    "shares": "Chia sẻ",
+    "signOut": "Đăng xuất"
+  },
+  "tooltips": {
+    "favorite": "Yêu thích",
+    "unfavorite": "Bỏ yêu thích",
+    "share": "Chia sẻ",
+    "linkCopied": "Đã sao chép liên kết!"
+  },
+  "threeDView": {
+    "sceneError": "Không thể tạo cảnh nhập vai. Vui lòng thử một sự kiện khác.",
+    "generatingVista": "Đang tạo cảnh quan lịch sử...",
+    "findingVista": "Đang tìm kiếm cảnh quan lịch sử...",
+    "populatingScene": "Đang điền đầy nhân vật vào cảnh...",
+    "interactWith": "Tương tác với {{hotspotName}}",
+    "nothingToSay": "Tôi không có gì để nói."
+  },
+  "tour": {
+    "welcome": "Chào mừng! Chuyến tham quan đang bắt đầu...",
+    "start": "Hãy bắt đầu bằng cách khám phá một nền văn minh cổ điển: La Mã cổ đại.",
+    "timeline": "Đây là dòng thời gian. Hãy chọn một sự kiện.",
+    "readDetails": "Chúng ta có thể đọc thêm chi tiết về sự kiện này.",
+    "canFavorite": "Bạn có thể lưu các mục thú vị vào mục yêu thích của mình.",
+    "viewFavorites": "Hãy xem các mục yêu thích đã lưu của bạn.",
+    "sharing": "Chia sẻ khám phá thật dễ dàng với một liên kết duy nhất.",
+    "shareHistory": "Lịch sử chia sẻ của bạn cũng được lưu vào hồ sơ của bạn.",
+    "sidebar": "Thanh bên phải có nhiều chủ đề hơn để khám phá.",
+    "keyCharacter": "Hãy tìm hiểu về một nhân vật chủ chốt.",
+    "majorConflict": "Và một cuộc xung đột lớn...",
+    "threeDView": "Bây giờ là chế độ xem 3D nhập vai!",
+    "hotspots": "Bạn có thể nhấp vào các điểm nóng để tương tác với cảnh.",
+    "dynamicSearch": "Hãy thử tìm kiếm động cho một chủ đề hiện đại.",
+    "restarting": "Chuyến tham quan sẽ khởi động lại ngay bây giờ. Bạn có thể thoát bất cứ lúc nào."
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "header": {
+    "exploreTopic": "Gundua mada yoyote",
+    "exploreSubtext": "Mtu, tukio, mahali... ratiba inasubiri",
+    "kidsMode": "Watoto",
+    "tourButton": "Fanya ziara",
+    "exitDemoButton": "Toka kwenye Onyesho",
+    "loginButton": "Ingia / Jisajili",
+    "searchPlaceholder": "Tafuta mtu, tukio, au mahali...",
+    "loading": "Inapakia..."
+  },
+  "footer": {
+    "contact": "Wasiliana Nasi",
+    "copyright": "hakimiliki 2025 timelineThis.app",
+    "disclaimer": "Kanusho (Programu hii ilitengenezwa kwa kutumia Google AI Studio. Ni kwa madhumuni ya onyesho tu na haipaswi kutumiwa kwa madhumuni yoyote ya uzalishaji)."
+  },
+  "login": {
+    "welcome": "Karibu kwenye",
+    "signInPrompt": "Ingia ili kuhifadhi ugunduzi wako na kubinafsisha safari yako.",
+    "signInWith": "Ingia kwa kutumia {{provider}}"
+  },
+  "mainContent": {
+    "welcomeMessage": "Karibu, {{name}}",
+    "explorer": "Mgunduzi",
+    "selectCivilization": "Tafadhali chagua ustaarabu ili kuanza safari yako.",
+    "exploreCivilization": "Gundua {{name}}",
+    "selectEvent": "Chagua tukio kutoka kwenye ratiba hapa chini ili kujifunza zaidi.",
+    "generatingVista": "Inatengeneza mandhari ya kihistoria...",
+    "findingVista": "Inatafuta mandhari ya kihistoria..."
+  },
+  "eventBubble": {
+    "readDetails": "Soma Maelezo",
+    "viewOnMap": "Tazama kwenye Ramani",
+    "askAI": "Uliza AI",
+    "loadingMap": "Inapakia Ramani..."
+  },
+  "sidebar": {
+    "keyCharacters": "Wahusika Wakuu",
+    "majorWars": "Vita Vikuu",
+    "culturalTopics": "Mada za Kitamaduni",
+    "sources": "Vyanzo",
+    "myFavorites": "Vipendwa Vyangu",
+    "relatedLinks": "Viungo Husika",
+    "exploreOn": "Gundua kwenye {{platform}}"
+  },
+  "ambientPlayer": {
+    "findingMusic": "Inatafuta muziki wa mandhari..."
+  },
+  "modals": {
+    "close": "Funga",
+    "historicalOverview": "Muhtasari wa Kihistoria",
+    "perspective": "Mtazamo wa {{characterName}}",
+    "error": "Haikuweza kupakia maelezo. Tafadhali jaribu tena.",
+    "imageError": "Picha haikuweza kutengenezwa.",
+    "playNarration": "Cheza masimulizi",
+    "stopNarration": "Simamisha masimulizi",
+    "eventDetailsTitle": "Maelezo ya Tukio",
+    "mapTitle": "Ramani ya {{eventName}}",
+    "location": "Mahali",
+    "pointsOfInterest": "Sehemu za Kuvutia",
+    "loadingRecords": "Inarejesha kumbukumbu za kihistoria...",
+    "drawingMaps": "Inachora ramani za kale...",
+    "selectPOI": "Chagua sehemu ya kuvutia ili kujifunza zaidi.",
+    "aiPromptTitle": "Uliza Mwanahistoria AI",
+    "aiPromptSubtext": "Una swali maalum kuhusu \"{{eventName}}\"? Uliza!",
+    "aiPromptPlaceholder": "k.m., Maisha ya kila siku ya mtu wa kawaida yalikuwaje?",
+    "ask": "Uliza",
+    "thinking": "Inafikiri...",
+    "aiError": "Imeshindwa kupata jibu kutoka kwa AI. Tafadhali jaribu tena.",
+    "consultingArchives": "Inashauriana na kumbukumbu...",
+    "paintingDiscovery": "Inachora ugunduzi wako...",
+    "audioTitle": "Uzoefu wa Sauti: {{eventName}}",
+    "audioSubtext": "Sikiliza hadithi kuhusu tukio hili.",
+    "audioError": "Haikuweza kuunda uzoefu wa sauti. Tafadhali jaribu tena.",
+    "profileTitle": "Wasifu",
+    "signedInWith": "Umeingia kwa kutumia {{provider}}",
+    "favorites": "Vipendwa",
+    "shares": "Shiriki",
+    "favoritesTitle": "Vipendwa Vyangu",
+    "noFavorites": "Bado hujapendelea chochote. Bofya ikoni ya nyota kwenye matukio au mada ili kuzihifadhi hapa.",
+    "sharesTitle": "Historia Yangu ya Kushiriki",
+    "noShares": "Bado hujashiriki chochote. Tumia ikoni ya kushiriki kwenye maudhui yoyote ili kutengeneza kiungo.",
+    "sharedOn": "Ilishirikiwa mnamo {{date}}",
+    "copyLink": "Nakili Kiungo",
+    "copied": "Imenakiliwa!",
+    "languageTitle": "Chagua Lugha",
+    "visualizing": "Inaonyesha: {{eventName}}",
+    "videoError": "Imeshindwa kutengeneza video. Kumbukumbu zinaweza kuwa zimefungwa kwa sasa.",
+    "conjuringVisions": "Inaibua maono ya zamani...",
+    "gatheringPigments": "Inakusanya rangi za kihistoria...",
+    "consultingCinematographers": "Inawasiliana na wapiga picha wa angani...",
+    "weavingTime": "Inasuka nyuzi za wakati kuwa filamu...",
+    "patience": "Hii inaweza kuchukua dakika moja au mbili, asante kwa uvumilivu wako!",
+    "renderingLandscapes": "Inaonyesha mandhari ya kale...",
+    "animatingFigures": "Inahuisha takwimu za kihistoria..."
+  },
+  "userProfile": {
+    "profile": "Wasifu",
+    "favorites": "Vipendwa",
+    "shares": "Shiriki",
+    "signOut": "Toka"
+  },
+  "tooltips": {
+    "favorite": "Pendwa",
+    "unfavorite": "Ondoa kwenye vipendwa",
+    "share": "Shiriki",
+    "linkCopied": "Kiungo Kimenakiliwa!"
+  },
+  "threeDView": {
+    "sceneError": "Haikuweza kuunda eneo la kuzama. Tafadhali jaribu tukio lingine.",
+    "generatingVista": "Inatengeneza mandhari ya kihistoria...",
+    "findingVista": "Inatafuta mandhari ya kihistoria...",
+    "populatingScene": "Inajaza eneo na wahusika...",
+    "interactWith": "Wasiliana na {{hotspotName}}",
+    "nothingToSay": "Sina la kusema."
+  },
+  "tour": {
+    "welcome": "Karibu! Ziara inaanza...",
+    "start": "Tuanze kwa kugundua ustaarabu wa kale: Roma ya Kale.",
+    "timeline": "Hii ndiyo ratiba. Tuchague tukio.",
+    "readDetails": "Tunaweza kusoma maelezo zaidi kuhusu tukio hili.",
+    "canFavorite": "Unaweza kuhifadhi vitu vya kupendeza kwenye vipendwa vyako.",
+    "viewFavorites": "Tuone vipendwa vyako vilivyohifadhiwa.",
+    "sharing": "Kushiriki ugunduzi ni rahisi kwa kiungo cha kipekee.",
+    "shareHistory": "Historia yako ya kushiriki pia imehifadhiwa kwenye wasifu wako.",
+    "sidebar": "Upau wa pembeni wa kulia una mada zaidi za kugundua.",
+    "keyCharacter": "Tujifunze kuhusu mhusika mkuu.",
+    "majorConflict": "Na mzozo mkubwa...",
+    "threeDView": "Sasa kwa mtazamo wa 3D wa kuzama!",
+    "hotspots": "Unaweza kubofya kwenye maeneo-moto ili kuingiliana na eneo.",
+    "dynamicSearch": "Tujaribu utafutaji wa nguvu kwa mada ya kisasa.",
+    "restarting": "Ziara itaanza upya sasa. Unaweza kutoka wakati wowote."
+  }
+}

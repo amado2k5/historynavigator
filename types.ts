@@ -40,39 +40,18 @@ export interface Civilization {
 
 export interface MapData {
     mapDescription: string;
+    centerCoordinates: {
+        lat: number;
+        lng: number;
+    };
     pointsOfInterest: {
         name: string;
         description: string;
+        coordinates: {
+            lat: number;
+            lng: number;
+        };
     }[];
-}
-
-// For AmbientMusicPlayer
-export interface LFO {
-    frequency: number;
-    depth: number;
-}
-
-export type OscillatorLayer = {
-    type: 'oscillator';
-    oscillatorType: OscillatorType;
-    frequency: number;
-    gain: number;
-    lfo?: LFO;
-};
-
-export type NoiseLayer = {
-    type: 'noise';
-    gain: number;
-    filter?: {
-        type: BiquadFilterType;
-        frequency: number;
-    };
-};
-
-export type MusicLayer = OscillatorLayer | NoiseLayer;
-
-export interface MusicParameters {
-    layers: MusicLayer[];
 }
 
 // For 3D View
@@ -89,15 +68,6 @@ export interface Hotspot {
         x: number;
         y: number;
     };
-}
-
-// For Text-to-Speech
-export interface VoiceDescription {
-    gender: 'male' | 'female' | 'neutral';
-    age: 'child' | 'young' | 'middle-aged' | 'elderly';
-    pitch: 'very low' | 'low' | 'medium' | 'high' | 'very high';
-    rate: 'very slow' | 'slow' | 'medium' | 'fast' | 'very fast';
-    accentLanguage: string; // BCP 47 language tag like 'en-US'
 }
 
 // For Authentication and Favorites
@@ -122,6 +92,15 @@ export interface Share {
     title: string;
     text: string;
     timestamp: string;
+}
+
+// FIX: Added VoiceDescription interface for audio narration.
+// For Audio Narration
+export interface VoiceDescription {
+    pitch: 'very low' | 'low' | 'medium' | 'high' | 'very high';
+    rate: 'very slow' | 'slow' | 'medium' | 'fast' | 'very fast';
+    accentLanguage: string; // e.g., 'en-US'
+    gender: 'male' | 'female' | 'neutral';
 }
 
 // For Telemetry
