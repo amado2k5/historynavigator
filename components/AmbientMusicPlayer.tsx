@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // FIX: Added .ts extension to the import path.
 import type { TimelineEvent, MusicParameters, MusicLayer } from '../types.ts';
 // FIX: Added .ts extension to the import path.
-import { generateMusicParameters } from '../services/geminiService.ts';
+import { generateMusicParameters, fetchSoundscapeDescription } from '../services/geminiService.ts';
 // FIX: Added .tsx extension to the import path.
 import { VolumeUpIcon, VolumeOffIcon } from './Icons.tsx';
 
@@ -18,6 +18,7 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
     const [isMuted, setIsMuted] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [loadingMessage, setLoadingMessage] = useState("Initializing audio engine...");
 
     const audioContextRef = useRef<AudioContext | null>(null);
     const masterGainRef = useRef<GainNode | null>(null);
@@ -124,6 +125,8 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
     
     // Main effect to generate and play music on event change
     useEffect(() => {
+        let isCancelled = false;
+
         const initializeAndPlay = async () => {
             if (!audioContextRef.current) {
                  audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -138,13 +141,22 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
             await stopCurrentSound();
             
             try {
-                const params = await generateMusicParameters(event, civilizationName, isKidsMode);
+                if (isCancelled) return;
+                setLoadingMessage("Crafting sonic atmosphere...");
+                const description = await fetchSoundscapeDescription(event, civilizationName, isKidsMode);
+                
+                if (isCancelled) return;
+                setLoadingMessage("Composing soundscape...");
+                const params = await generateMusicParameters(description, isKidsMode);
+                
+                if (isCancelled) return;
                 playNewSound(params);
+
             } catch(err) {
-                console.error("Failed to generate music parameters:", err);
-                setError("Could not generate soundscape.");
+                console.error("Failed to generate soundscape:", err);
+                if (!isCancelled) setError("Could not generate soundscape.");
             } finally {
-                setIsLoading(false);
+                if (!isCancelled) setIsLoading(false);
             }
         };
 
@@ -152,6 +164,7 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
         
         // Cleanup on unmount
         return () => {
+            isCancelled = true;
             stopCurrentSound();
         };
     }, [event, civilizationName, isKidsMode]);
@@ -175,7 +188,7 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
     };
 
     return (
-        <div className="fixed bottom-16 right-4 z-40">
+        <div className="fixed bottom-16 right-4 z-40 group">
             <button
                 onClick={handleMuteToggle}
                 className="w-12 h-12 bg-gray-800 bg-opacity-70 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-[var(--color-accent)] hover:text-black transition-colors"
@@ -193,6 +206,11 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
                     <VolumeUpIcon className="w-6 h-6" />
                 )}
             </button>
+             {isLoading && (
+                <div className="absolute bottom-1/2 right-full mr-3 w-max translate-y-1/2 bg-[var(--color-background-light)] px-3 py-2 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <p className="text-sm text-[var(--color-secondary)]">{loadingMessage}</p>
+                </div>
+            )}
         </div>
     );
 };

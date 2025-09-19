@@ -1,7 +1,10 @@
+
+// FIX: Imported useState and useEffect to resolve 'Cannot find name' errors.
 import React, { useState, useEffect } from 'react';
-import type { TimelineEvent, Character, Civilization } from '../types.ts';
+import type { TimelineEvent, Character, Civilization, User, Favorite } from '../types.ts';
 import { EventBubble } from './EventBubble.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
+import { Login } from './Login.tsx';
 import { generateImage } from '../services/geminiService.ts';
 
 interface MainContentProps {
@@ -11,9 +14,15 @@ interface MainContentProps {
     language: string;
     isKidsMode: boolean;
     isLoading: boolean;
+    user: User | null;
+    onLogin: (provider: string) => void;
+    isFavorited: (type: Favorite['type'], id: string) => boolean;
+    toggleFavorite: (favorite: Omit<Favorite, 'civilizationName'>) => void;
 }
 
-export const MainContent: React.FC<MainContentProps> = ({ civilization, currentEvent, character, language, isKidsMode, isLoading }) => {
+export const MainContent: React.FC<MainContentProps> = ({ 
+    civilization, currentEvent, character, language, isKidsMode, isLoading, user, onLogin, isFavorited, toggleFavorite 
+}) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
 
@@ -58,6 +67,46 @@ export const MainContent: React.FC<MainContentProps> = ({ civilization, currentE
 
     }, [currentEvent, civilization, isKidsMode]);
 
+    const renderContent = () => {
+        if (isLoading) return null; // Full-screen loader is handled by the parent
+
+        if (!user) {
+             return <Login onLogin={onLogin} />;
+        }
+
+        if (!civilization) {
+            return (
+                 <div className="text-center">
+                    <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome, {user.name}</h2>
+                    <p className="text-xl" style={{color: 'var(--color-secondary)'}}>Please select a civilization to begin your journey.</p>
+                </div>
+            )
+        }
+        
+        if (!currentEvent) {
+             return (
+                 <div className="text-center">
+                    <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Explore {civilization.name}</h2>
+                    <p className="text-xl" style={{color: 'var(--color-secondary)'}}>Select an event from the timeline below to learn more.</p>
+                </div>
+            )
+        }
+
+        return (
+             <EventBubble
+                event={currentEvent}
+                character={character}
+                language={language}
+                civilizationName={civilization.name}
+                isKidsMode={isKidsMode}
+                user={user}
+                isFavorited={isFavorited('event', currentEvent.id)}
+                toggleFavorite={() => toggleFavorite({type: 'event', id: currentEvent.id, name: currentEvent.title})}
+            />
+        );
+    }
+
+
     return (
         <main className="flex-grow flex items-center justify-center p-4 relative overflow-hidden transition-all duration-500">
             {(isLoading || isImageLoading) && (
@@ -79,27 +128,7 @@ export const MainContent: React.FC<MainContentProps> = ({ civilization, currentE
             <div className="absolute inset-0 bg-black bg-opacity-60 z-10" />
 
             <div className="relative z-20 w-full h-full flex items-center justify-center">
-                {!isLoading && !civilization && (
-                    <div className="text-center">
-                        <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome to History Navigator</h2>
-                        <p className="text-xl" style={{color: 'var(--color-secondary)'}}>Please select a civilization to begin your journey.</p>
-                    </div>
-                )}
-                {!isLoading && civilization && !currentEvent && (
-                     <div className="text-center">
-                        <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Explore {civilization.name}</h2>
-                        <p className="text-xl" style={{color: 'var(--color-secondary)'}}>Select an event from the timeline below to learn more.</p>
-                    </div>
-                )}
-                {!isLoading && currentEvent && civilization && (
-                    <EventBubble
-                        event={currentEvent}
-                        character={character}
-                        language={language}
-                        civilizationName={civilization.name}
-                        isKidsMode={isKidsMode}
-                    />
-                )}
+                {renderContent()}
             </div>
         </main>
     );

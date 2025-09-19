@@ -9,7 +9,10 @@ import { CharacterDetailsModal } from './components/CharacterDetailsModal.tsx';
 import { WarDetailsModal } from './components/WarDetailsModal.tsx';
 import { TopicDetailsModal } from './components/TopicDetailsModal.tsx';
 import { fetchCivilizations, fetchCivilizationData } from './services/geminiService.ts';
-import type { Civilization, TimelineEvent, Character, War, Topic } from './types.ts';
+import type { Civilization, TimelineEvent, Character, War, Topic, User, Favorite } from './types.ts';
+import { themes } from './themes.ts';
+import { ViewModeToggle } from './components/ViewModeToggle.tsx';
+import { ThreeDView } from './components/ThreeDView.tsx';
 
 type ModalState = 
     | { type: 'character', name: string }
@@ -27,6 +30,132 @@ function App() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [activeModal, setActiveModal] = useState<ModalState>(null);
+    const [viewMode, setViewMode] = useState<'2D' | '3D'>('2D');
+    const [user, setUser] = useState<User | null>(null);
+    const [favorites, setFavorites] = useState<Favorite[]>([]);
+
+    // --- Authentication and Favorites Logic ---
+
+    useEffect(() => {
+        // Persist user login
+        try {
+            const savedUser = localStorage.getItem('historyNavigatorUser');
+            if (savedUser) {
+                setUser(JSON.parse(savedUser));
+            }
+        } catch (e) {
+            console.error("Failed to parse user from localStorage", e);
+            localStorage.removeItem('historyNavigatorUser');
+        }
+    }, []);
+
+    useEffect(() => {
+        // Load favorites when user logs in
+        if (user) {
+            try {
+                const savedFavorites = localStorage.getItem(`favorites_${user.name}_${user.provider}`);
+                if (savedFavorites) {
+                    setFavorites(JSON.parse(savedFavorites));
+                } else {
+                    setFavorites([]);
+                }
+            } catch (e) {
+                console.error("Failed to parse favorites from localStorage", e);
+            }
+        } else {
+            setFavorites([]); // Clear favorites on logout
+        }
+    }, [user]);
+
+    const handleLogin = (provider: string) => {
+        const mockUser: User = { name: `${provider} User`, provider, avatar: provider.toLowerCase() };
+        setUser(mockUser);
+        localStorage.setItem('historyNavigatorUser', JSON.stringify(mockUser));
+    };
+
+    const handleLogout = () => {
+        setUser(null);
+        localStorage.removeItem('historyNavigatorUser');
+        setSelectedCivilization(null); // Reset view
+        setCurrentEvent(null);
+    };
+
+    const toggleFavorite = (favorite: Omit<Favorite, 'civilizationName'>) => {
+        if (!user || !selectedCivilization) return;
+
+        const fullFavorite: Favorite = { ...favorite, civilizationName: selectedCivilization.name };
+        
+        const key = `favorites_${user.name}_${user.provider}`;
+        let updatedFavorites;
+
+        const isFavorited = favorites.some(f => f.id === fullFavorite.id && f.type === fullFavorite.type && f.civilizationName === fullFavorite.civilizationName);
+
+        if (isFavorited) {
+            updatedFavorites = favorites.filter(f => !(f.id === fullFavorite.id && f.type === fullFavorite.type && f.civilizationName === fullFavorite.civilizationName));
+        } else {
+            updatedFavorites = [...favorites, fullFavorite];
+        }
+
+        setFavorites(updatedFavorites);
+        localStorage.setItem(key, JSON.stringify(updatedFavorites));
+    };
+
+    const isFavorited = (type: Favorite['type'], id: string): boolean => {
+        if (!user || !selectedCivilization) return false;
+        return favorites.some(f => f.type === type && f.id === id && f.civilizationName === selectedCivilization.name);
+    };
+
+    const navigateToFavorite = async (favorite: Favorite) => {
+        setIsLoading(true);
+        setError(null);
+        setActiveModal(null);
+        setViewMode('2D');
+
+        try {
+            let civData = selectedCivilization;
+            // Load civilization data if it's not the currently selected one
+            if (civData?.name !== favorite.civilizationName) {
+                civData = await fetchCivilizationData(favorite.civilizationName, language, isKidsMode);
+                setSelectedCivilization(civData);
+            }
+
+            if (!civData) throw new Error("Civilization data could not be loaded.");
+
+            // Handle the specific favorite type
+            switch (favorite.type) {
+                case 'event':
+                    const event = civData.timeline.find(e => e.id === favorite.id);
+                    if (event) setCurrentEvent(event);
+                    break;
+                case 'character':
+                    setActiveModal({ type: 'character', name: favorite.id });
+                    break;
+                case 'war':
+                    setActiveModal({ type: 'war', name: favorite.id });
+                    break;
+                case 'topic':
+                    setActiveModal({ type: 'topic', name: favorite.id });
+                    break;
+            }
+        } catch (err) {
+            console.error("Failed to navigate to favorite:", err);
+            setError("Could not navigate to the selected favorite.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+
+    // --- Core App Logic ---
+
+    useEffect(() => {
+        const theme = selectedCivilization ? themes[selectedCivilization.name] ?? themes.default : themes.default;
+        
+        Object.entries(theme).forEach(([key, value]) => {
+            document.documentElement.style.setProperty(key, value);
+        });
+    
+    }, [selectedCivilization]);
 
     useEffect(() => {
         const loadCivilizations = async () => {
@@ -49,12 +178,13 @@ function App() {
         setSelectedCivilization(null);
         setCurrentEvent(null);
         setSelectedCharacter(null);
+        setViewMode('2D');
 
         try {
             const data = await fetchCivilizationData(name, language, isKidsMode);
             setSelectedCivilization(data);
             if (data.timeline && data.timeline.length > 0) {
-                setCurrentEvent(data.timeline[0]); // Select the first event by default
+                setCurrentEvent(data.timeline[0]);
             }
         } catch (err) {
             console.error(`Failed to fetch data for ${name}:`, err);
@@ -64,18 +194,15 @@ function App() {
         }
     }, [language, isKidsMode, selectedCivilization?.name]);
     
-    // Refetch data when language or kids mode changes
     useEffect(() => {
         if (selectedCivilization) {
             const civName = selectedCivilization.name;
-            // Use a separate function to avoid re-triggering the useCallback dependency loop issues with stateful parent function
             const refetchData = async () => {
                 setIsLoading(true);
                 setError(null);
                 try {
                     const data = await fetchCivilizationData(civName, language, isKidsMode);
                     setSelectedCivilization(data);
-                    // Preserve current event if it still exists in the new timeline, otherwise default to first
                     const eventExists = data.timeline.find(e => e.id === currentEvent?.id);
                     setCurrentEvent(eventExists || (data.timeline.length > 0 ? data.timeline[0] : null));
                 } catch (err) {
@@ -89,15 +216,13 @@ function App() {
         }
     }, [language, isKidsMode]);
 
-
     const handleEventSelect = (event: TimelineEvent) => {
         setCurrentEvent(event);
-        setSelectedCharacter(null); // Reset character perspective when event changes
+        setSelectedCharacter(null);
     };
     
     const handleCharacterClick = (character: Character) => {
         setSelectedCharacter(character);
-        // Open character details modal
         setActiveModal({ type: 'character', name: character.name });
     };
 
@@ -127,7 +252,7 @@ function App() {
 
 
     return (
-        <div className="flex flex-col h-screen bg-[var(--color-background)] text-[var(--color-foreground)] font-body">
+        <div className="flex flex-col h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
             <Header
                 civilizations={civilizations}
                 selectedCivilization={selectedCivilization}
@@ -138,31 +263,60 @@ function App() {
                 onKidsModeToggle={() => setIsKidsMode(!isKidsMode)}
                 onSearchResultClick={handleSearchResultClick}
                 isLoading={isLoading}
+                user={user}
+                onLogout={handleLogout}
             />
+             {selectedCivilization && currentEvent && user && (
+                <ViewModeToggle 
+                    viewMode={viewMode}
+                    onToggle={() => setViewMode(prev => prev === '2D' ? '3D' : '2D')}
+                />
+            )}
             <div className="flex flex-grow overflow-hidden">
                 <div className="flex flex-col flex-grow">
-                    <MainContent
-                        civilization={selectedCivilization}
-                        currentEvent={currentEvent}
-                        character={selectedCharacter}
-                        language={language}
-                        isKidsMode={isKidsMode}
-                        isLoading={isLoading}
-                    />
-                    {selectedCivilization && selectedCivilization.timeline?.length > 0 && (
+                     {viewMode === '2D' ? (
+                        <MainContent
+                            civilization={selectedCivilization}
+                            currentEvent={currentEvent}
+                            character={selectedCharacter}
+                            language={language}
+                            isKidsMode={isKidsMode}
+                            isLoading={isLoading}
+                            user={user}
+                            onLogin={handleLogin}
+                            isFavorited={isFavorited}
+                            toggleFavorite={toggleFavorite}
+                        />
+                    ) : (
+                        <ThreeDView
+                            civilization={selectedCivilization}
+                            currentEvent={currentEvent}
+                            language={language}
+                            isKidsMode={isKidsMode}
+                        />
+                    )}
+                    {selectedCivilization && selectedCivilization.timeline?.length > 0 && viewMode === '2D' && (
                         <Timeline
                             events={selectedCivilization.timeline}
                             currentEvent={currentEvent}
                             onEventSelect={handleEventSelect}
+                            user={user}
+                            isFavorited={isFavorited}
+                            toggleFavorite={toggleFavorite}
                         />
                     )}
                 </div>
-                {selectedCivilization && !isLoading && (
+                {selectedCivilization && !isLoading && viewMode === '2D' && (
                     <RightSidebar
                         civilization={selectedCivilization}
                         onCharacterClick={handleCharacterClick}
                         onWarClick={handleWarClick}
                         onTopicClick={handleTopicClick}
+                        user={user}
+                        favorites={favorites}
+                        isFavorited={isFavorited}
+                        toggleFavorite={toggleFavorite}
+                        onFavoriteClick={navigateToFavorite}
                     />
                 )}
             </div>

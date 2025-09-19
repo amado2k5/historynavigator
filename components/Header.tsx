@@ -2,8 +2,9 @@
 import React from 'react';
 import { SearchableSelect } from './SearchableSelect.tsx';
 import { GlobalSearch } from './GlobalSearch.tsx';
-import type { Civilization } from '../types.ts';
+import type { Civilization, User } from '../types.ts';
 import { LANGUAGES } from '../constants.ts';
+import { UserProfile } from './UserProfile.tsx';
 
 interface HeaderProps {
     civilizations: { name: string }[];
@@ -15,6 +16,8 @@ interface HeaderProps {
     onKidsModeToggle: () => void;
     onSearchResultClick: (item: any) => void;
     isLoading: boolean;
+    user: User | null;
+    onLogout: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -26,7 +29,9 @@ export const Header: React.FC<HeaderProps> = ({
     isKidsMode,
     onKidsModeToggle,
     onSearchResultClick,
-    isLoading
+    isLoading,
+    user,
+    onLogout
 }) => {
     const languageItems = LANGUAGES.map(lang => ({ name: lang }));
 
@@ -48,24 +53,30 @@ export const Header: React.FC<HeaderProps> = ({
                     isKidsMode={isKidsMode}
                     onResultClick={onSearchResultClick}
                 />
+                
+                {user ? (
+                    <UserProfile user={user} onLogout={onLogout} />
+                ) : (
+                    <>
+                        <SearchableSelect
+                            items={languageItems}
+                            selected={{ name: language }}
+                            onChange={onLanguageChange}
+                            placeholder="Select Language"
+                        />
 
-                <SearchableSelect
-                    items={languageItems}
-                    selected={{ name: language }}
-                    onChange={onLanguageChange}
-                    placeholder="Select Language"
-                />
-
-                <div className="flex items-center">
-                    <label htmlFor="kids-mode-toggle" className="mr-2 text-sm text-[var(--color-secondary)]">Kids Mode</label>
-                    <button
-                        id="kids-mode-toggle"
-                        onClick={onKidsModeToggle}
-                        className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${isKidsMode ? 'bg-[var(--color-accent)]' : 'bg-gray-600'}`}
-                    >
-                        <span className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${isKidsMode ? 'translate-x-6' : 'translate-x-1'}`} />
-                    </button>
-                </div>
+                        <div className="flex items-center">
+                            <label htmlFor="kids-mode-toggle" className="mr-2 text-sm text-[var(--color-secondary)]">Kids Mode</label>
+                            <button
+                                id="kids-mode-toggle"
+                                onClick={onKidsModeToggle}
+                                className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors ${isKidsMode ? 'bg-[var(--color-accent)]' : 'bg-gray-600'}`}
+                            >
+                                <span className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform ${isKidsMode ? 'translate-x-6' : 'translate-x-1'}`} />
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </header>
     );
