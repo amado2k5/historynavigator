@@ -7,6 +7,7 @@ import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { fetchWarDetails, generateImage } from '../services/geminiService.ts';
 import { ShareButton } from './ShareButton.tsx';
 import type { TimelineEvent, Share } from '../types.ts';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface WarDetailsModalProps {
     isOpen: boolean;
@@ -26,6 +27,7 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
     const [error, setError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
+    const { t, language: langCode } = useI18n();
 
     const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -34,7 +36,7 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
             view: '2D',
             modal: 'war',
             id: warName,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -63,7 +65,7 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
 
                 } catch (e) {
                     console.error("Failed to fetch war details or image:", e);
-                    setError("Could not load the war details. Please try again.");
+                    setError(t('modals.error'));
                 } finally {
                     setIsLoading(false);
                     setIsImageLoading(false);
@@ -71,7 +73,7 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
             };
             loadDetails();
         }
-    }, [isOpen, warName, civilizationName, language, isKidsMode]);
+    }, [isOpen, warName, civilizationName, language, isKidsMode, t]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -89,7 +91,7 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
             <div className="w-full aspect-video bg-[var(--color-background-light)] rounded-md mb-4 flex items-center justify-center overflow-hidden">
                 {isImageLoading && <LoadingSpinner />}
                 {!isImageLoading && imageUrl && <img src={imageUrl} alt={`Depiction of ${warName}`} className="w-full h-full object-cover" />}
-                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">Image could not be generated.</div>}
+                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">{t('modals.imageError')}</div>}
             </div>
 
             {isLoading && (

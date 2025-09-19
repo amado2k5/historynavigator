@@ -5,6 +5,7 @@ import { EventBubble } from './EventBubble.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { Login } from './Login.tsx';
 import { generateImage } from '../services/geminiService.ts';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface MainContentProps {
     civilization: Civilization | null;
@@ -31,6 +32,7 @@ export const MainContent: React.FC<MainContentProps> = ({
 }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
+    const { t } = useI18n();
 
     useEffect(() => {
         let isCancelled = false;
@@ -83,8 +85,8 @@ export const MainContent: React.FC<MainContentProps> = ({
         if (!civilization) {
             return (
                  <div className="text-center p-4">
-                    <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome, {user?.name || 'Explorer'}</h2>
-                    <p className="text-lg md:text-xl" style={{color: 'var(--color-secondary)'}}>Please select a civilization to begin your journey.</p>
+                    <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>{t('mainContent.welcomeMessage', { name: user?.name || t('mainContent.explorer') })}</h2>
+                    <p className="text-lg md:text-xl" style={{color: 'var(--color-secondary)'}}>{t('mainContent.selectCivilization')}</p>
                 </div>
             )
         }
@@ -92,8 +94,8 @@ export const MainContent: React.FC<MainContentProps> = ({
         if (!currentEvent) {
              return (
                  <div className="text-center p-4">
-                    <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Explore {civilization.name}</h2>
-                    <p className="text-lg md:text-xl" style={{color: 'var(--color-secondary)'}}>Select an event from the timeline below to learn more.</p>
+                    <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>{t('mainContent.exploreCivilization', { name: civilization.name })}</h2>
+                    <p className="text-lg md:text-xl" style={{color: 'var(--color-secondary)'}}>{t('mainContent.selectEvent')}</p>
                 </div>
             )
         }
@@ -121,7 +123,7 @@ export const MainContent: React.FC<MainContentProps> = ({
                  <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-10">
                     <LoadingSpinner />
                     {isLoading && <p className="mt-4 text-[var(--color-secondary)]">{loadingMessage}</p>}
-                    {isImageLoading && !isLoading && <p className="mt-4 text-[var(--color-secondary)]">Generating historical vista...</p>}
+                    {isImageLoading && !isLoading && <p className="mt-4 text-[var(--color-secondary)]">{t('mainContent.generatingVista')}</p>}
                 </div>
             )}
 

@@ -25,6 +25,7 @@ import { AudioModal } from './components/AudioModal.tsx';
 import { Footer } from './components/Footer.tsx';
 import { LanguageModal } from './components/LanguageModal.tsx';
 import { LANGUAGES } from './constants.ts';
+import { I18nProvider } from './contexts/I18nContext.tsx';
 
 // --- Responsive Hook ---
 const useMediaQuery = (query: string) => {
@@ -71,7 +72,7 @@ function App() {
     const [selectedCivilization, setSelectedCivilization] = useState<Civilization | null>(null);
     const [currentEvent, setCurrentEvent] = useState<TimelineEvent | null>(null);
     const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-    const [language, setLanguage] = useState<string>('English');
+    const [language, setLanguage] = useState<string>('en'); // Stores language code e.g. 'en', 'es'
     const [isKidsMode, setIsKidsMode] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [loadingMessage, setLoadingMessage] = useState<string>('Loading civilization data...');
@@ -175,7 +176,8 @@ function App() {
         }
 
         try {
-            const data = await fetchCivilizationData(name, language, isKidsMode);
+            const languageFullName = LANGUAGES.find(l => l.code === language)?.name || 'English';
+            const data = await fetchCivilizationData(name, languageFullName, isKidsMode);
             setSelectedCivilization(data);
             if (data.timeline && data.timeline.length > 0) {
                 setCurrentEvent(data.timeline[0]);
@@ -350,7 +352,8 @@ function App() {
             let civData = selectedCivilization;
             // Load civilization data if it's not the currently selected one
             if (civData?.name !== favorite.civilizationName) {
-                civData = await fetchCivilizationData(favorite.civilizationName, language, isKidsMode);
+                const languageFullName = LANGUAGES.find(l => l.code === language)?.name || 'English';
+                civData = await fetchCivilizationData(favorite.civilizationName, languageFullName, isKidsMode);
                 setSelectedCivilization(civData);
             }
 
@@ -403,7 +406,7 @@ function App() {
                         modal: modalType,
                         id: modalId,
                     });
-                    setLanguage(lang || 'English');
+                    setLanguage(lang || 'en');
                     setIsKidsMode(kids);
                     setShareTarget({ civilizationName, eventId, viewMode, modalType, modalId, prompt: prompt || undefined });
                     history.pushState("", document.title, window.location.pathname + window.location.search);
@@ -482,7 +485,8 @@ function App() {
                 setIsLoading(true);
                 setError(null);
                 try {
-                    const data = await fetchCivilizationData(civName, language, isKidsMode);
+                    const languageFullName = LANGUAGES.find(l => l.code === language)?.name || 'English';
+                    const data = await fetchCivilizationData(civName, languageFullName, isKidsMode);
                     setSelectedCivilization(data);
                     const eventExists = data.timeline.find(e => e.id === currentEvent?.id);
                     setCurrentEvent(eventExists || (data.timeline.length > 0 ? data.timeline[0] : null));
@@ -528,8 +532,8 @@ function App() {
         setActiveModal({ type: 'topic', name: topic.name });
     };
     
-    const handleLanguageSelect = (lang: string) => {
-        setLanguage(lang);
+    const handleLanguageSelect = (langCode: string) => {
+        setLanguage(langCode);
         setActiveModal(null);
     };
 
@@ -544,265 +548,268 @@ function App() {
         setIsSidebarVisible(prev => !prev);
     };
 
+    const languageFullName = LANGUAGES.find(l => l.code === language)?.name || 'English';
 
     return (
-        <div className="flex flex-col h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
-            <Header
-                civilizations={civilizations}
-                selectedCivilization={selectedCivilization}
-                onCivilizationChange={handleCivilizationChange}
-                onLanguageIconClick={() => setActiveModal({ type: 'language' })}
-                isKidsMode={isKidsMode}
-                onKidsModeToggle={() => setIsKidsMode(!isKidsMode)}
-                isLoading={isLoading}
-                user={user}
-                onLogout={handleLogout}
-                onProfileClick={() => setActiveModal({ type: 'profile' })}
-                onFavoritesClick={() => setActiveModal({ type: 'favorites'})}
-                onSharesClick={() => setActiveModal({ type: 'shares'})}
-                track={track}
-                isDemoMode={isDemoMode}
-                demoSearchText={demoSearchText}
-                startDemo={startDemo}
-                stopDemo={stopDemo}
-                showLoginPrompt={showLoginPrompt}
-                onLoginButtonClick={handleLoginButtonClick}
-            />
-             {selectedCivilization && currentEvent && user && (
-                <ViewModeToggle 
-                    viewMode={viewMode}
-                    onToggle={handleViewModeToggle}
+        <I18nProvider language={language}>
+            <div className="flex flex-col h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
+                <Header
+                    civilizations={civilizations}
+                    selectedCivilization={selectedCivilization}
+                    onCivilizationChange={handleCivilizationChange}
+                    onLanguageIconClick={() => setActiveModal({ type: 'language' })}
+                    isKidsMode={isKidsMode}
+                    onKidsModeToggle={() => setIsKidsMode(!isKidsMode)}
+                    isLoading={isLoading}
+                    user={user}
+                    onLogout={handleLogout}
+                    onProfileClick={() => setActiveModal({ type: 'profile' })}
+                    onFavoritesClick={() => setActiveModal({ type: 'favorites'})}
+                    onSharesClick={() => setActiveModal({ type: 'shares'})}
+                    track={track}
+                    isDemoMode={isDemoMode}
+                    demoSearchText={demoSearchText}
+                    startDemo={startDemo}
+                    stopDemo={stopDemo}
+                    showLoginPrompt={showLoginPrompt}
+                    onLoginButtonClick={handleLoginButtonClick}
                 />
-            )}
-            <div className="flex flex-grow overflow-hidden relative">
-                <div className="flex flex-col flex-grow">
-                     {viewMode === '2D' ? (
-                        <MainContent
-                            civilization={selectedCivilization}
-                            currentEvent={currentEvent}
-                            character={selectedCharacter}
-                            language={language}
-                            isKidsMode={isKidsMode}
-                            isLoading={isLoading}
-                            loadingMessage={loadingMessage}
-                            user={user}
-                            onLogin={handleLogin}
-                            isFavorited={isFavorited}
-                            toggleFavorite={toggleFavorite}
-                            logShare={logShare}
-                            track={track}
-                            isDemoMode={isDemoMode}
-                            onOpenModal={handleOpenModal}
-                            showLoginPrompt={showLoginPrompt}
-                        />
-                    ) : (
-                        <ThreeDView
-                            civilization={selectedCivilization}
-                            currentEvent={currentEvent}
-                            language={language}
-                            isKidsMode={isKidsMode}
-                            initialHotspotId={shareTarget?.modalType === 'hotspot' ? shareTarget.modalId : undefined}
-                            logShare={logShare}
-                            track={track}
-                        />
-                    )}
-                    {selectedCivilization && selectedCivilization.timeline?.length > 0 && viewMode === '2D' && (
-                        <Timeline
-                            events={selectedCivilization.timeline}
-                            currentEvent={currentEvent}
-                            onEventSelect={handleEventSelect}
-                            user={user}
-                            isFavorited={isFavorited}
-                            toggleFavorite={toggleFavorite}
-                        />
-                    )}
-                </div>
-                {selectedCivilization && !isLoading && viewMode === '2D' && isSidebarVisible && (
-                    <RightSidebar
-                        civilization={selectedCivilization}
-                        currentEvent={currentEvent}
-                        onCharacterClick={handleCharacterClick}
-                        onWarClick={handleWarClick}
-                        onTopicClick={handleTopicClick}
-                        user={user}
-                        favorites={favorites}
-                        isFavorited={isFavorited}
-                        toggleFavorite={toggleFavorite}
-                        onFavoriteClick={navigateToFavorite}
+                 {selectedCivilization && currentEvent && user && (
+                    <ViewModeToggle 
+                        viewMode={viewMode}
+                        onToggle={handleViewModeToggle}
                     />
                 )}
-            </div>
-            
-            <Footer />
-
-            {selectedCivilization && !isLoading && viewMode === '2D' && (
-                 <SidebarToggle isVisible={isSidebarVisible} onToggle={toggleSidebarVisibility} />
-            )}
-
-            {isDemoMode && (
-                <TourGuide
-                    stopDemo={stopDemo}
-                    isLoading={isLoading}
-                    selectedCivilization={selectedCivilization}
-                    currentEvent={currentEvent}
-                    viewMode={viewMode}
-                    setDemoSearchText={setDemoSearchText}
-                    handleCivilizationChange={handleCivilizationChange}
-                    handleEventSelect={handleEventSelect}
-                    handleCharacterClick={handleCharacterClick}
-                    handleWarClick={handleWarClick}
-                    handleViewModeToggle={handleViewModeToggle}
-                    setActiveModal={setActiveModal}
-                    toggleFavorite={toggleFavorite}
-                    logShare={logShare}
-                />
-            )}
-
-            {error && (
-                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-red-800 text-white p-4 rounded-lg shadow-lg z-50 animate-fade-in">
-                    <p>{error}</p>
-                    <button onClick={() => setError(null)} className="absolute top-1 right-2 text-white font-bold">X</button>
+                <div className="flex flex-grow overflow-hidden relative">
+                    <div className="flex flex-col flex-grow">
+                         {viewMode === '2D' ? (
+                            <MainContent
+                                civilization={selectedCivilization}
+                                currentEvent={currentEvent}
+                                character={selectedCharacter}
+                                language={languageFullName}
+                                isKidsMode={isKidsMode}
+                                isLoading={isLoading}
+                                loadingMessage={loadingMessage}
+                                user={user}
+                                onLogin={handleLogin}
+                                isFavorited={isFavorited}
+                                toggleFavorite={toggleFavorite}
+                                logShare={logShare}
+                                track={track}
+                                isDemoMode={isDemoMode}
+                                onOpenModal={handleOpenModal}
+                                showLoginPrompt={showLoginPrompt}
+                            />
+                        ) : (
+                            <ThreeDView
+                                civilization={selectedCivilization}
+                                currentEvent={currentEvent}
+                                language={languageFullName}
+                                isKidsMode={isKidsMode}
+                                initialHotspotId={shareTarget?.modalType === 'hotspot' ? shareTarget.modalId : undefined}
+                                logShare={logShare}
+                                track={track}
+                            />
+                        )}
+                        {selectedCivilization && selectedCivilization.timeline?.length > 0 && viewMode === '2D' && (
+                            <Timeline
+                                events={selectedCivilization.timeline}
+                                currentEvent={currentEvent}
+                                onEventSelect={handleEventSelect}
+                                user={user}
+                                isFavorited={isFavorited}
+                                toggleFavorite={toggleFavorite}
+                            />
+                        )}
+                    </div>
+                    {selectedCivilization && !isLoading && viewMode === '2D' && isSidebarVisible && (
+                        <RightSidebar
+                            civilization={selectedCivilization}
+                            currentEvent={currentEvent}
+                            onCharacterClick={handleCharacterClick}
+                            onWarClick={handleWarClick}
+                            onTopicClick={handleTopicClick}
+                            user={user}
+                            favorites={favorites}
+                            isFavorited={isFavorited}
+                            toggleFavorite={toggleFavorite}
+                            onFavoriteClick={navigateToFavorite}
+                        />
+                    )}
                 </div>
-            )}
-            
-            {currentEvent && selectedCivilization && (
-                <AmbientMusicPlayer 
-                    event={currentEvent} 
-                    civilizationName={selectedCivilization.name}
-                    isKidsMode={isKidsMode}
-                    track={track}
-                />
-            )}
-            
-            {activeModal?.type === 'eventDetails' && currentEvent && selectedCivilization && (
-                <EventDetailsModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    event={currentEvent}
-                    character={selectedCharacter}
-                    language={language}
-                    civilizationName={selectedCivilization.name}
-                    isKidsMode={isKidsMode}
-                    logShare={logShare}
-                    track={track}
-                />
-            )}
-            {activeModal?.type === 'map' && currentEvent && selectedCivilization && (
-                <MapModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    event={currentEvent}
-                    civilizationName={selectedCivilization.name}
-                    language={language}
-                    isKidsMode={isKidsMode}
-                    logShare={logShare}
-                    track={track}
-                />
-            )}
-            {activeModal?.type === 'aiPrompt' && currentEvent && selectedCivilization && (
-                <AIPromptModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    event={currentEvent}
-                    civilizationName={selectedCivilization.name}
-                    language={language}
-                    isKidsMode={isKidsMode}
-                    initialPrompt={activeModal.prompt}
-                    logShare={logShare}
-                    track={track}
-                />
-            )}
-            {activeModal?.type === 'audio' && currentEvent && selectedCivilization && (
-                <AudioModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    event={currentEvent}
-                    character={selectedCharacter}
-                    civilizationName={selectedCivilization.name}
-                    language={language}
-                    isKidsMode={isKidsMode}
-                    logShare={logShare}
-                    track={track}
-                />
-            )}
+                
+                <Footer />
 
-            {activeModal?.type === 'character' && selectedCivilization && currentEvent && (
-                 <CharacterDetailsModal 
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    characterName={activeModal.name}
-                    civilizationName={selectedCivilization.name}
-                    language={language}
-                    isKidsMode={isKidsMode}
-                    currentEvent={currentEvent}
-                    logShare={logShare}
-                    track={track}
-                 />
-            )}
-            {activeModal?.type === 'war' && selectedCivilization && currentEvent && (
-                 <WarDetailsModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    warName={activeModal.name}
-                    civilizationName={selectedCivilization.name}
-                    language={language}
-                    isKidsMode={isKidsMode}
-                    currentEvent={currentEvent}
-                    logShare={logShare}
-                    track={track}
-                 />
-            )}
-            {activeModal?.type === 'topic' && selectedCivilization && currentEvent && (
-                 <TopicDetailsModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    topicName={activeModal.name}
-                    civilizationName={selectedCivilization.name}
-                    language={language}
-                    isKidsMode={isKidsMode}
-                    currentEvent={currentEvent}
-                    logShare={logShare}
-                    track={track}
-                 />
-            )}
-            {activeModal?.type === 'profile' && user && (
-                <ProfileModal 
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    user={user}
-                    favoritesCount={favorites.length}
-                    sharesCount={shares.length}
-                />
-            )}
-            {activeModal?.type === 'favorites' && user && (
-                <FavoritesModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    favorites={favorites}
-                    onFavoriteClick={(fav) => {
-                        navigateToFavorite(fav);
-                        setActiveModal(null);
-                    }}
-                />
-            )}
-            {activeModal?.type === 'shares' && user && (
-                <SharesModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    shares={shares}
-                />
-            )}
-            {activeModal?.type === 'language' && (
-                <LanguageModal
-                    isOpen={true}
-                    onClose={() => setActiveModal(null)}
-                    languages={LANGUAGES}
-                    currentLanguage={language}
-                    onSelectLanguage={handleLanguageSelect}
-                />
-            )}
+                {selectedCivilization && !isLoading && viewMode === '2D' && (
+                     <SidebarToggle isVisible={isSidebarVisible} onToggle={toggleSidebarVisibility} />
+                )}
 
-        </div>
+                {isDemoMode && (
+                    <TourGuide
+                        stopDemo={stopDemo}
+                        isLoading={isLoading}
+                        selectedCivilization={selectedCivilization}
+                        currentEvent={currentEvent}
+                        viewMode={viewMode}
+                        setDemoSearchText={setDemoSearchText}
+                        handleCivilizationChange={handleCivilizationChange}
+                        handleEventSelect={handleEventSelect}
+                        handleCharacterClick={handleCharacterClick}
+                        handleWarClick={handleWarClick}
+                        handleViewModeToggle={handleViewModeToggle}
+                        setActiveModal={setActiveModal}
+                        toggleFavorite={toggleFavorite}
+                        logShare={logShare}
+                    />
+                )}
+
+                {error && (
+                    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-red-800 text-white p-4 rounded-lg shadow-lg z-50 animate-fade-in">
+                        <p>{error}</p>
+                        <button onClick={() => setError(null)} className="absolute top-1 right-2 text-white font-bold">X</button>
+                    </div>
+                )}
+                
+                {currentEvent && selectedCivilization && (
+                    <AmbientMusicPlayer 
+                        event={currentEvent} 
+                        civilizationName={selectedCivilization.name}
+                        isKidsMode={isKidsMode}
+                        track={track}
+                    />
+                )}
+                
+                {activeModal?.type === 'eventDetails' && currentEvent && selectedCivilization && (
+                    <EventDetailsModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        event={currentEvent}
+                        character={selectedCharacter}
+                        language={languageFullName}
+                        civilizationName={selectedCivilization.name}
+                        isKidsMode={isKidsMode}
+                        logShare={logShare}
+                        track={track}
+                    />
+                )}
+                {activeModal?.type === 'map' && currentEvent && selectedCivilization && (
+                    <MapModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        event={currentEvent}
+                        civilizationName={selectedCivilization.name}
+                        language={languageFullName}
+                        isKidsMode={isKidsMode}
+                        logShare={logShare}
+                        track={track}
+                    />
+                )}
+                {activeModal?.type === 'aiPrompt' && currentEvent && selectedCivilization && (
+                    <AIPromptModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        event={currentEvent}
+                        civilizationName={selectedCivilization.name}
+                        language={languageFullName}
+                        isKidsMode={isKidsMode}
+                        initialPrompt={activeModal.prompt}
+                        logShare={logShare}
+                        track={track}
+                    />
+                )}
+                {activeModal?.type === 'audio' && currentEvent && selectedCivilization && (
+                    <AudioModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        event={currentEvent}
+                        character={selectedCharacter}
+                        civilizationName={selectedCivilization.name}
+                        language={languageFullName}
+                        isKidsMode={isKidsMode}
+                        logShare={logShare}
+                        track={track}
+                    />
+                )}
+
+                {activeModal?.type === 'character' && selectedCivilization && currentEvent && (
+                     <CharacterDetailsModal 
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        characterName={activeModal.name}
+                        civilizationName={selectedCivilization.name}
+                        language={languageFullName}
+                        isKidsMode={isKidsMode}
+                        currentEvent={currentEvent}
+                        logShare={logShare}
+                        track={track}
+                     />
+                )}
+                {activeModal?.type === 'war' && selectedCivilization && currentEvent && (
+                     <WarDetailsModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        warName={activeModal.name}
+                        civilizationName={selectedCivilization.name}
+                        language={languageFullName}
+                        isKidsMode={isKidsMode}
+                        currentEvent={currentEvent}
+                        logShare={logShare}
+                        track={track}
+                     />
+                )}
+                {activeModal?.type === 'topic' && selectedCivilization && currentEvent && (
+                     <TopicDetailsModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        topicName={activeModal.name}
+                        civilizationName={selectedCivilization.name}
+                        language={languageFullName}
+                        isKidsMode={isKidsMode}
+                        currentEvent={currentEvent}
+                        logShare={logShare}
+                        track={track}
+                     />
+                )}
+                {activeModal?.type === 'profile' && user && (
+                    <ProfileModal 
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        user={user}
+                        favoritesCount={favorites.length}
+                        sharesCount={shares.length}
+                    />
+                )}
+                {activeModal?.type === 'favorites' && user && (
+                    <FavoritesModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        favorites={favorites}
+                        onFavoriteClick={(fav) => {
+                            navigateToFavorite(fav);
+                            setActiveModal(null);
+                        }}
+                    />
+                )}
+                {activeModal?.type === 'shares' && user && (
+                    <SharesModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        shares={shares}
+                    />
+                )}
+                {activeModal?.type === 'language' && (
+                    <LanguageModal
+                        isOpen={true}
+                        onClose={() => setActiveModal(null)}
+                        languages={LANGUAGES}
+                        currentLanguageCode={language}
+                        onSelectLanguage={handleLanguageSelect}
+                    />
+                )}
+
+            </div>
+        </I18nProvider>
     );
 }
 

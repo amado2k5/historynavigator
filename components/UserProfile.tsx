@@ -1,6 +1,7 @@
 import React from 'react';
 import type { User } from '../types.ts';
 import { UserIcon, GoogleIcon, AppleIcon, XIcon, FacebookIcon, StarIcon, ShareIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface UserProfileProps {
     user: User;
@@ -20,6 +21,7 @@ export const avatarMap: Record<string, React.FC<{className?: string}>> = {
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout, onProfileClick, onFavoritesClick, onSharesClick }) => {
     const AvatarComponent = avatarMap[user.avatar] || UserIcon;
+    const { t } = useI18n();
 
     return (
         <div className="relative group">
@@ -35,25 +37,25 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onLogout, onProf
                         <li>
                             <button onClick={onProfileClick} className="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-[var(--color-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-accent)]">
                                 <UserIcon className="w-5 h-5" />
-                                Profile
+                                {t('userProfile.profile')}
                             </button>
                         </li>
                         <li>
                             <button onClick={onFavoritesClick} className="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-[var(--color-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-accent)]">
                                <StarIcon className="w-5 h-5" />
-                               Favorites
+                               {t('userProfile.favorites')}
                             </button>
                         </li>
                          <li>
                             <button onClick={onSharesClick} className="flex items-center gap-3 w-full text-left px-4 py-2 text-sm text-[var(--color-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-accent)]">
                                <ShareIcon className="w-5 h-5" />
-                               Shares
+                               {t('userProfile.shares')}
                             </button>
                         </li>
                         <div className="border-t my-1" style={{borderColor: 'var(--color-primary)'}}></div>
                         <li>
                             <button onClick={onLogout} className="w-full text-left px-4 py-2 text-sm text-[var(--color-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-accent)]">
-                               Sign Out
+                               {t('userProfile.signOut')}
                             </button>
                         </li>
                     </ul>

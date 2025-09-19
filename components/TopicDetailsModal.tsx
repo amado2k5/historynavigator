@@ -7,6 +7,7 @@ import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { fetchTopicDetails, generateImage } from '../services/geminiService.ts';
 import { ShareButton } from './ShareButton.tsx';
 import type { TimelineEvent, Share } from '../types.ts';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface TopicDetailsModalProps {
     isOpen: boolean;
@@ -26,6 +27,7 @@ export const TopicDetailsModal: React.FC<TopicDetailsModalProps> = ({ isOpen, on
     const [error, setError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
+    const { t, language: langCode } = useI18n();
 
     const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -34,7 +36,7 @@ export const TopicDetailsModal: React.FC<TopicDetailsModalProps> = ({ isOpen, on
             view: '2D',
             modal: 'topic',
             id: topicName,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -62,7 +64,7 @@ export const TopicDetailsModal: React.FC<TopicDetailsModalProps> = ({ isOpen, on
                     setImageUrl(url);
                 } catch (e) {
                     console.error("Failed to fetch topic details or image:", e);
-                    setError("Could not load the topic details. Please try again.");
+                    setError(t('modals.error'));
                 } finally {
                     setIsLoading(false);
                     setIsImageLoading(false);
@@ -70,7 +72,7 @@ export const TopicDetailsModal: React.FC<TopicDetailsModalProps> = ({ isOpen, on
             };
             loadDetails();
         }
-    }, [isOpen, topicName, civilizationName, language, isKidsMode]);
+    }, [isOpen, topicName, civilizationName, language, isKidsMode, t]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -88,7 +90,7 @@ export const TopicDetailsModal: React.FC<TopicDetailsModalProps> = ({ isOpen, on
             <div className="w-full aspect-[4/3] bg-[var(--color-background-light)] rounded-md mb-4 flex items-center justify-center overflow-hidden">
                 {isImageLoading && <LoadingSpinner />}
                 {!isImageLoading && imageUrl && <img src={imageUrl} alt={`Representation of ${topicName}`} className="w-full h-full object-cover" />}
-                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">Image could not be generated.</div>}
+                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">{t('modals.imageError')}</div>}
             </div>
 
             {isLoading && (

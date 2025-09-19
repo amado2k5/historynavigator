@@ -3,6 +3,7 @@ import type { TimelineEvent, User, Share } from '../types.ts';
 import { BookOpenIcon, MapIcon, LightbulbIcon, VolumeUpIcon } from './Icons.tsx';
 import { FavoriteIcon } from './FavoriteIcon.tsx';
 import { ShareButton } from './ShareButton.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface EventBubbleProps {
     event: TimelineEvent;
@@ -18,7 +19,8 @@ interface EventBubbleProps {
 }
 
 export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civilizationName, isKidsMode, user, isFavorited, toggleFavorite, logShare, track, onOpenModal }) => {
-    
+    const { t, language: langCode } = useI18n();
+
     const generateShareUrl = () => {
         const params = new URLSearchParams({
             civilization: civilizationName,
@@ -26,7 +28,7 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
             view: '2D',
             modal: 'none',
             id: event.id,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -58,19 +60,19 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
                     <div className="flex gap-4 sm:gap-6 flex-wrap justify-center">
                         <button onClick={() => onOpenModal('eventDetails')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <BookOpenIcon className="w-10 h-10" />
-                            <span className="mt-2 text-sm">Read Details</span>
+                            <span className="mt-2 text-sm">{t('eventBubble.readDetails')}</span>
                         </button>
                          <button onClick={() => onOpenModal('audio')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <VolumeUpIcon className="w-10 h-10" />
-                            <span className="mt-2 text-sm">Create Audio</span>
+                            <span className="mt-2 text-sm">{t('eventBubble.createAudio')}</span>
                         </button>
                         <button onClick={() => onOpenModal('map')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <MapIcon className="w-10 h-10" />
-                            <span className="mt-2 text-sm">View on Map</span>
+                            <span className="mt-2 text-sm">{t('eventBubble.viewOnMap')}</span>
                         </button>
                         <button onClick={() => onOpenModal('aiPrompt')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <LightbulbIcon className="w-10 h-10" />
-                            <span className="mt-2 text-sm">Ask AI</span>
+                            <span className="mt-2 text-sm">{t('eventBubble.askAI')}</span>
                         </button>
                     </div>
                 </div>

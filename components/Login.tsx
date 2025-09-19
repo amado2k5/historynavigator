@@ -1,5 +1,6 @@
 import React from 'react';
 import { GoogleIcon, AppleIcon, XIcon, FacebookIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface LoginProps {
     onLogin: (provider: string) => void;
@@ -13,20 +14,21 @@ const providers = [
 ];
 
 export const Login: React.FC<LoginProps> = ({ onLogin }) => {
+    const { t } = useI18n();
     return (
         <div className="text-center bg-black bg-opacity-50 backdrop-blur-sm p-8 rounded-xl border animate-fade-in" style={{borderColor: 'var(--color-primary)'}}>
             <div className="flex flex-col items-center justify-center gap-3 mb-4">
-                <h2 className="text-4xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Welcome to</h2>
+                <h2 className="text-4xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{t('login.welcome')}</h2>
                 <img src="timelineThisLogo.png" alt="TimelineThis Logo" className="h-44" />
             </div>
-            <p className="text-xl text-[var(--color-secondary)] mb-8">Sign in to save your discoveries and personalize your journey.</p>
+            <p className="text-xl text-[var(--color-secondary)] mb-8">{t('login.signInPrompt')}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 {providers.map(provider => (
                     <button 
                         key={provider.name}
                         onClick={() => onLogin(provider.name)}
                         className={`w-full sm:w-auto flex items-center justify-center gap-3 py-3 px-6 bg-[var(--color-background-light)] border border-[var(--color-primary)] rounded-lg transition-colors duration-300 hover:bg-[var(--color-primary)] ${provider.color}`}
-                        aria-label={`Sign in with ${provider.name}`}
+                        aria-label={t('login.signInWith', { provider: provider.name })}
                     >
                         <provider.icon className="w-6 h-6" />
                         <span className="font-semibold text-lg hidden sm:block">{provider.name}</span>

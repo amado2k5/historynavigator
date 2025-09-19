@@ -1,0 +1,129 @@
+{
+  "header": {
+    "exploreTopic": "Explorer n'importe quel sujet",
+    "exploreSubtext": "Personne, événement, lieu... une chronologie vous attend",
+    "kidsMode": "Enfants",
+    "tourButton": "Faire une visite",
+    "exitDemoButton": "Quitter la Démo",
+    "loginButton": "Connexion / Inscription",
+    "searchPlaceholder": "Rechercher une personne, un événement ou un lieu...",
+    "loading": "Chargement..."
+  },
+  "footer": {
+    "contact": "Contactez-nous",
+    "copyright": "copyright 2025 timelineThis.app",
+    "disclaimer": "Avis de non-responsabilité (Cette application a été développée avec Google AI Studio. Elle est uniquement à des fins de démonstration et ne doit pas être utilisée en production)."
+  },
+  "login": {
+    "welcome": "Bienvenue sur",
+    "signInPrompt": "Connectez-vous pour sauvegarder vos découvertes et personnaliser votre parcours.",
+    "signInWith": "Se connecter avec {{provider}}"
+  },
+  "mainContent": {
+    "welcomeMessage": "Bienvenue, {{name}}",
+    "explorer": "Explorateur",
+    "selectCivilization": "Veuillez sélectionner une civilisation pour commencer votre voyage.",
+    "exploreCivilization": "Explorer {{name}}",
+    "selectEvent": "Sélectionnez un événement sur la chronologie ci-dessous pour en savoir plus.",
+    "generatingVista": "Génération de la vue historique..."
+  },
+  "eventBubble": {
+    "readDetails": "Lire les Détails",
+    "createAudio": "Créer l'Audio",
+    "viewOnMap": "Voir sur la Carte",
+    "askAI": "Demander à l'IA"
+  },
+  "sidebar": {
+    "keyCharacters": "Personnages Clés",
+    "majorWars": "Guerres Majeures",
+    "culturalTopics": "Sujets Culturels",
+    "sources": "Sources",
+    "myFavorites": "Mes Favoris",
+    "relatedLinks": "Liens Connexes",
+    "exploreOn": "Explorer sur {{platform}}"
+  },
+  "modals": {
+    "close": "Fermer",
+    "historicalOverview": "Aperçu Historique",
+    "perspective": "Perspective de {{characterName}}",
+    "error": "Impossible de charger les détails. Veuillez réessayer.",
+    "imageError": "L'image n'a pas pu être générée.",
+    "playNarration": "Lancer la narration",
+    "stopNarration": "Arrêter la narration",
+    "eventDetailsTitle": "Détails de l'Événement",
+    "mapTitle": "Carte de {{eventName}}",
+    "location": "Lieu",
+    "pointsOfInterest": "Points d'Intérêt",
+    "loadingRecords": "Récupération des archives historiques...",
+    "drawingMaps": "Dessin des cartes anciennes...",
+    "selectPOI": "Sélectionnez un point d'intérêt pour en savoir plus.",
+    "aiPromptTitle": "Demandez à l'Historien IA",
+    "aiPromptSubtext": "Vous avez une question spécifique sur \"{{eventName}}\" ? N'hésitez pas !",
+    "aiPromptPlaceholder": "Ex: Quelle était la vie quotidienne d'un roturier ?",
+    "ask": "Demander",
+    "thinking": "Réflexion...",
+    "aiError": "Échec de la réponse de l'IA. Veuillez réessayer.",
+    "consultingArchives": "Consultation des archives...",
+    "paintingDiscovery": "Peinture de votre découverte...",
+    "audioTitle": "Expérience Audio : {{eventName}}",
+    "audioSubtext": "Écoutez une histoire sur cet événement.",
+    "audioError": "Impossible de créer l'expérience audio. Veuillez réessayer.",
+    "profileTitle": "Profil",
+    "signedInWith": "Connecté avec {{provider}}",
+    "favorites": "Favoris",
+    "shares": "Partages",
+    "favoritesTitle": "Mes Favoris",
+    "noFavorites": "Vous n'avez encore rien mis en favori. Cliquez sur l'étoile des événements ou des sujets pour les enregistrer ici.",
+    "sharesTitle": "Mon Historique de Partage",
+    "noShares": "Vous n'avez encore rien partagé. Utilisez l'icône de partage sur n'importe quel contenu pour générer un lien.",
+    "sharedOn": "Partagé le {{date}}",
+    "copyLink": "Copier le Lien",
+    "copied": "Copié !",
+    "languageTitle": "Sélectionner une Langue",
+    "visualizing": "Visualisation : {{eventName}}",
+    "videoError": "La génération de la vidéo a échoué. Les archives sont peut-être scellées pour le moment.",
+    "conjuringVisions": "Invocation des visions du passé...",
+    "gatheringPigments": "Collecte de pigments historiques...",
+    "consultingCinematographers": "Consultation des cinéastes célestes...",
+    "weavingTime": "Tissage des fils du temps en film...",
+    "patience": "Cela peut prendre une minute ou deux, merci de votre patience !",
+    "renderingLandscapes": "Rendu des paysages anciens...",
+    "animatingFigures": "Animation des personnages historiques..."
+  },
+  "userProfile": {
+    "profile": "Profil",
+    "favorites": "Favoris",
+    "shares": "Partages",
+    "signOut": "Déconnexion"
+  },
+  "tooltips": {
+    "favorite": "Ajouter aux favoris",
+    "unfavorite": "Retirer des favoris",
+    "share": "Partager",
+    "linkCopied": "Lien Copié !"
+  },
+  "threeDView": {
+    "sceneError": "Impossible de créer la scène immersive. Veuillez essayer un autre événement.",
+    "generatingVista": "Génération de la vue historique...",
+    "populatingScene": "Peuplement de la scène avec des personnages...",
+    "interactWith": "Interagir avec {{hotspotName}}",
+    "nothingToSay": "Je n'ai rien à dire."
+  },
+  "tour": {
+    "welcome": "Bienvenue ! La visite commence...",
+    "start": "Commençons par explorer une civilisation classique : la Rome antique.",
+    "timeline": "Voici la chronologie. Sélectionnons un événement.",
+    "readDetails": "Nous pouvons lire plus de détails sur cet événement.",
+    "canFavorite": "Vous pouvez enregistrer les éléments intéressants dans vos favoris.",
+    "viewFavorites": "Voyons vos favoris enregistrés.",
+    "sharing": "Partager des découvertes est facile avec un lien unique.",
+    "shareHistory": "Votre historique de partage est également sauvegardé sur votre profil.",
+    "sidebar": "La barre latérale droite propose d'autres sujets à explorer.",
+    "keyCharacter": "Apprenons-en plus sur un personnage clé.",
+    "majorConflict": "Et un conflit majeur...",
+    "threeDView": "Et maintenant, la vue 3D immersive !",
+    "hotspots": "Vous pouvez cliquer sur les points d'accès pour interagir avec la scène.",
+    "dynamicSearch": "Essayons une recherche dynamique sur un sujet moderne.",
+    "restarting": "La visite va maintenant redémarrer. Vous pouvez quitter à tout moment."
+  }
+}

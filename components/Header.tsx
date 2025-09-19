@@ -3,6 +3,7 @@ import { SearchableSelect } from './SearchableSelect.tsx';
 import type { Civilization, User } from '../types.ts';
 import { UserProfile } from './UserProfile.tsx';
 import { GlobeIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface HeaderProps {
     civilizations: { name: string }[];
@@ -47,7 +48,8 @@ export const Header: React.FC<HeaderProps> = ({
     showLoginPrompt,
     onLoginButtonClick
 }) => {
-    
+    const { t } = useI18n();
+
     const SettingsControls = () => (
         <>
             <button 
@@ -59,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <div className="flex items-center">
-                <label htmlFor="kids-mode-toggle" className="mr-2 text-sm text-[var(--color-secondary)]">Kids</label>
+                <label htmlFor="kids-mode-toggle" className="mr-2 text-sm text-[var(--color-secondary)]">{t('header.kidsMode')}</label>
                 <button
                     id="kids-mode-toggle"
                     onClick={onKidsModeToggle}
@@ -80,22 +82,22 @@ export const Header: React.FC<HeaderProps> = ({
                         onClick={stopDemo}
                         className="px-4 py-2 text-sm bg-red-600 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
                     >
-                        Exit Demo
+                        {t('header.exitDemoButton')}
                     </button>
                 ) : (
                     <button
                         onClick={startDemo}
                         className="px-4 py-2 text-sm bg-[var(--color-accent)] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
                     >
-                        Take a tour
+                        {t('header.tourButton')}
                     </button>
                 )}
             </div>
             
             <div className="flex items-center gap-4 w-full md:w-auto flex-col sm:flex-row">
                 <div className="text-right hidden sm:block flex-grow">
-                    <p className="text-sm font-semibold text-[var(--color-foreground)]">Explore any topic</p>
-                    <p className="text-xs text-[var(--color-secondary)]">Person, event, place... a timeline awaits</p>
+                    <p className="text-sm font-semibold text-[var(--color-foreground)]">{t('header.exploreTopic')}</p>
+                    <p className="text-xs text-[var(--color-secondary)]">{t('header.exploreSubtext')}</p>
                 </div>
 
                 <div className="w-full sm:w-64">
@@ -103,7 +105,7 @@ export const Header: React.FC<HeaderProps> = ({
                         items={civilizations}
                         selected={selectedCivilization}
                         onChange={onCivilizationChange}
-                        placeholder={isLoading ? "Loading..." : "Search for a person, event, or place..."}
+                        placeholder={isLoading ? t('header.loading') : t('header.searchPlaceholder')}
                         isDemoMode={isDemoMode}
                         demoValue={demoSearchText}
                     />
@@ -128,7 +130,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 onClick={onLoginButtonClick}
                                 className="px-6 py-2 text-sm bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 transition-all animate-fade-in"
                             >
-                                Login / Sign Up
+                                {t('header.loginButton')}
                             </button>
                         )}
                     </>

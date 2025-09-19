@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
@@ -7,6 +8,7 @@ import { speak, cancelSpeech } from '../services/voiceService.ts';
 import type { TimelineEvent, Character, VoiceDescription, Share } from '../types.ts';
 import { PlayIcon, PauseIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface AudioModalProps {
     isOpen: boolean;
@@ -28,6 +30,7 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
     const [isImageLoading, setIsImageLoading] = useState(false);
     const [isNarrating, setIsNarrating] = useState(false);
     const [voiceDescription, setVoiceDescription] = useState<VoiceDescription | null>(null);
+    const { t, language: langCode } = useI18n();
 
     const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -36,7 +39,7 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
             view: '2D',
             modal: 'audio',
             id: event.id,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -80,7 +83,7 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
 
                 } catch (e) {
                     console.error("Failed to fetch audio experience:", e);
-                    setError("Could not create the audio experience. Please try again.");
+                    setError(t('modals.audioError'));
                     setIsLoading(false);
                 } finally {
                     setIsImageLoading(false);
@@ -90,7 +93,7 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
         }
 
         return cleanup;
-    }, [isOpen, event, character, civilizationName, language, isKidsMode]);
+    }, [isOpen, event, character, civilizationName, language, isKidsMode, t]);
 
     const handleToggleNarration = () => {
         if (!script || !voiceDescription) return;
@@ -116,13 +119,13 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <div className="flex justify-between items-start mb-2">
                 <div className='flex-grow'>
-                    <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Audio Experience: {event.title}</h2>
-                    <p className="text-md text-[var(--color-secondary)] mt-1">Listen to a story about this event.</p>
+                    <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{t('modals.audioTitle', { eventName: event.title })}</h2>
+                    <p className="text-md text-[var(--color-secondary)] mt-1">{t('modals.audioSubtext')}</p>
                 </div>
                 <div className="flex items-center flex-shrink-0 ml-4">
                     {script && <ShareButton
                         shareUrl={generateShareUrl()}
-                        shareTitle={`Audio Experience: ${event.title}`}
+                        shareTitle={`${t('modals.audioTitle', { eventName: event.title })}`}
                         shareText={`Listen to an audio story about "${event.title}" from the history of ${civilizationName}!`}
                         onShareClick={() => track('share_content', { type: 'audio', id: event.id })}
                         onLogShare={({ url, title, text }) => logShare({ url, title, text })}
@@ -131,7 +134,7 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
                         onClick={handleToggleNarration}
                         disabled={isLoading || !script || !voiceDescription}
                         className="p-2 rounded-full hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        aria-label={isNarrating ? 'Stop narration' : 'Play narration'}
+                        aria-label={isNarrating ? t('modals.stopNarration') : t('modals.playNarration')}
                     >
                         {isNarrating
                             ? <PauseIcon className="w-6 h-6 text-[var(--color-accent)]" />
@@ -144,7 +147,7 @@ export const AudioModal: React.FC<AudioModalProps> = ({ isOpen, onClose, event, 
              <div className="w-full aspect-video bg-[var(--color-background-light)] rounded-md my-4 flex items-center justify-center overflow-hidden">
                 {isImageLoading && <LoadingSpinner />}
                 {!isImageLoading && imageUrl && <img src={imageUrl} alt={`Depiction of ${event.title}`} className="w-full h-full object-cover" />}
-                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">Image could not be generated.</div>}
+                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">{t('modals.imageError')}</div>}
             </div>
 
             {isLoading && (

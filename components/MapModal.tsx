@@ -10,6 +10,7 @@ import { generateMapData, generateImage } from '../services/geminiService.ts';
 // FIX: Added .tsx extension to the import path.
 import { MapPinIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface MapModalProps {
     isOpen: boolean;
@@ -29,6 +30,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
     const [isLoadingImage, setIsLoadingImage] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedPoi, setSelectedPoi] = useState<MapData['pointsOfInterest'][0] | null>(null);
+    const { t, language: langCode } = useI18n();
 
      const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -37,7 +39,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
             view: '2D',
             modal: 'map',
             id: event.id,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -62,10 +64,6 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                     const data = await generateMapData(event, civilizationName, language, isKidsMode);
                     setMapData(data);
                     
-                    // Automatically select the first POI, but don't show it on top of map initially
-                    // if (data && data.pointsOfInterest.length > 0) {
-                    //     setSelectedPoi(data.pointsOfInterest[0]);
-                    // }
                     setIsLoading(false);
 
                     if (data) {
@@ -78,7 +76,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                         setMapImageUrl(imageUrl);
                     }
                 } catch (err) {
-                    setError('Failed to load map data or generate map image.');
+                    setError(t('modals.error'));
                     console.error(err);
                     setIsLoading(false);
                 } finally {
@@ -87,15 +85,15 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
             };
             fetchMapDataAndImage();
         }
-    }, [isOpen, event, civilizationName, language, isKidsMode]);
+    }, [isOpen, event, civilizationName, language, isKidsMode, t]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Map of {event.title}</h2>
+                <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{t('modals.mapTitle', { eventName: event.title })}</h2>
                 <ShareButton
                     shareUrl={generateShareUrl()}
-                    shareTitle={`Map of ${event.title} - TimelineThis`}
+                    shareTitle={`${t('modals.mapTitle', { eventName: event.title })} - TimelineThis`}
                     shareText={`Explore the map for the event "${event.title}" from the history of ${civilizationName}!`}
                     onShareClick={() => track('share_content', { type: 'map', id: event.id })}
                     onLogShare={({ url, title, text }) => logShare({ url, title, text })}
@@ -106,7 +104,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                 <div className="flex justify-center items-center h-96 flex-col">
                     <LoadingSpinner />
                     <p className="mt-4 text-[var(--color-secondary)]">
-                        {isLoading ? 'Retrieving historical records...' : 'Drawing ancient maps...'}
+                        {isLoading ? t('modals.loadingRecords') : t('modals.drawingMaps')}
                     </p>
                 </div>
             )}
@@ -114,9 +112,9 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
             {!isLoading && !isLoadingImage && mapData && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="md:col-span-1">
-                        <h3 className="font-bold text-lg font-heading mb-2">Location</h3>
+                        <h3 className="font-bold text-lg font-heading mb-2">{t('modals.location')}</h3>
                         <p className="text-[var(--color-secondary)] mb-4">{mapData.mapDescription}</p>
-                        <h3 className="font-bold text-lg font-heading mb-2">Points of Interest</h3>
+                        <h3 className="font-bold text-lg font-heading mb-2">{t('modals.pointsOfInterest')}</h3>
                          <ul className="text-sm text-[var(--color-secondary)] space-y-2">
                             {mapData.pointsOfInterest.map((poi, index) => (
                                 <li key={index}>
@@ -146,7 +144,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                                 <button 
                                     onClick={() => setSelectedPoi(null)} 
                                     className="absolute top-2 right-2 p-1 bg-black bg-opacity-30 rounded-full text-white hover:bg-opacity-50 transition-colors"
-                                    aria-label="Close details"
+                                    aria-label={t('modals.close')}
                                 >
                                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -160,7 +158,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                                  </p>
                             </div>
                         ) : (
-                             <p className="text-white relative z-10 drop-shadow-lg">Select a point of interest to learn more.</p>
+                             <p className="text-white relative z-10 drop-shadow-lg">{t('modals.selectPOI')}</p>
                         )}
                     </div>
                 </div>

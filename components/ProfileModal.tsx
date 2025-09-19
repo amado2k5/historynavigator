@@ -5,6 +5,7 @@ import { Modal } from './Modal.tsx';
 import type { User } from '../types.ts';
 import { UserIcon, StarIcon, ShareIcon } from './Icons.tsx';
 import { avatarMap } from './UserProfile.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface ProfileModalProps {
     isOpen: boolean;
@@ -16,6 +17,7 @@ interface ProfileModalProps {
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, user, favoritesCount, sharesCount }) => {
     const AvatarComponent = avatarMap[user.avatar] || UserIcon;
+    const { t } = useI18n();
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="sm">
             <div className="flex flex-col items-center text-center">
@@ -23,7 +25,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                     <AvatarComponent className="w-12 h-12 text-[var(--color-secondary)]" />
                 </div>
                  <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{user.name}</h2>
-                 <p className="text-sm text-[var(--color-secondary)] mb-6">Signed in with {user.provider}</p>
+                 <p className="text-sm text-[var(--color-secondary)] mb-6">{t('modals.signedInWith', { provider: user.provider })}</p>
                  
                  <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-[var(--color-background-light)] rounded-lg">
                     <div className="text-center">
@@ -31,14 +33,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                             <StarIcon className="w-6 h-6 text-[var(--color-accent)]" filled />
                             <p className="text-2xl font-bold">{favoritesCount}</p>
                         </div>
-                        <p className="text-sm text-[var(--color-secondary)]">Favorites</p>
+                        <p className="text-sm text-[var(--color-secondary)]">{t('modals.favorites')}</p>
                     </div>
                      <div className="text-center">
                         <div className="flex items-center justify-center gap-2">
                             <ShareIcon className="w-6 h-6 text-[var(--color-secondary)]" />
                             <p className="text-2xl font-bold">{sharesCount}</p>
                         </div>
-                        <p className="text-sm text-[var(--color-secondary)]">Shares</p>
+                        <p className="text-sm text-[var(--color-secondary)]">{t('modals.shares')}</p>
                     </div>
                  </div>
             </div>

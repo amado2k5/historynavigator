@@ -7,6 +7,7 @@ import { generateImage, fetchSceneHotspots, fetchHotspotDialogue, fetchVoiceDesc
 import { speak, cancelSpeech } from '../services/voiceService.ts';
 import { ChatBubbleIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface ThreeDViewProps {
     civilization: Civilization | null;
@@ -41,6 +42,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
     const [isLoadingHotspots, setIsLoadingHotspots] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [rotation, setRotation] = useState({ x: 0, y: 0 });
+    const { t, language: langCode } = useI18n();
 
     // Main data fetching effect
     useEffect(() => {
@@ -87,7 +89,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
 
             } catch (err) {
                 console.error("Failed to generate 3D scene:", err);
-                if (!isCancelled) setError("Could not create the immersive scene. Please try another event.");
+                if (!isCancelled) setError(t('threeDView.sceneError'));
             } finally {
                 if (!isCancelled) {
                     setIsLoadingImage(false);
@@ -102,7 +104,8 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
             isCancelled = true;
             cancelSpeech();
         };
-    }, [currentEvent, civilization, isKidsMode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentEvent, civilization, isKidsMode, t]);
     
     // Mouse move handler for panoramic effect
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -119,7 +122,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
             view: '3D',
             modal: 'hotspot',
             id: hotspotName,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -159,7 +162,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
 
         } catch (err) {
             console.error(`Failed to get dialogue for ${hotspot.name}:`, err);
-            setActiveDialogue({ hotspotName: hotspot.name, text: 'I have nothing to say.', imageUrl: null, isLoading: false });
+            setActiveDialogue({ hotspotName: hotspot.name, text: t('threeDView.nothingToSay'), imageUrl: null, isLoading: false });
             setTimeout(() => setActiveDialogue(null), 2000);
         }
     };
@@ -175,7 +178,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
                  <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-20">
                     <LoadingSpinner />
                     <p className="mt-4 text-[var(--color-secondary)]">
-                        {isLoadingImage ? "Generating historical vista..." : "Populating scene with characters..."}
+                        {isLoadingImage ? t('threeDView.generatingVista') : t('threeDView.populatingScene')}
                     </p>
                 </div>
             )}
@@ -206,7 +209,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
                             <button
                                 onClick={() => handleHotspotClick(hotspot)}
                                 className="w-10 h-10 bg-black bg-opacity-40 backdrop-blur-sm rounded-full flex items-center justify-center text-white border-2 border-white border-opacity-50 animate-pulse-hotspot"
-                                aria-label={`Interact with ${hotspot.name}`}
+                                aria-label={t('threeDView.interactWith', { hotspotName: hotspot.name })}
                             >
                                 <ChatBubbleIcon className="w-6 h-6"/>
                             </button>

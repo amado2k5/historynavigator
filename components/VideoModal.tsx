@@ -5,6 +5,7 @@ import { LoadingSpinner } from './LoadingSpinner.tsx';
 import type { TimelineEvent, Character } from '../types.ts';
 // FIX: Added .ts extension to the import path.
 import { generateVideo } from '../services/geminiService.ts';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface VideoModalProps {
     isOpen: boolean;
@@ -21,19 +22,20 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, event, 
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [loadingMessage, setLoadingMessage] = useState("Conjuring visions of the past...");
+    const { t } = useI18n();
+    const [loadingMessage, setLoadingMessage] = useState(t('modals.conjuringVisions'));
 
     useEffect(() => {
         let isCancelled = false;
         let timeoutId: ReturnType<typeof setTimeout>;
 
         const messages = [
-            "Gathering historical pigments...",
-            "Consulting the celestial cinematographers...",
-            "Weaving threads of time into film...",
-            "This can take a minute or two, thank you for your patience!",
-            "Rendering ancient landscapes...",
-            "Animating historical figures...",
+            t('modals.gatheringPigments'),
+            t('modals.consultingCinematographers'),
+            t('modals.weavingTime'),
+            t('modals.patience'),
+            t('modals.renderingLandscapes'),
+            t('modals.animatingFigures'),
         ];
         
         const updateMessage = () => {
@@ -48,7 +50,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, event, 
                 setIsLoading(true);
                 setError(null);
                 setVideoUrl(null);
-                setLoadingMessage("Conjuring visions of the past...");
+                setLoadingMessage(t('modals.conjuringVisions'));
                 timeoutId = setTimeout(updateMessage, 5000);
 
                 try {
@@ -59,7 +61,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, event, 
                     }
                 } catch (err) {
                     if (!isCancelled) {
-                        setError('Failed to generate video. The archives may be sealed at the moment.');
+                        setError(t('modals.videoError'));
                         console.error(err);
                     }
                 } finally {
@@ -79,11 +81,11 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, event, 
             }
         };
     // FIX: Added civilizationName to the dependency array.
-    }, [isOpen, event, character, civilizationName, language, isKidsMode]);
+    }, [isOpen, event, character, civilizationName, language, isKidsMode, t]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
-            <h2 className="text-2xl font-bold font-heading mb-4" style={{color: 'var(--color-accent)'}}>Visualizing: {event.title}</h2>
+            <h2 className="text-2xl font-bold font-heading mb-4" style={{color: 'var(--color-accent)'}}>{t('modals.visualizing', { eventName: event.title })}</h2>
             <div className="aspect-video w-full flex items-center justify-center bg-black rounded-lg">
                 {isLoading && (
                     <div className="text-center">

@@ -3,6 +3,7 @@ import React from 'react';
 import { Modal } from './Modal.tsx';
 import type { Favorite } from '../types.ts';
 import { StarIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface FavoritesModalProps {
     isOpen: boolean;
@@ -12,6 +13,7 @@ interface FavoritesModalProps {
 }
 
 export const FavoritesModal: React.FC<FavoritesModalProps> = ({ isOpen, onClose, favorites, onFavoriteClick }) => {
+    const { t } = useI18n();
     
     const groupedFavorites = favorites.reduce((acc, fav) => {
         (acc[fav.civilizationName] = acc[fav.civilizationName] || []).push(fav);
@@ -22,11 +24,11 @@ export const FavoritesModal: React.FC<FavoritesModalProps> = ({ isOpen, onClose,
         <Modal isOpen={isOpen} onClose={onClose} size="md">
             <div className="flex items-center gap-4 mb-4">
                 <StarIcon className="w-8 h-8 text-[var(--color-accent)]" filled />
-                <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>My Favorites</h2>
+                <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{t('modals.favoritesTitle')}</h2>
             </div>
 
             {favorites.length === 0 ? (
-                <p className="text-center text-[var(--color-secondary)] py-8">You haven't favorited anything yet. Click the star icon on events or topics to save them here.</p>
+                <p className="text-center text-[var(--color-secondary)] py-8">{t('modals.noFavorites')}</p>
             ) : (
                 <div className="space-y-4 text-sm max-h-[60vh] overflow-y-auto pr-2">
                     {Object.entries(groupedFavorites).map(([civName, favs]) => (

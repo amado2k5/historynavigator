@@ -1,0 +1,129 @@
+{
+  "header": {
+    "exploreTopic": "あらゆるトピックを探る",
+    "exploreSubtext": "人物、出来事、場所...タイムラインが待っています",
+    "kidsMode": "キッズ",
+    "tourButton": "ツアーに参加",
+    "exitDemoButton": "デモを終了",
+    "loginButton": "ログイン / 新規登録",
+    "searchPlaceholder": "人物、出来事、場所を検索...",
+    "loading": "読み込み中..."
+  },
+  "footer": {
+    "contact": "お問い合わせ",
+    "copyright": "copyright 2025 timelineThis.app",
+    "disclaimer": "免責事項（このアプリケーションはGoogle AI Studioを使用して開発されました。デモ目的のみであり、本番環境での使用は意図されていません）。"
+  },
+  "login": {
+    "welcome": "ようこそ",
+    "signInPrompt": "サインインして、発見を保存し、あなたの旅をパーソナライズしましょう。",
+    "signInWith": "{{provider}}でサインイン"
+  },
+  "mainContent": {
+    "welcomeMessage": "ようこそ、{{name}}さん",
+    "explorer": "探検家",
+    "selectCivilization": "旅を始めるために文明を選択してください。",
+    "exploreCivilization": "{{name}}を探索",
+    "selectEvent": "下のタイムラインからイベントを選択して詳細をご覧ください。",
+    "generatingVista": "歴史的景観を生成中..."
+  },
+  "eventBubble": {
+    "readDetails": "詳細を読む",
+    "createAudio": "音声を作成",
+    "viewOnMap": "地図で見る",
+    "askAI": "AIに質問"
+  },
+  "sidebar": {
+    "keyCharacters": "主要人物",
+    "majorWars": "主な戦争",
+    "culturalTopics": "文化的トピック",
+    "sources": "出典",
+    "myFavorites": "お気に入り",
+    "relatedLinks": "関連リンク",
+    "exploreOn": "{{platform}}で探る"
+  },
+  "modals": {
+    "close": "閉じる",
+    "historicalOverview": "歴史概要",
+    "perspective": "{{characterName}}の視点",
+    "error": "詳細を読み込めませんでした。もう一度お試しください。",
+    "imageError": "画像を生成できませんでした。",
+    "playNarration": "ナレーションを再生",
+    "stopNarration": "ナレーションを停止",
+    "eventDetailsTitle": "イベント詳細",
+    "mapTitle": "{{eventName}}の地図",
+    "location": "場所",
+    "pointsOfInterest": "名所",
+    "loadingRecords": "歴史的記録を取得中...",
+    "drawingMaps": "古代の地図を作成中...",
+    "selectPOI": "詳細を知るには名所を選択してください。",
+    "aiPromptTitle": "歴史家AIに質問",
+    "aiPromptSubtext": "「{{eventName}}」について具体的な質問はありますか？どうぞ！",
+    "aiPromptPlaceholder": "例：一般人の日常生活はどのようなものでしたか？",
+    "ask": "質問する",
+    "thinking": "考え中...",
+    "aiError": "AIからの応答取得に失敗しました。もう一度お試しください。",
+    "consultingArchives": "アーカイブを調査中...",
+    "paintingDiscovery": "あなたの発見を描写中...",
+    "audioTitle": "音声体験：{{eventName}}",
+    "audioSubtext": "このイベントについての話を聞く。",
+    "audioError": "音声体験を作成できませんでした。もう一度お試しください。",
+    "profileTitle": "プロフィール",
+    "signedInWith": "{{provider}}でサインイン中",
+    "favorites": "お気に入り",
+    "shares": "共有",
+    "favoritesTitle": "お気に入り",
+    "noFavorites": "まだ何もお気に入りに追加していません。イベントやトピックの星アイコンをクリックしてここに保存してください。",
+    "sharesTitle": "共有履歴",
+    "noShares": "まだ何も共有していません。コンテンツの共有アイコンを使ってリンクを生成してください。",
+    "sharedOn": "{{date}}に共有",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました！",
+    "languageTitle": "言語を選択",
+    "visualizing": "視覚化中：{{eventName}}",
+    "videoError": "動画の生成に失敗しました。現在、アーカイブは封印されている可能性があります。",
+    "conjuringVisions": "過去のビジョンを召喚中...",
+    "gatheringPigments": "歴史的な顔料を収集中...",
+    "consultingCinematographers": "天の映画撮影監督に相談中...",
+    "weavingTime": "時間の糸をフィルムに織り込み中...",
+    "patience": "これには1〜2分かかることがあります。しばらくお待ちください！",
+    "renderingLandscapes": "古代の風景をレンダリング中...",
+    "animatingFigures": "歴史上の人物をアニメーション化中..."
+  },
+  "userProfile": {
+    "profile": "プロフィール",
+    "favorites": "お気に入り",
+    "shares": "共有",
+    "signOut": "サインアウト"
+  },
+  "tooltips": {
+    "favorite": "お気に入りに追加",
+    "unfavorite": "お気に入りから削除",
+    "share": "共有",
+    "linkCopied": "リンクをコピーしました！"
+  },
+  "threeDView": {
+    "sceneError": "没入型シーンを作成できませんでした。別のイベントをお試しください。",
+    "generatingVista": "歴史的景観を生成中...",
+    "populatingScene": "シーンにキャラクターを配置中...",
+    "interactWith": "{{hotspotName}}と対話する",
+    "nothingToSay": "何も言うことはありません。"
+  },
+  "tour": {
+    "welcome": "ようこそ！ツアーを開始します...",
+    "start": "まずは古典的な文明、古代ローマを探検しましょう。",
+    "timeline": "これがタイムラインです。イベントを選択しましょう。",
+    "readDetails": "このイベントについてもっと詳しく読むことができます。",
+    "canFavorite": "興味深い項目はお気に入りに保存できます。",
+    "viewFavorites": "保存したお気に入りを見てみましょう。",
+    "sharing": "ユニークなリンクで発見を簡単に共有できます。",
+    "shareHistory": "共有履歴もプロフィールに保存されます。",
+    "sidebar": "右のサイドバーには探検できるトピックがもっとあります。",
+    "keyCharacter": "主要人物について学びましょう。",
+    "majorConflict": "そして、主要な紛争も...",
+    "threeDView": "さあ、没入型の3Dビューへ！",
+    "hotspots": "ホットスポットをクリックしてシーンと対話できます。",
+    "dynamicSearch": "現代的なトピックで動的検索を試してみましょう。",
+    "restarting": "ツアーはこれから再開します。いつでも終了できます。"
+  }
+}

@@ -6,6 +6,7 @@ import { LightbulbIcon } from './Icons.tsx';
 import { fetchAIHistorianResponse, generateImage } from '../services/geminiService.ts';
 import type { TimelineEvent, Share } from '../types.ts';
 import { ShareButton } from './ShareButton.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface AIPromptModalProps {
     isOpen: boolean;
@@ -26,6 +27,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
     const [error, setError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
+    const { t, language: langCode } = useI18n();
 
     const handleSubmit = async (e: React.FormEvent | null) => {
         e?.preventDefault();
@@ -54,7 +56,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
             setIsImageLoading(false); // Image is ready
 
         } catch (err) {
-            setError('Failed to get a response from the AI. Please try again.');
+            setError(t('modals.aiError'));
             console.error(err);
             setIsLoading(false);
             setIsImageLoading(false);
@@ -70,7 +72,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
             modal: 'aiPrompt',
             id: event.id,
             prompt: prompt,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -81,6 +83,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
         if (isOpen && initialPrompt) {
             handleSubmit(null);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen, initialPrompt]);
     
     // Reset state when modal closes
@@ -102,8 +105,8 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
                         <LightbulbIcon className="h-6 w-6 text-[var(--color-accent)]" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Ask the Historian AI</h2>
-                        <p className="text-[var(--color-secondary)]">Have a specific question about "{event.title}"? Ask away!</p>
+                        <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{t('modals.aiPromptTitle')}</h2>
+                        <p className="text-[var(--color-secondary)]">{t('modals.aiPromptSubtext', { eventName: event.title })}</p>
                     </div>
                 </div>
                 {response && (
@@ -122,7 +125,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
                     className="w-full h-24 p-2 bg-[var(--color-background-light)] border border-[var(--color-primary)] rounded-md focus:ring-2 focus:ring-[var(--color-accent)] focus:outline-none"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="e.g., What was the daily life of a commoner like?"
+                    placeholder={t('modals.aiPromptPlaceholder')}
                     aria-label="Your question for the AI Historian"
                 />
                 <button
@@ -130,7 +133,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
                     disabled={isLoading || !prompt}
                     className="mt-4 w-full bg-[var(--color-accent)] text-black font-bold py-2 px-4 rounded-md hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isLoading ? 'Thinking...' : 'Ask'}
+                    {isLoading ? t('modals.thinking') : t('modals.ask')}
                 </button>
             </form>
 
@@ -139,7 +142,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
                     <div className="flex justify-center items-center py-8 flex-col gap-4">
                         <LoadingSpinner />
                         <span className="text-[var(--color-secondary)]">
-                            {isLoading ? "Consulting the archives..." : "Painting your discovery..."}
+                            {isLoading ? t('modals.consultingArchives') : t('modals.paintingDiscovery')}
                         </span>
                     </div>
                 )}
@@ -154,7 +157,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
                                 // Placeholder while image loads after text is ready
                                 <div className="flex items-center justify-center flex-col gap-2">
                                     <LoadingSpinner />
-                                    <span className="text-sm text-[var(--color-secondary)]">Generating image...</span>
+                                    <span className="text-sm text-[var(--color-secondary)]">{t('mainContent.generatingVista')}</span>
                                 </div>
                             )}
                         </div>

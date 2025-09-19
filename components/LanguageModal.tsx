@@ -1,28 +1,32 @@
 import React from 'react';
 import { Modal } from './Modal.tsx';
 import { GlobeIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface Language {
     name: string;
     nativeName: string;
     region: string;
+    code: string;
 }
 
 interface LanguageModalProps {
     isOpen: boolean;
     onClose: () => void;
     languages: Language[];
-    currentLanguage: string;
-    onSelectLanguage: (language: string) => void;
+    currentLanguageCode: string;
+    onSelectLanguage: (languageCode: string) => void;
 }
 
 export const LanguageModal: React.FC<LanguageModalProps> = ({
     isOpen,
     onClose,
     languages,
-    currentLanguage,
+    currentLanguageCode,
     onSelectLanguage,
 }) => {
+    const { t } = useI18n();
+
     const groupedLanguages = languages.reduce((acc, lang) => {
         (acc[lang.region] = acc[lang.region] || []).push(lang);
         return acc;
@@ -35,7 +39,7 @@ export const LanguageModal: React.FC<LanguageModalProps> = ({
             <div className="flex items-center gap-4 mb-6">
                 <GlobeIcon className="w-8 h-8 text-[var(--color-accent)]" />
                 <h2 className="text-2xl font-bold font-heading" style={{ color: 'var(--color-accent)' }}>
-                    Select a Language
+                    {t('modals.languageTitle')}
                 </h2>
             </div>
 
@@ -49,9 +53,9 @@ export const LanguageModal: React.FC<LanguageModalProps> = ({
                             {groupedLanguages[region].map((lang) => (
                                 <button
                                     key={lang.name}
-                                    onClick={() => onSelectLanguage(lang.name)}
+                                    onClick={() => onSelectLanguage(lang.code)}
                                     className={`w-full text-left p-3 rounded-md transition-colors duration-200 ${
-                                        currentLanguage === lang.name
+                                        currentLanguageCode === lang.code
                                             ? 'bg-[var(--color-accent)] text-black font-bold'
                                             : 'bg-[var(--color-background-light)] text-[var(--color-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-accent)]'
                                     }`}

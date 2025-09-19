@@ -2,6 +2,7 @@ import React from 'react';
 import type { Civilization, Character, War, Topic, User, Favorite, TimelineEvent } from '../types.ts';
 import { FavoriteIcon } from './FavoriteIcon.tsx';
 import { YoutubeIcon, WikipediaIcon, QuoraIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface RightSidebarProps {
     civilization: Civilization;
@@ -19,7 +20,8 @@ interface RightSidebarProps {
 export const RightSidebar: React.FC<RightSidebarProps> = ({ 
     civilization, currentEvent, onCharacterClick, onWarClick, onTopicClick, user, favorites, isFavorited, toggleFavorite, onFavoriteClick
 }) => {
-    
+    const { t } = useI18n();
+
     const renderSection = <T extends { name: string }>(
         title: string, 
         items: T[], 
@@ -68,7 +70,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
         return (
             <div className="mt-6 pt-6 border-t-2" style={{borderColor: 'var(--color-primary)'}}>
-                <h3 className="text-lg font-bold font-heading mb-3">Related Links</h3>
+                <h3 className="text-lg font-bold font-heading mb-3">{t('sidebar.relatedLinks')}</h3>
                 <ul className="space-y-2 text-sm">
                     {links.map(link => (
                         <li key={link.name}>
@@ -79,7 +81,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                                 className="flex items-center gap-3 text-[var(--color-secondary)] hover:text-[var(--color-accent)] transition-colors duration-200 py-1 group"
                             >
                                 <link.icon className="w-5 h-5 text-[var(--color-primary)] group-hover:text-[var(--color-accent)] transition-colors" />
-                                <span>Explore on {link.name}</span>
+                                <span>{t('sidebar.exploreOn', { platform: link.name })}</span>
                             </a>
                         </li>
                     ))}
@@ -97,13 +99,13 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                 {civilization.summary}
             </p>
             
-            {renderSection('Key Characters', civilization.keyCharacters, onCharacterClick, 'character')}
-            {renderSection('Major Wars', civilization.majorWars, onWarClick, 'war')}
-            {renderSection('Cultural Topics', civilization.culturalTopics, onTopicClick, 'topic')}
+            {renderSection(t('sidebar.keyCharacters'), civilization.keyCharacters, onCharacterClick, 'character')}
+            {renderSection(t('sidebar.majorWars'), civilization.majorWars, onWarClick, 'war')}
+            {renderSection(t('sidebar.culturalTopics'), civilization.culturalTopics, onTopicClick, 'topic')}
             
             {civilization.sources && civilization.sources.length > 0 && (
                 <div className="mb-6">
-                    <h3 className="text-lg font-bold font-heading mb-3 border-b-2" style={{borderColor: 'var(--color-primary)'}}>Sources</h3>
+                    <h3 className="text-lg font-bold font-heading mb-3 border-b-2" style={{borderColor: 'var(--color-primary)'}}>{t('sidebar.sources')}</h3>
                     <ul className="space-y-2 text-sm">
                         {civilization.sources.map((source, index) => (
                             source.web?.uri && (
@@ -126,7 +128,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
 
             {user && favorites.length > 0 && (
                 <div className="mb-6">
-                     <h3 className="text-lg font-bold font-heading mb-3 border-b-2" style={{borderColor: 'var(--color-primary)'}}>My Favorites</h3>
+                     <h3 className="text-lg font-bold font-heading mb-3 border-b-2" style={{borderColor: 'var(--color-primary)'}}>{t('sidebar.myFavorites')}</h3>
                      <div className="space-y-4 text-sm">
                         {Object.entries(groupedFavorites).map(([civName, favs]) => (
                             <div key={civName}>

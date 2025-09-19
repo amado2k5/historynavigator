@@ -1,0 +1,129 @@
+{
+  "header": {
+    "exploreTopic": "Explore any topic",
+    "exploreSubtext": "Person, event, place... a timeline awaits",
+    "kidsMode": "Kids",
+    "tourButton": "Take a tour",
+    "exitDemoButton": "Exit Demo",
+    "loginButton": "Login / Sign Up",
+    "searchPlaceholder": "Search for a person, event, or place...",
+    "loading": "Loading..."
+  },
+  "footer": {
+    "contact": "Contact US",
+    "copyright": "copyright 2025 timelineThis.app",
+    "disclaimer": "Disclaimer (This application was developed using Google AI Studio. This is for demo purposes only and should not be used for any production use purposes)."
+  },
+  "login": {
+    "welcome": "Welcome to",
+    "signInPrompt": "Sign in to save your discoveries and personalize your journey.",
+    "signInWith": "Sign in with {{provider}}"
+  },
+  "mainContent": {
+    "welcomeMessage": "Welcome, {{name}}",
+    "explorer": "Explorer",
+    "selectCivilization": "Please select a civilization to begin your journey.",
+    "exploreCivilization": "Explore {{name}}",
+    "selectEvent": "Select an event from the timeline below to learn more.",
+    "generatingVista": "Generating historical vista..."
+  },
+  "eventBubble": {
+    "readDetails": "Read Details",
+    "createAudio": "Create Audio",
+    "viewOnMap": "View on Map",
+    "askAI": "Ask AI"
+  },
+  "sidebar": {
+    "keyCharacters": "Key Characters",
+    "majorWars": "Major Wars",
+    "culturalTopics": "Cultural Topics",
+    "sources": "Sources",
+    "myFavorites": "My Favorites",
+    "relatedLinks": "Related Links",
+    "exploreOn": "Explore on {{platform}}"
+  },
+  "modals": {
+    "close": "Close",
+    "historicalOverview": "Historical Overview",
+    "perspective": "{{characterName}}'s Perspective",
+    "error": "Could not load the details. Please try again.",
+    "imageError": "Image could not be generated.",
+    "playNarration": "Play narration",
+    "stopNarration": "Stop narration",
+    "eventDetailsTitle": "Event Details",
+    "mapTitle": "Map of {{eventName}}",
+    "location": "Location",
+    "pointsOfInterest": "Points of Interest",
+    "loadingRecords": "Retrieving historical records...",
+    "drawingMaps": "Drawing ancient maps...",
+    "selectPOI": "Select a point of interest to learn more.",
+    "aiPromptTitle": "Ask the Historian AI",
+    "aiPromptSubtext": "Have a specific question about \"{{eventName}}\"? Ask away!",
+    "aiPromptPlaceholder": "e.g., What was the daily life of a commoner like?",
+    "ask": "Ask",
+    "thinking": "Thinking...",
+    "aiError": "Failed to get a response from the AI. Please try again.",
+    "consultingArchives": "Consulting the archives...",
+    "paintingDiscovery": "Painting your discovery...",
+    "audioTitle": "Audio Experience: {{eventName}}",
+    "audioSubtext": "Listen to a story about this event.",
+    "audioError": "Could not create the audio experience. Please try again.",
+    "profileTitle": "Profile",
+    "signedInWith": "Signed in with {{provider}}",
+    "favorites": "Favorites",
+    "shares": "Shares",
+    "favoritesTitle": "My Favorites",
+    "noFavorites": "You haven't favorited anything yet. Click the star icon on events or topics to save them here.",
+    "sharesTitle": "My Share History",
+    "noShares": "You haven't shared anything yet. Use the share icon on any content to generate a link.",
+    "sharedOn": "Shared on {{date}}",
+    "copyLink": "Copy Link",
+    "copied": "Copied!",
+    "languageTitle": "Select a Language",
+    "visualizing": "Visualizing: {{eventName}}",
+    "videoError": "Failed to generate video. The archives may be sealed at the moment.",
+    "conjuringVisions": "Conjuring visions of the past...",
+    "gatheringPigments": "Gathering historical pigments...",
+    "consultingCinematographers": "Consulting the celestial cinematographers...",
+    "weavingTime": "Weaving threads of time into film...",
+    "patience": "This can take a minute or two, thank you for your patience!",
+    "renderingLandscapes": "Rendering ancient landscapes...",
+    "animatingFigures": "Animating historical figures..."
+  },
+  "userProfile": {
+    "profile": "Profile",
+    "favorites": "Favorites",
+    "shares": "Shares",
+    "signOut": "Sign Out"
+  },
+  "tooltips": {
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "share": "Share",
+    "linkCopied": "Link Copied!"
+  },
+  "threeDView": {
+    "sceneError": "Could not create the immersive scene. Please try another event.",
+    "generatingVista": "Generating historical vista...",
+    "populatingScene": "Populating scene with characters...",
+    "interactWith": "Interact with {{hotspotName}}",
+    "nothingToSay": "I have nothing to say."
+  },
+  "tour": {
+    "welcome": "Welcome! The tour is starting...",
+    "start": "Let's start by exploring a classic civilization: Ancient Rome.",
+    "timeline": "Here's the timeline. Let's select an event.",
+    "readDetails": "We can read more details about this event.",
+    "canFavorite": "You can save interesting items to your favorites.",
+    "viewFavorites": "Let's view your saved favorites.",
+    "sharing": "Sharing discoveries is easy with a unique link.",
+    "shareHistory": "Your share history is also saved to your profile.",
+    "sidebar": "The right sidebar has more topics to explore.",
+    "keyCharacter": "Let's learn about a key character.",
+    "majorConflict": "And a major conflict...",
+    "threeDView": "Now for the immersive 3D view!",
+    "hotspots": "You can click on hotspots to interact with the scene.",
+    "dynamicSearch": "Let's try a dynamic search for a modern topic.",
+    "restarting": "The tour will now restart. You can exit anytime."
+  }
+}

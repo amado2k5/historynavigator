@@ -8,6 +8,7 @@ import { speak, cancelSpeech } from '../services/voiceService.ts';
 import type { TimelineEvent, Character, VoiceDescription, Share } from '../types.ts';
 import { PlayIcon, PauseIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface EventDetailsModalProps {
     isOpen: boolean;
@@ -29,6 +30,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
     const [isImageLoading, setIsImageLoading] = useState(false);
     const [isNarrating, setIsNarrating] = useState(false);
     const [voiceDescription, setVoiceDescription] = useState<VoiceDescription | null>(null);
+    const { t, language: langCode } = useI18n();
 
     const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -37,7 +39,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
             view: '2D',
             modal: 'eventDetails',
             id: event.id,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -78,7 +80,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
 
                 } catch (e) {
                     console.error("Failed to fetch event details or image:", e);
-                    setError("Could not load the event details. Please try again.");
+                    setError(t('modals.error'));
                 } finally {
                     setIsLoading(false);
                     setIsImageLoading(false);
@@ -88,7 +90,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
         }
 
         return cleanup;
-    }, [isOpen, event, character, civilizationName, language, isKidsMode]);
+    }, [isOpen, event, character, civilizationName, language, isKidsMode, t]);
 
     const handleToggleNarration = () => {
         if (!details || !voiceDescription) return;
@@ -110,7 +112,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
         }
     };
 
-    const perspective = character ? `${character.name}'s Perspective` : 'Historical Overview';
+    const perspective = character ? t('modals.perspective', { characterName: character.name }) : t('modals.historicalOverview');
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -131,7 +133,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
                         onClick={handleToggleNarration}
                         disabled={isLoading || !details}
                         className="p-2 rounded-full hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        aria-label={isNarrating ? 'Stop narration' : 'Play narration'}
+                        aria-label={isNarrating ? t('modals.stopNarration') : t('modals.playNarration')}
                     >
                         {isNarrating
                             ? <PauseIcon className="w-6 h-6 text-[var(--color-accent)]" />
@@ -144,7 +146,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
              <div className="w-full aspect-video bg-[var(--color-background-light)] rounded-md my-4 flex items-center justify-center overflow-hidden">
                 {isImageLoading && <LoadingSpinner />}
                 {!isImageLoading && imageUrl && <img src={imageUrl} alt={`Depiction of ${event.title}`} className="w-full h-full object-cover" />}
-                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">Image could not be generated.</div>}
+                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">{t('modals.imageError')}</div>}
             </div>
 
             {isLoading && (

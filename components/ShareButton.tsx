@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { ShareIcon } from './Icons.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface ShareButtonProps {
     shareUrl: string;
@@ -12,6 +13,7 @@ interface ShareButtonProps {
 
 export const ShareButton: React.FC<ShareButtonProps> = ({ shareUrl, shareTitle, shareText, onShareClick, onLogShare }) => {
     const [copied, setCopied] = useState(false);
+    const { t } = useI18n();
 
     const handleShare = async () => {
         if (onShareClick) {
@@ -46,12 +48,12 @@ export const ShareButton: React.FC<ShareButtonProps> = ({ shareUrl, shareTitle, 
             <button
                 onClick={handleShare}
                 className="p-2 rounded-full hover:bg-[var(--color-background-light)] text-[var(--color-secondary)] hover:text-[var(--color-accent)] transition-colors"
-                aria-label="Share"
+                aria-label={t('tooltips.share')}
             >
                 <ShareIcon className="w-6 h-6" />
             </button>
             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-max px-2 py-1 bg-[var(--color-background)] text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                {copied ? 'Link Copied!' : 'Share'}
+                {copied ? t('tooltips.linkCopied') : t('tooltips.share')}
             </div>
         </div>
     );

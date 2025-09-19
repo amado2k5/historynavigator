@@ -8,6 +8,7 @@ import { speak, cancelSpeech } from '../services/voiceService.ts';
 import type { VoiceDescription, TimelineEvent, Share } from '../types.ts';
 import { PlayIcon, PauseIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
+import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface CharacterDetailsModalProps {
     isOpen: boolean;
@@ -29,6 +30,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
     const [isImageLoading, setIsImageLoading] = useState(false);
     const [isNarrating, setIsNarrating] = useState(false);
     const [voiceDescription, setVoiceDescription] = useState<VoiceDescription | null>(null);
+    const { t, language: langCode } = useI18n();
 
     const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -37,7 +39,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
             view: '2D',
             modal: 'character',
             id: characterName,
-            lang: language,
+            lang: langCode,
             kids: String(isKidsMode),
         });
         return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
@@ -76,7 +78,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
 
                 } catch (e) {
                     console.error("Failed to fetch character details or image:", e);
-                    setError("Could not load the character details. Please try again.");
+                    setError(t('modals.error'));
                 } finally {
                     setIsLoading(false);
                     setIsImageLoading(false);
@@ -86,7 +88,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
         }
 
         return cleanup;
-    }, [isOpen, characterName, civilizationName, language, isKidsMode]);
+    }, [isOpen, characterName, civilizationName, language, isKidsMode, t]);
 
     const handleToggleNarration = () => {
         if (!details || !voiceDescription) return;
@@ -124,7 +126,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
                         onClick={handleToggleNarration}
                         disabled={isLoading || !details}
                         className="p-2 rounded-full hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        aria-label={isNarrating ? 'Stop narration' : 'Play narration'}
+                        aria-label={isNarrating ? t('modals.stopNarration') : t('modals.playNarration')}
                     >
                         {isNarrating
                             ? <PauseIcon className="w-6 h-6 text-[var(--color-accent)]" />
@@ -137,7 +139,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
             <div className="w-full aspect-[4/3] bg-[var(--color-background-light)] rounded-md mb-4 flex items-center justify-center overflow-hidden">
                 {isImageLoading && <LoadingSpinner />}
                 {!isImageLoading && imageUrl && <img src={imageUrl} alt={`Portrait of ${characterName}`} className="w-full h-full object-cover" />}
-                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">Image could not be generated.</div>}
+                {!isImageLoading && !imageUrl && !error && <div className="text-center text-[var(--color-secondary)]">{t('modals.imageError')}</div>}
             </div>
 
             {isLoading && (
