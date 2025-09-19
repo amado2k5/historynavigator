@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
@@ -60,9 +61,11 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                 try {
                     const data = await generateMapData(event, civilizationName, language, isKidsMode);
                     setMapData(data);
-                    if (data && data.pointsOfInterest.length > 0) {
-                        setSelectedPoi(data.pointsOfInterest[0]);
-                    }
+                    
+                    // Automatically select the first POI, but don't show it on top of map initially
+                    // if (data && data.pointsOfInterest.length > 0) {
+                    //     setSelectedPoi(data.pointsOfInterest[0]);
+                    // }
                     setIsLoading(false);
 
                     if (data) {
@@ -139,15 +142,25 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                         <div className="absolute inset-0 bg-black bg-opacity-20 rounded-lg"></div>
 
                         {selectedPoi ? (
-                            <div className="relative z-10 bg-[var(--color-background)] bg-opacity-80 backdrop-blur-sm p-6 rounded-lg shadow-2xl border border-[var(--color-primary)] max-w-md animate-fade-in">
-                                 <h4 className="text-xl font-bold font-heading mb-2 flex items-center gap-2" style={{color: 'var(--color-accent)'}}>
-                                     <MapPinIcon className="w-6 h-6"/>
+                            <div className="relative z-10 p-6 max-w-md animate-fade-in text-center backdrop-blur-sm bg-black/30 rounded-lg">
+                                <button 
+                                    onClick={() => setSelectedPoi(null)} 
+                                    className="absolute top-2 right-2 p-1 bg-black bg-opacity-30 rounded-full text-white hover:bg-opacity-50 transition-colors"
+                                    aria-label="Close details"
+                                >
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                                 <h4 className="text-2xl font-bold font-heading mb-2 text-white drop-shadow-lg" style={{color: 'var(--color-accent)'}}>
                                      {selectedPoi.name}
                                  </h4>
-                                 <p className="text-[var(--color-secondary)] leading-relaxed">{selectedPoi.description}</p>
+                                 <p className="text-white leading-relaxed drop-shadow-md">
+                                     {selectedPoi.description}
+                                 </p>
                             </div>
                         ) : (
-                             <p className="text-gray-400 relative z-10">Select a point of interest to learn more.</p>
+                             <p className="text-white relative z-10 drop-shadow-lg">Select a point of interest to learn more.</p>
                         )}
                     </div>
                 </div>

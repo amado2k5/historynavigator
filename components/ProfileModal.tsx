@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { Modal } from './Modal.tsx';
 import type { User } from '../types.ts';
@@ -24,7 +25,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                  <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{user.name}</h2>
                  <p className="text-sm text-[var(--color-secondary)] mb-6">Signed in with {user.provider}</p>
                  
-                 <div className="w-full flex justify-around p-4 bg-[var(--color-background-light)] rounded-lg">
+                 <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-[var(--color-background-light)] rounded-lg">
                     <div className="text-center">
                         <div className="flex items-center justify-center gap-2">
                             <StarIcon className="w-6 h-6 text-[var(--color-accent)]" filled />

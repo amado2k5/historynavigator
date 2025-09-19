@@ -22,10 +22,11 @@ interface MainContentProps {
     track: (eventName: string, properties?: Record<string, any>) => void;
     isDemoMode: boolean;
     onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'video') => void;
+    showLoginPrompt: boolean;
 }
 
 export const MainContent: React.FC<MainContentProps> = ({ 
-    civilization, currentEvent, character, language, isKidsMode, isLoading, loadingMessage, user, onLogin, isFavorited, toggleFavorite, logShare, track, isDemoMode, onOpenModal
+    civilization, currentEvent, character, language, isKidsMode, isLoading, loadingMessage, user, onLogin, isFavorited, toggleFavorite, logShare, track, isDemoMode, onOpenModal, showLoginPrompt
 }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
@@ -74,24 +75,24 @@ export const MainContent: React.FC<MainContentProps> = ({
     const renderContent = () => {
         if (isLoading) return null; // Full-screen loader is handled by the parent
 
-        if (!user && !isDemoMode) {
+        if (!user && !isDemoMode && showLoginPrompt) {
              return <Login onLogin={onLogin} />;
         }
 
         if (!civilization) {
             return (
-                 <div className="text-center">
-                    <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome, {user?.name}</h2>
-                    <p className="text-xl" style={{color: 'var(--color-secondary)'}}>Please select a civilization to begin your journey.</p>
+                 <div className="text-center p-4">
+                    <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome, {user?.name || 'Explorer'}</h2>
+                    <p className="text-lg md:text-xl" style={{color: 'var(--color-secondary)'}}>Please select a civilization to begin your journey.</p>
                 </div>
             )
         }
         
         if (!currentEvent) {
              return (
-                 <div className="text-center">
-                    <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Explore {civilization.name}</h2>
-                    <p className="text-xl" style={{color: 'var(--color-secondary)'}}>Select an event from the timeline below to learn more.</p>
+                 <div className="text-center p-4">
+                    <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Explore {civilization.name}</h2>
+                    <p className="text-lg md:text-xl" style={{color: 'var(--color-secondary)'}}>Select an event from the timeline below to learn more.</p>
                 </div>
             )
         }

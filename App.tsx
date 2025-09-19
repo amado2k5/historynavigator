@@ -23,6 +23,23 @@ import { MapModal } from './components/MapModal.tsx';
 import { AIPromptModal } from './components/AIPromptModal.tsx';
 import { VideoModal } from './components/VideoModal.tsx';
 
+// --- Responsive Hook ---
+const useMediaQuery = (query: string) => {
+    const [matches, setMatches] = useState(window.matchMedia(query).matches);
+
+    useEffect(() => {
+        const mediaQueryList = window.matchMedia(query);
+        const listener = (event: MediaQueryListEvent) => setMatches(event.matches);
+        
+        // Swithcing to the new addEventListener/removeEventListener syntax
+        mediaQueryList.addEventListener('change', listener);
+        return () => mediaQueryList.removeEventListener('change', listener);
+    }, [query]);
+
+    return matches;
+};
+
+
 export type ModalState = 
     | { type: 'character', name: string }
     | { type: 'war', name: string }
@@ -63,7 +80,9 @@ function App() {
     const [shareTarget, setShareTarget] = useState<ShareTarget | null>(null);
     const [isDemoMode, setIsDemoMode] = useState(false);
     const [demoSearchText, setDemoSearchText] = useState('');
-    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const isLargeScreen = useMediaQuery('(min-width: 1024px)');
+    const [isSidebarVisible, setIsSidebarVisible] = useState(isLargeScreen);
+    const [showLoginPrompt, setShowLoginPrompt] = useState(true);
     
     // Refs to track previous state for telemetry
     const prevLanguageRef = useRef(language);
@@ -71,6 +90,11 @@ function App() {
     const demoTimeoutRef = useRef<number | null>(null);
     const demoUserRef = useRef<User | null>(null);
     const lastActionTimestampRef = useRef<number>(0);
+
+    // Sync sidebar visibility with screen size changes
+    useEffect(() => {
+        setIsSidebarVisible(isLargeScreen);
+    }, [isLargeScreen]);
 
 
     // --- Global Action Throttling ---
@@ -108,6 +132,13 @@ function App() {
     const handleCivilizationChange = useCallback(async (name: string) => {
         if (!isActionAllowed()) return;
         if (name === selectedCivilization?.name && !isDemoMode) return;
+
+        // Manage login prompt visibility based on user action
+        if (name) {
+            setShowLoginPrompt(false); // Hide login prompt on any search
+        } else if (!user) {
+            setShowLoginPrompt(true); // Show it again if search is cleared and not logged in
+        }
 
         // If the name is cleared, reset the view.
         if (!name) {
@@ -152,7 +183,7 @@ function App() {
         } finally {
             setIsLoading(false);
         }
-    }, [language, isKidsMode, selectedCivilization?.name, track, civilizations, isDemoMode, isActionAllowed]);
+    }, [language, isKidsMode, selectedCivilization?.name, track, civilizations, isDemoMode, isActionAllowed, user]);
 
     // --- Demo Mode Logic ---
     const stopDemo = useCallback(() => {
@@ -169,6 +200,9 @@ function App() {
             setUser(null);
             demoUserRef.current = null;
         }
+        
+        // After demo, ensure login prompt visibility is correct
+        setShowLoginPrompt(!user);
 
         // Reset state to the beginning
         if (selectedCivilization) {
@@ -180,6 +214,7 @@ function App() {
 
     const startDemo = () => {
         track('start_demo_tour');
+        setShowLoginPrompt(false); // Hide login prompt during demo
         // Create a mock user if not logged in to showcase user features
         if (!user) {
             const mockDemoUser: User = { name: 'Demo User', provider: 'tour', avatar: 'tour' };
@@ -202,6 +237,9 @@ function App() {
             const savedUser = localStorage.getItem('timelineCreatorUser');
             if (savedUser) {
                 setUser(JSON.parse(savedUser));
+                setShowLoginPrompt(false);
+            } else {
+                setShowLoginPrompt(true);
             }
         } catch (e) {
             console.error("Failed to parse user from localStorage", e);
@@ -237,13 +275,20 @@ function App() {
     const handleLogin = (provider: string) => {
         const mockUser: User = { name: `${provider} User`, provider, avatar: provider.toLowerCase() };
         setUser(mockUser);
+        setShowLoginPrompt(false);
         localStorage.setItem('timelineCreatorUser', JSON.stringify(mockUser));
         track('login', { provider });
+    };
+    
+    const handleLoginButtonClick = () => {
+        track('login_button_clicked');
+        setShowLoginPrompt(true);
     };
 
     const handleLogout = () => {
         track('logout');
         setUser(null);
+        setShowLoginPrompt(true);
         localStorage.removeItem('timelineCreatorUser');
         setSelectedCivilization(null); // Reset view
         setCurrentEvent(null);
@@ -512,6 +557,8 @@ function App() {
                 demoSearchText={demoSearchText}
                 startDemo={startDemo}
                 stopDemo={stopDemo}
+                showLoginPrompt={showLoginPrompt}
+                onLoginButtonClick={handleLoginButtonClick}
             />
              {selectedCivilization && currentEvent && user && (
                 <ViewModeToggle 
@@ -538,6 +585,7 @@ function App() {
                             track={track}
                             isDemoMode={isDemoMode}
                             onOpenModal={handleOpenModal}
+                            showLoginPrompt={showLoginPrompt}
                         />
                     ) : (
                         <ThreeDView

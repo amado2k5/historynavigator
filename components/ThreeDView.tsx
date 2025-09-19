@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import type { TimelineEvent, Civilization, Hotspot, SceneHotspot, VoiceDescription, Share } from '../types.ts';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
@@ -214,7 +215,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
                                 <p className="text-gray-300">{hotspot.description}</p>
                             </div>
                             {activeDialogue?.hotspotName === hotspot.name && (
-                                <div className="absolute top-full mt-2 w-52 bg-[var(--color-background)] rounded-lg shadow-lg animate-fade-in -translate-x-1/2 left-1/2 border border-[var(--color-primary)] overflow-hidden">
+                                <div className="absolute top-full mt-2 w-64 max-w-[80vw] bg-[var(--color-background)] rounded-lg shadow-lg animate-fade-in -translate-x-1/2 left-1/2 border border-[var(--color-primary)] overflow-hidden">
                                     {activeDialogue.isLoading ? (
                                         <div className="w-full h-[220px] flex items-center justify-center">
                                             <LoadingSpinner />

@@ -34,7 +34,7 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
 
     return (
         <>
-            <div className="relative group w-full max-w-3xl text-center bg-black bg-opacity-50 backdrop-blur-sm p-8 rounded-xl border shadow-2xl transition-transform duration-300 transform hover:scale-105"
+            <div className="relative group w-full max-w-3xl text-center bg-black bg-opacity-50 backdrop-blur-sm p-6 md:p-8 rounded-xl border shadow-2xl transition-transform duration-300 transform hover:scale-105"
                  style={{borderColor: 'var(--color-primary)'}}>
                 
                 {user && (
@@ -50,25 +50,25 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
                     </div>
                 )}
 
-                <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>{event.title}</h2>
-                <p className="text-xl mb-4" style={{color: 'var(--color-secondary)'}}>{event.date}</p>
-                <p className="text-lg" style={{ color: 'var(--color-secondary)' }}>{event.summary}</p>
+                <h2 className="text-3xl md:text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>{event.title}</h2>
+                <p className="text-lg md:text-xl mb-4" style={{color: 'var(--color-secondary)'}}>{event.date}</p>
+                <p className="text-base md:text-lg" style={{ color: 'var(--color-secondary)' }}>{event.summary}</p>
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
-                    <div className="flex gap-6">
-                        <button onClick={() => onOpenModal('eventDetails')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                    <div className="flex gap-4 sm:gap-6 flex-wrap justify-center">
+                        <button onClick={() => onOpenModal('eventDetails')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <BookOpenIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">Read Details</span>
                         </button>
-                         <button onClick={() => onOpenModal('video')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                         <button onClick={() => onOpenModal('video')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <FilmIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">Create Video</span>
                         </button>
-                        <button onClick={() => onOpenModal('map')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                        <button onClick={() => onOpenModal('map')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <MapIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">View on Map</span>
                         </button>
-                        <button onClick={() => onOpenModal('aiPrompt')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                        <button onClick={() => onOpenModal('aiPrompt')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <LightbulbIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">Ask AI</span>
                         </button>
