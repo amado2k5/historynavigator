@@ -5,7 +5,7 @@ import { LoadingSpinner } from './LoadingSpinner.tsx';
 // FIX: Added generateImage import.
 import { fetchWarDetails, generateImage } from '../services/geminiService.ts';
 import { ShareButton } from './ShareButton.tsx';
-import type { TimelineEvent } from '../types.ts';
+import type { TimelineEvent, Share } from '../types.ts';
 
 interface WarDetailsModalProps {
     isOpen: boolean;
@@ -15,10 +15,11 @@ interface WarDetailsModalProps {
     language: string;
     isKidsMode: boolean;
     currentEvent: TimelineEvent;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClose, warName, civilizationName, language, isKidsMode, currentEvent, track }) => {
+export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClose, warName, civilizationName, language, isKidsMode, currentEvent, logShare, track }) => {
     const [details, setDetails] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -77,9 +78,10 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
                 <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{warName}</h2>
                 <ShareButton
                     shareUrl={generateShareUrl()}
-                    shareTitle={`History Navigator: ${warName}`}
+                    shareTitle={`Timeline Creator: ${warName}`}
                     shareText={`Learn about the ${warName} from the history of ${civilizationName}!`}
                     onShareClick={() => track('share_content', { type: 'war', id: warName })}
+                    onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                 />
             </div>
 

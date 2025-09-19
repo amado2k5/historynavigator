@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { SearchableSelect } from './SearchableSelect.tsx';
-import { GlobalSearch } from './GlobalSearch.tsx';
 import type { Civilization, User } from '../types.ts';
 import { LANGUAGES } from '../constants.ts';
 import { UserProfile } from './UserProfile.tsx';
@@ -14,11 +13,15 @@ interface HeaderProps {
     onLanguageChange: (lang: string) => void;
     isKidsMode: boolean;
     onKidsModeToggle: () => void;
-    onSearchResultClick: (item: any) => void;
     isLoading: boolean;
     user: User | null;
     onLogout: () => void;
+    onProfileClick: () => void;
+    onFavoritesClick: () => void;
+    onSharesClick: () => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
+    isDemoMode: boolean;
+    demoSearchText: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -29,34 +32,45 @@ export const Header: React.FC<HeaderProps> = ({
     onLanguageChange,
     isKidsMode,
     onKidsModeToggle,
-    onSearchResultClick,
     isLoading,
     user,
     onLogout,
-    track
+    onProfileClick,
+    onFavoritesClick,
+    onSharesClick,
+    track,
+    isDemoMode,
+    demoSearchText
 }) => {
     const languageItems = LANGUAGES.map(lang => ({ name: lang }));
 
     return (
         <header className="w-full bg-black bg-opacity-40 backdrop-blur-sm p-4 z-30 shadow-bottom flex items-center justify-between flex-wrap gap-4">
-            <h1 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>History Navigator</h1>
+            <h1 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Timeline Creator</h1>
             
             <div className="flex items-center gap-4 flex-wrap">
+                <div className="text-right hidden sm:block">
+                    <p className="text-sm font-semibold text-[var(--color-foreground)]">Explore any topic</p>
+                    <p className="text-xs text-[var(--color-secondary)]">Person, event, place... a timeline awaits</p>
+                </div>
+
                 <SearchableSelect
                     items={civilizations}
                     selected={selectedCivilization}
                     onChange={onCivilizationChange}
-                    placeholder={isLoading ? "Loading..." : "Select or search for a topic..."}
-                />
-                
-                <GlobalSearch
-                    civilization={selectedCivilization}
-                    onResultClick={onSearchResultClick}
-                    track={track}
+                    placeholder={isLoading ? "Loading..." : "Search for a person, event, or place..."}
+                    isDemoMode={isDemoMode}
+                    demoValue={demoSearchText}
                 />
                 
                 {user ? (
-                    <UserProfile user={user} onLogout={onLogout} />
+                    <UserProfile
+                        user={user}
+                        onLogout={onLogout}
+                        onProfileClick={onProfileClick}
+                        onFavoritesClick={onFavoritesClick}
+                        onSharesClick={onSharesClick}
+                    />
                 ) : (
                     <>
                         <SearchableSelect

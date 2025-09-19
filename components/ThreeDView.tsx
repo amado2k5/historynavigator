@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import type { TimelineEvent, Civilization, Hotspot, SceneHotspot, VoiceDescription } from '../types.ts';
+import type { TimelineEvent, Civilization, Hotspot, SceneHotspot, VoiceDescription, Share } from '../types.ts';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { generateImage, fetchSceneHotspots, fetchHotspotDialogue, fetchVoiceDescription } from '../services/geminiService.ts';
 import { speak, cancelSpeech } from '../services/voiceService.ts';
@@ -13,6 +13,7 @@ interface ThreeDViewProps {
     language: string;
     isKidsMode: boolean;
     initialHotspotId?: string;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
@@ -31,7 +32,7 @@ const positionStringToCoords = (posStr: SceneHotspot['position']): { x: number; 
     return positions[posStr] || positions['center'];
 };
 
-export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEvent, language, isKidsMode, initialHotspotId, track }) => {
+export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEvent, language, isKidsMode, initialHotspotId, logShare, track }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [hotspots, setHotspots] = useState<Hotspot[]>([]);
     const [activeDialogue, setActiveDialogue] = useState<{ hotspotName: string, text: string, imageUrl: string | null, isLoading: boolean } | null>(null);
@@ -223,9 +224,10 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
                                             <div className="absolute top-1 right-1 z-10 bg-black bg-opacity-30 rounded-full">
                                                 <ShareButton 
                                                     shareUrl={generateShareUrl(hotspot.name)}
-                                                    shareTitle={`History Navigator: ${hotspot.name}`}
+                                                    shareTitle={`Timeline Creator: ${hotspot.name}`}
                                                     shareText={`Check out ${hotspot.name} in this 3D scene from the history of ${civilization!.name}!`}
                                                     onShareClick={() => track('share_content', { type: 'hotspot', id: hotspot.name })}
+                                                    onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                                                 />
                                             </div>
                                             {activeDialogue.imageUrl && (

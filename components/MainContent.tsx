@@ -1,7 +1,7 @@
 
 // FIX: Imported useState and useEffect to resolve 'Cannot find name' errors.
 import React, { useState, useEffect } from 'react';
-import type { TimelineEvent, Character, Civilization, User, Favorite } from '../types.ts';
+import type { TimelineEvent, Character, Civilization, User, Favorite, Share } from '../types.ts';
 import { EventBubble } from './EventBubble.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { Login } from './Login.tsx';
@@ -18,11 +18,12 @@ interface MainContentProps {
     onLogin: (provider: string) => void;
     isFavorited: (type: Favorite['type'], id: string) => boolean;
     toggleFavorite: (favorite: Omit<Favorite, 'civilizationName'>) => void;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
 export const MainContent: React.FC<MainContentProps> = ({ 
-    civilization, currentEvent, character, language, isKidsMode, isLoading, user, onLogin, isFavorited, toggleFavorite, track
+    civilization, currentEvent, character, language, isKidsMode, isLoading, user, onLogin, isFavorited, toggleFavorite, logShare, track
 }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
@@ -103,6 +104,7 @@ export const MainContent: React.FC<MainContentProps> = ({
                 user={user}
                 isFavorited={isFavorited('event', currentEvent.id)}
                 toggleFavorite={() => toggleFavorite({type: 'event', id: currentEvent.id, name: currentEvent.title})}
+                logShare={logShare}
                 track={track}
             />
         );

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import type { TimelineEvent, Character, User } from '../types.ts';
+import type { TimelineEvent, Character, User, Share } from '../types.ts';
 import { BookOpenIcon, MapIcon, LightbulbIcon } from './Icons.tsx';
 import { EventDetailsModal } from './EventDetailsModal.tsx';
 import { MapModal } from './MapModal.tsx';
@@ -17,10 +17,11 @@ interface EventBubbleProps {
     user: User | null;
     isFavorited: boolean;
     toggleFavorite: () => void;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, language, civilizationName, isKidsMode, user, isFavorited, toggleFavorite, track }) => {
+export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, language, civilizationName, isKidsMode, user, isFavorited, toggleFavorite, logShare, track }) => {
     const [isDetailsOpen, setDetailsOpen] = useState(false);
     const [isMapOpen, setMapOpen] = useState(false);
     const [isAIOpen, setAIOpen] = useState(false);
@@ -47,9 +48,10 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, lang
                     <div className="absolute top-4 right-4 z-10 flex items-center">
                          <ShareButton
                             shareUrl={generateShareUrl()}
-                            shareTitle={`History Navigator: ${event.title}`}
+                            shareTitle={`Timeline Creator: ${event.title}`}
                             shareText={`Explore the event "${event.title}" from the history of ${civilizationName}!`}
                             onShareClick={() => track('share_content', { type: 'eventBubble', id: event.id })}
+                            onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                         />
                         <FavoriteIcon isFavorited={isFavorited} onToggle={toggleFavorite} />
                     </div>
@@ -85,6 +87,7 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, lang
                 language={language}
                 civilizationName={civilizationName}
                 isKidsMode={isKidsMode}
+                logShare={logShare}
                 track={track}
             />}
             {isMapOpen && <MapModal
@@ -94,6 +97,7 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, lang
                 civilizationName={civilizationName}
                 language={language}
                 isKidsMode={isKidsMode}
+                logShare={logShare}
                 track={track}
             />}
              {isAIOpen && <AIPromptModal
@@ -103,6 +107,7 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, lang
                 civilizationName={civilizationName}
                 language={language}
                 isKidsMode={isKidsMode}
+                logShare={logShare}
                 track={track}
             />}
         </>

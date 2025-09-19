@@ -7,15 +7,18 @@ interface ShareButtonProps {
     shareTitle: string;
     shareText: string;
     onShareClick?: () => void;
+    onLogShare: (shareDetails: { url: string, title: string, text: string }) => void;
 }
 
-export const ShareButton: React.FC<ShareButtonProps> = ({ shareUrl, shareTitle, shareText, onShareClick }) => {
+export const ShareButton: React.FC<ShareButtonProps> = ({ shareUrl, shareTitle, shareText, onShareClick, onLogShare }) => {
     const [copied, setCopied] = useState(false);
 
     const handleShare = async () => {
         if (onShareClick) {
             onShareClick();
         }
+        
+        onLogShare({ url: shareUrl, title: shareTitle, text: shareText });
 
         if (navigator.share) {
             try {

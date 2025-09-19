@@ -8,20 +8,27 @@ import { AmbientMusicPlayer } from './components/AmbientMusicPlayer.tsx';
 import { CharacterDetailsModal } from './components/CharacterDetailsModal.tsx';
 import { WarDetailsModal } from './components/WarDetailsModal.tsx';
 import { TopicDetailsModal } from './components/TopicDetailsModal.tsx';
+import { ProfileModal } from './components/ProfileModal.tsx';
+import { FavoritesModal } from './components/FavoritesModal.tsx';
+import { SharesModal } from './components/SharesModal.tsx';
+import { TourGuide } from './components/TourGuide.tsx';
 import { fetchCivilizations, fetchCivilizationData } from './services/geminiService.ts';
-import type { Civilization, TimelineEvent, Character, War, Topic, User, Favorite, TelemetryContext } from './types.ts';
+import type { Civilization, TimelineEvent, Character, War, Topic, User, Favorite, Share, TelemetryContext } from './types.ts';
 import { themes } from './themes.ts';
 import { ViewModeToggle } from './components/ViewModeToggle.tsx';
 import { ThreeDView } from './components/ThreeDView.tsx';
 import { trackEvent } from './services/telemetryService.ts';
 
-type ModalState = 
+export type ModalState = 
     | { type: 'character', name: string }
     | { type: 'war', name: string }
     | { type: 'topic', name: string }
     | { type: 'eventDetails', name: string }
     | { type: 'map', name: string }
     | { type: 'aiPrompt', name: string, prompt?: string }
+    | { type: 'profile' }
+    | { type: 'favorites' }
+    | { type: 'shares' }
     | null;
 
 interface ShareTarget {
@@ -46,13 +53,17 @@ function App() {
     const [viewMode, setViewMode] = useState<'2D' | '3D'>('2D');
     const [user, setUser] = useState<User | null>(null);
     const [favorites, setFavorites] = useState<Favorite[]>([]);
+    const [shares, setShares] = useState<Share[]>([]);
     const [shareTarget, setShareTarget] = useState<ShareTarget | null>(null);
+    const [isDemoMode, setIsDemoMode] = useState(false);
+    const [demoSearchText, setDemoSearchText] = useState('');
     
     // Refs to track previous state for telemetry
     const prevLanguageRef = useRef(language);
     const prevIsKidsModeRef = useRef(isKidsMode);
+    const demoTimeoutRef = useRef<number | null>(null);
 
-
+    // FIX: Moved telemetry logic before its usage to resolve 'used before its declaration' errors.
     // --- Telemetry Logic ---
     const getTelemetryContext = useCallback((): TelemetryContext => {
         return {
@@ -69,23 +80,91 @@ function App() {
         trackEvent(eventName, getTelemetryContext(), properties);
     }, [getTelemetryContext]);
 
-    // --- Authentication and Favorites Logic ---
+
+    const handleCivilizationChange = useCallback(async (name: string) => {
+        if (name === selectedCivilization?.name && !isDemoMode) return;
+
+        // If the name is cleared, reset the view.
+        if (!name) {
+            if (!isDemoMode) track('clear_search');
+            setSelectedCivilization(null);
+            setCurrentEvent(null);
+            return;
+        }
+        
+        // Telemetry: Detect if this is a dynamic search or a selection from the list
+        if (!isDemoMode) {
+            const isDynamicSearch = !civilizations.some(c => c.name === name);
+            track(isDynamicSearch ? 'search_topic' : 'select_civilization', { name });
+        }
+        
+        setIsLoading(true);
+        setError(null);
+        setSelectedCivilization(null);
+        setCurrentEvent(null);
+        setSelectedCharacter(null);
+        setViewMode('2D');
+        setActiveModal(null);
+
+        try {
+            const data = await fetchCivilizationData(name, language, isKidsMode);
+            setSelectedCivilization(data);
+            if (data.timeline && data.timeline.length > 0) {
+                setCurrentEvent(data.timeline[0]);
+            }
+        } catch (err: any)
+ {
+            console.error(`Failed to fetch data for ${name}:`, err);
+            setError(err.message || `Could not load data for ${name}. Please try another topic or refresh the page.`);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [language, isKidsMode, selectedCivilization?.name, track, civilizations, isDemoMode]);
+
+    // --- Demo Mode Logic ---
+    const stopDemo = useCallback(() => {
+        if (demoTimeoutRef.current) {
+            clearTimeout(demoTimeoutRef.current);
+            demoTimeoutRef.current = null;
+        }
+        track('stop_demo_tour');
+        setIsDemoMode(false);
+        setDemoSearchText('');
+        // Reset state to the beginning, using handleCivilizationChange to clear it
+        if (selectedCivilization) {
+            handleCivilizationChange(''); 
+        }
+        setActiveModal(null);
+        setViewMode('2D');
+    }, [selectedCivilization, handleCivilizationChange, track]);
+
+    const startDemo = () => {
+        track('start_demo_tour');
+        setIsDemoMode(true);
+        // Set a 3-minute timeout to automatically stop the demo
+        demoTimeoutRef.current = window.setTimeout(() => {
+            console.log("Demo mode timed out after 3 minutes.");
+            stopDemo();
+        }, 180000); // 3 minutes in milliseconds
+    };
+
+    // --- Authentication, Favorites and Shares Logic ---
 
     useEffect(() => {
         // Persist user login
         try {
-            const savedUser = localStorage.getItem('historyNavigatorUser');
+            const savedUser = localStorage.getItem('timelineCreatorUser');
             if (savedUser) {
                 setUser(JSON.parse(savedUser));
             }
         } catch (e) {
             console.error("Failed to parse user from localStorage", e);
-            localStorage.removeItem('historyNavigatorUser');
+            localStorage.removeItem('timelineCreatorUser');
         }
     }, []);
 
     useEffect(() => {
-        // Load favorites when user logs in
+        // Load favorites and shares when user logs in
         if (user) {
             try {
                 const savedFavorites = localStorage.getItem(`favorites_${user.name}_${user.provider}`);
@@ -94,25 +173,32 @@ function App() {
                 } else {
                     setFavorites([]);
                 }
+                const savedShares = localStorage.getItem(`shares_${user.name}_${user.provider}`);
+                 if (savedShares) {
+                    setShares(JSON.parse(savedShares));
+                } else {
+                    setShares([]);
+                }
             } catch (e) {
-                console.error("Failed to parse favorites from localStorage", e);
+                console.error("Failed to parse data from localStorage", e);
             }
         } else {
             setFavorites([]); // Clear favorites on logout
+            setShares([]); // Clear shares on logout
         }
     }, [user]);
 
     const handleLogin = (provider: string) => {
         const mockUser: User = { name: `${provider} User`, provider, avatar: provider.toLowerCase() };
         setUser(mockUser);
-        localStorage.setItem('historyNavigatorUser', JSON.stringify(mockUser));
+        localStorage.setItem('timelineCreatorUser', JSON.stringify(mockUser));
         track('login', { provider });
     };
 
     const handleLogout = () => {
         track('logout');
         setUser(null);
-        localStorage.removeItem('historyNavigatorUser');
+        localStorage.removeItem('timelineCreatorUser');
         setSelectedCivilization(null); // Reset view
         setCurrentEvent(null);
     };
@@ -142,6 +228,19 @@ function App() {
     const isFavorited = (type: Favorite['type'], id: string): boolean => {
         if (!user || !selectedCivilization) return false;
         return favorites.some(f => f.type === type && f.id === id && f.civilizationName === selectedCivilization.name);
+    };
+    
+    const logShare = (shareData: Omit<Share, 'timestamp'>) => {
+        if (!user) return;
+        track('share_content_logged', { title: shareData.title });
+        const newShare: Share = { ...shareData, timestamp: new Date().toISOString() };
+        // Prevent duplicates from rapid clicking
+        const isDuplicate = shares.some(s => s.url === newShare.url);
+        if (isDuplicate) return;
+
+        const updatedShares = [newShare, ...shares].slice(0, 50); // Keep last 50 shares
+        setShares(updatedShares);
+        localStorage.setItem(`shares_${user.name}_${user.provider}`, JSON.stringify(updatedShares));
     };
 
     const navigateToFavorite = async (favorite: Favorite) => {
@@ -177,9 +276,9 @@ function App() {
                     setActiveModal({ type: 'topic', name: favorite.id });
                     break;
             }
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to navigate to favorite:", err);
-            setError("Could not navigate to the selected favorite.");
+            setError(err.message || "Could not navigate to the selected favorite.");
         } finally {
             setIsLoading(false);
         }
@@ -225,7 +324,7 @@ function App() {
         if (shareTarget && !selectedCivilization && !isLoading) {
             handleCivilizationChange(shareTarget.civilizationName);
         }
-    }, [shareTarget, selectedCivilization, isLoading]);
+    }, [shareTarget, selectedCivilization, isLoading, handleCivilizationChange]);
     
     // This useEffect waits for the civilization to load, then restores the rest of the state
     useEffect(() => {
@@ -266,35 +365,6 @@ function App() {
         };
         loadCivilizations();
     }, []);
-
-    const handleCivilizationChange = useCallback(async (name: string) => {
-        if (!name || name === selectedCivilization?.name) return;
-        
-        // Telemetry: Detect if this is a dynamic search or a selection from the list
-        const isDynamicSearch = !civilizations.some(c => c.name === name);
-        track(isDynamicSearch ? 'search_topic' : 'select_civilization', { name });
-        
-        setIsLoading(true);
-        setError(null);
-        setSelectedCivilization(null);
-        setCurrentEvent(null);
-        setSelectedCharacter(null);
-        setViewMode('2D');
-        setActiveModal(null);
-
-        try {
-            const data = await fetchCivilizationData(name, language, isKidsMode);
-            setSelectedCivilization(data);
-            if (data.timeline && data.timeline.length > 0) {
-                setCurrentEvent(data.timeline[0]);
-            }
-        } catch (err) {
-            console.error(`Failed to fetch data for ${name}:`, err);
-            setError(`Could not load data for ${name}. Please try another civilization or refresh the page.`);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [language, isKidsMode, selectedCivilization?.name, track, civilizations]);
     
     // Effect to track settings changes
     useEffect(() => {
@@ -309,7 +379,7 @@ function App() {
     }, [language, isKidsMode, track]);
 
     useEffect(() => {
-        if (selectedCivilization && !shareTarget) { // Prevent refetch during share link loading
+        if (selectedCivilization && !shareTarget && !isDemoMode) { // Prevent refetch during share link loading and demo
             const civName = selectedCivilization.name;
             const refetchData = async () => {
                 setIsLoading(true);
@@ -319,59 +389,43 @@ function App() {
                     setSelectedCivilization(data);
                     const eventExists = data.timeline.find(e => e.id === currentEvent?.id);
                     setCurrentEvent(eventExists || (data.timeline.length > 0 ? data.timeline[0] : null));
-                } catch (err) {
+                } catch (err: any) {
                     console.error(`Failed to refetch data for ${civName}:`, err);
-                    setError(`Could not reload data for ${civName}.`);
+                    setError(err.message || `Could not reload data for ${civName}.`);
                 } finally {
                     setIsLoading(false);
                 }
             };
             refetchData();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [language, isKidsMode]);
 
     const handleEventSelect = (event: TimelineEvent) => {
-        track('select_timeline_event', { id: event.id, title: event.title });
+        if (!isDemoMode) track('select_timeline_event', { id: event.id, title: event.title });
         setCurrentEvent(event);
         setSelectedCharacter(null);
     };
     
     const handleCharacterClick = (character: Character) => {
-        track('open_modal', { type: 'character', name: character.name });
+        if (!isDemoMode) track('open_modal', { type: 'character', name: character.name });
         setSelectedCharacter(character);
         setActiveModal({ type: 'character', name: character.name });
     };
 
     const handleWarClick = (war: War) => {
-        track('open_modal', { type: 'war', name: war.name });
+        if (!isDemoMode) track('open_modal', { type: 'war', name: war.name });
         setActiveModal({ type: 'war', name: war.name });
     };
 
     const handleTopicClick = (topic: Topic) => {
-        track('open_modal', { type: 'topic', name: topic.name });
+        if (!isDemoMode) track('open_modal', { type: 'topic', name: topic.name });
         setActiveModal({ type: 'topic', name: topic.name });
-    };
-
-    const handleSearchResultClick = (item: any) => {
-        if (!selectedCivilization) return;
-        const { type, id, name, title } = item;
-        const itemName = name || title;
-        track('click_global_search_result', { type, id, name: itemName });
-        if (type === 'event' && id) {
-            const event = selectedCivilization.timeline.find(e => e.id === id);
-            if (event) setCurrentEvent(event);
-        } else if (type === 'character' && itemName) {
-            setActiveModal({ type: 'character', name: itemName });
-        } else if (type === 'war' && itemName) {
-            setActiveModal({ type: 'war', name: itemName });
-        } else if (type === 'topic' && itemName) {
-            setActiveModal({ type: 'topic', name: itemName });
-        }
     };
 
     const handleViewModeToggle = () => {
         const newMode = viewMode === '2D' ? '3D' : '2D';
-        track('view_mode_changed', { from: viewMode, to: newMode });
+        if (!isDemoMode) track('view_mode_changed', { from: viewMode, to: newMode });
         setViewMode(newMode);
     };
 
@@ -386,11 +440,15 @@ function App() {
                 onLanguageChange={setLanguage}
                 isKidsMode={isKidsMode}
                 onKidsModeToggle={() => setIsKidsMode(!isKidsMode)}
-                onSearchResultClick={handleSearchResultClick}
                 isLoading={isLoading}
                 user={user}
                 onLogout={handleLogout}
+                onProfileClick={() => setActiveModal({ type: 'profile' })}
+                onFavoritesClick={() => setActiveModal({ type: 'favorites'})}
+                onSharesClick={() => setActiveModal({ type: 'shares'})}
                 track={track}
+                isDemoMode={isDemoMode}
+                demoSearchText={demoSearchText}
             />
              {selectedCivilization && currentEvent && user && (
                 <ViewModeToggle 
@@ -398,7 +456,7 @@ function App() {
                     onToggle={handleViewModeToggle}
                 />
             )}
-            <div className="flex flex-grow overflow-hidden">
+            <div className="flex flex-grow overflow-hidden relative">
                 <div className="flex flex-col flex-grow">
                      {viewMode === '2D' ? (
                         <MainContent
@@ -412,6 +470,7 @@ function App() {
                             onLogin={handleLogin}
                             isFavorited={isFavorited}
                             toggleFavorite={toggleFavorite}
+                            logShare={logShare}
                             track={track}
                         />
                     ) : (
@@ -421,6 +480,7 @@ function App() {
                             language={language}
                             isKidsMode={isKidsMode}
                             initialHotspotId={shareTarget?.modalType === 'hotspot' ? shareTarget.modalId : undefined}
+                            logShare={logShare}
                             track={track}
                         />
                     )}
@@ -450,9 +510,38 @@ function App() {
                 )}
             </div>
 
+            {!isDemoMode && !isLoading && (
+                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40">
+                     <button
+                        onClick={startDemo}
+                        className="px-6 py-3 bg-[var(--color-accent)] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
+                    >
+                        Take a tour
+                    </button>
+                </div>
+             )}
+
+            {isDemoMode && (
+                <TourGuide
+                    stopDemo={stopDemo}
+                    isLoading={isLoading}
+                    selectedCivilization={selectedCivilization}
+                    currentEvent={currentEvent}
+                    viewMode={viewMode}
+                    setDemoSearchText={setDemoSearchText}
+                    handleCivilizationChange={handleCivilizationChange}
+                    handleEventSelect={handleEventSelect}
+                    handleCharacterClick={handleCharacterClick}
+                    handleWarClick={handleWarClick}
+                    handleViewModeToggle={handleViewModeToggle}
+                    setActiveModal={setActiveModal}
+                />
+            )}
+
             {error && (
-                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-red-800 text-white p-4 rounded-lg shadow-lg z-50">
+                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-red-800 text-white p-4 rounded-lg shadow-lg z-50 animate-fade-in">
                     <p>{error}</p>
+                    <button onClick={() => setError(null)} className="absolute top-1 right-2 text-white font-bold">X</button>
                 </div>
             )}
             
@@ -474,6 +563,7 @@ function App() {
                     language={language}
                     isKidsMode={isKidsMode}
                     currentEvent={currentEvent}
+                    logShare={logShare}
                     track={track}
                  />
             )}
@@ -486,6 +576,7 @@ function App() {
                     language={language}
                     isKidsMode={isKidsMode}
                     currentEvent={currentEvent}
+                    logShare={logShare}
                     track={track}
                  />
             )}
@@ -498,8 +589,36 @@ function App() {
                     language={language}
                     isKidsMode={isKidsMode}
                     currentEvent={currentEvent}
+                    logShare={logShare}
                     track={track}
                  />
+            )}
+            {activeModal?.type === 'profile' && user && (
+                <ProfileModal 
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    user={user}
+                    favoritesCount={favorites.length}
+                    sharesCount={shares.length}
+                />
+            )}
+            {activeModal?.type === 'favorites' && user && (
+                <FavoritesModal
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    favorites={favorites}
+                    onFavoriteClick={(fav) => {
+                        navigateToFavorite(fav);
+                        setActiveModal(null);
+                    }}
+                />
+            )}
+            {activeModal?.type === 'shares' && user && (
+                <SharesModal
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    shares={shares}
+                />
             )}
 
         </div>

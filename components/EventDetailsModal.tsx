@@ -4,7 +4,7 @@ import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { fetchEventDetails, generateImage, fetchVoiceDescription } from '../services/geminiService.ts';
 import { speak, cancelSpeech } from '../services/voiceService.ts';
-import type { TimelineEvent, Character, VoiceDescription } from '../types.ts';
+import type { TimelineEvent, Character, VoiceDescription, Share } from '../types.ts';
 import { PlayIcon, PauseIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
 
@@ -16,10 +16,11 @@ interface EventDetailsModalProps {
     language: string;
     civilizationName: string;
     isKidsMode: boolean;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, onClose, event, character, language, civilizationName, isKidsMode, track }) => {
+export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, onClose, event, character, language, civilizationName, isKidsMode, logShare, track }) => {
     const [details, setDetails] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -120,9 +121,10 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
                 <div className="flex items-center flex-shrink-0 ml-4">
                     <ShareButton 
                         shareUrl={generateShareUrl()}
-                        shareTitle={`History Navigator: ${event.title}`}
+                        shareTitle={`Timeline Creator: ${event.title}`}
                         shareText={`Check out this event from the history of ${civilizationName}: ${event.title}`}
                         onShareClick={() => track('share_content', { type: 'eventDetails', id: event.id })}
+                        onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                     />
                     <button
                         onClick={handleToggleNarration}

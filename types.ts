@@ -116,6 +116,14 @@ export interface Favorite {
     name: string; 
 }
 
+// For Share History
+export interface Share {
+    url: string;
+    title: string;
+    text: string;
+    timestamp: string;
+}
+
 // For Telemetry
 export interface TelemetryContext {
     user: User | null;

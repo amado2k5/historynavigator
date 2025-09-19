@@ -4,7 +4,7 @@ import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { LightbulbIcon } from './Icons.tsx';
 import { fetchAIHistorianResponse, generateImage } from '../services/geminiService.ts';
-import type { TimelineEvent } from '../types.ts';
+import type { TimelineEvent, Share } from '../types.ts';
 import { ShareButton } from './ShareButton.tsx';
 
 interface AIPromptModalProps {
@@ -15,10 +15,11 @@ interface AIPromptModalProps {
     language: string;
     isKidsMode: boolean;
     initialPrompt?: string;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, event, civilizationName, language, isKidsMode, initialPrompt = '', track }) => {
+export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, event, civilizationName, language, isKidsMode, initialPrompt = '', logShare, track }) => {
     const [prompt, setPrompt] = useState(initialPrompt);
     const [response, setResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -111,6 +112,7 @@ export const AIPromptModal: React.FC<AIPromptModalProps> = ({ isOpen, onClose, e
                         shareTitle={`AI Historian: A question about ${event.title}`}
                         shareText={`I asked the AI Historian about "${prompt}" in the context of ${event.title}. See the answer for yourself!`}
                         onShareClick={() => track('share_content', { type: 'aiPrompt', prompt })}
+                        onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                     />
                 )}
             </div>

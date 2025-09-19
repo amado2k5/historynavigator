@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 // FIX: Added .ts extension to the import path.
-import type { TimelineEvent, MapData } from '../types.ts';
+import type { TimelineEvent, MapData, Share } from '../types.ts';
 // FIX: Added .ts extension to the import path.
 import { generateMapData, generateImage } from '../services/geminiService.ts';
 // FIX: Added .tsx extension to the import path.
@@ -17,10 +17,11 @@ interface MapModalProps {
     civilizationName: string;
     language: string;
     isKidsMode: boolean;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civilizationName, language, isKidsMode, track }) => {
+export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civilizationName, language, isKidsMode, logShare, track }) => {
     const [mapData, setMapData] = useState<MapData | null>(null);
     const [mapImageUrl, setMapImageUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -91,9 +92,10 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                 <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Map of {event.title}</h2>
                 <ShareButton
                     shareUrl={generateShareUrl()}
-                    shareTitle={`Map of ${event.title} - History Navigator`}
+                    shareTitle={`Map of ${event.title} - Timeline Creator`}
                     shareText={`Explore the map for the event "${event.title}" from the history of ${civilizationName}!`}
                     onShareClick={() => track('share_content', { type: 'map', id: event.id })}
+                    onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                 />
             </div>
 

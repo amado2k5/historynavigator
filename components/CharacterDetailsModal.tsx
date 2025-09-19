@@ -4,7 +4,7 @@ import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { fetchCharacterDetails, generateImage, fetchVoiceDescription } from '../services/geminiService.ts';
 import { speak, cancelSpeech } from '../services/voiceService.ts';
-import type { VoiceDescription, TimelineEvent } from '../types.ts';
+import type { VoiceDescription, TimelineEvent, Share } from '../types.ts';
 import { PlayIcon, PauseIcon } from './Icons.tsx';
 import { ShareButton } from './ShareButton.tsx';
 
@@ -16,10 +16,11 @@ interface CharacterDetailsModalProps {
     language: string;
     isKidsMode: boolean;
     currentEvent: TimelineEvent;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ isOpen, onClose, characterName, civilizationName, language, isKidsMode, currentEvent, track }) => {
+export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ isOpen, onClose, characterName, civilizationName, language, isKidsMode, currentEvent, logShare, track }) => {
     const [details, setDetails] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -113,9 +114,10 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
                  <div className="flex items-center flex-shrink-0 ml-4">
                     <ShareButton
                         shareUrl={generateShareUrl()}
-                        shareTitle={`History Navigator: ${characterName}`}
+                        shareTitle={`Timeline Creator: ${characterName}`}
                         shareText={`Learn about ${characterName} from the history of ${civilizationName}!`}
                         onShareClick={() => track('share_content', { type: 'character', id: characterName })}
+                        onLogShare={({ url, title, text }) => logShare({ url, title, text })}
                     />
                     <button
                         onClick={handleToggleNarration}
