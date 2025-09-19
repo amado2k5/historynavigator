@@ -26,7 +26,7 @@
     "exploreCivilization": "Explore {{name}}",
     "selectEvent": "Select an event from the timeline below to learn more.",
     "generatingVista": "Generating historical vista...",
-    "findingVista": "Finding historical vista..."
+    "findingVista": "Generating historical vista..."
   },
   "eventBubble": {
     "readDetails": "Read Details",
@@ -109,7 +109,7 @@
   "threeDView": {
     "sceneError": "Could not create the immersive scene. Please try another event.",
     "generatingVista": "Generating historical vista...",
-    "findingVista": "Finding historical vista...",
+    "findingVista": "Generating historical vista...",
     "populatingScene": "Populating scene with characters...",
     "interactWith": "Interact with {{hotspotName}}",
     "nothingToSay": "I have nothing to say."

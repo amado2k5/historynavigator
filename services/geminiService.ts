@@ -424,44 +424,27 @@ export const fetchVoiceDescription = async (context: string, language: string, i
     });
 };
 
-export const findImageOnWeb = async (prompt: string, aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4'): Promise<string> => {
-    // Note: aspectRatio is no longer directly used but kept for signature compatibility to minimize changes in calling components.
-    return withCache(['webImage', prompt], async () => {
-        console.log(`Searching for image on the web for prompt: "${prompt}"`);
-        
-        const MAX_FALLBACK_ATTEMPTS = 2;
-        for (let i = 0; i < MAX_FALLBACK_ATTEMPTS; i++) {
-            try {
-                const attemptSuffix = i > 0 ? ` Please provide a different image source than before.` : '';
-                const webSearchPrompt = `Find a URL for a professional, high-quality, non-AI-generated, photorealistic stock photo that visually represents: "${prompt}". The image must be from a source that allows direct hotlinking (e.g., Wikipedia, Wikimedia Commons, Pexels, Unsplash) and have a public domain or Creative Commons license. The image must be directly usable as a 'src' in an <img> tag without causing CORS or 403 Forbidden errors. Do not return results from sites that use watermarks (like Shutterstock previews, Getty, etc.) or require logins. Respond with ONLY the raw, direct image URL and nothing else.${attemptSuffix}`;
-                
-                const response = await apiCallWithRetry(() => ai.models.generateContent({
-                    model: textModel,
-                    contents: webSearchPrompt,
-                    config: {
-                        tools: [{ googleSearch: {} }],
-                    },
-                }));
+export const generateImage = async (prompt: string, aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4'): Promise<string> => {
+    return withCache(['generatedImage', prompt, aspectRatio], async () => {
+        console.log(`Generating image with prompt: "${prompt}" and aspect ratio: ${aspectRatio}`);
+        const response = await apiCallWithRetry(() => ai.models.generateImages({
+            model: 'imagen-4.0-generate-001',
+            prompt: prompt,
+            config: {
+                numberOfImages: 1,
+                outputMimeType: 'image/jpeg',
+                aspectRatio: aspectRatio,
+            },
+        }));
 
-                const responseText = response.text.trim();
-                const urlRegex = /(https?:\/\/[^\s"'`)]+\.(?:jpg|jpeg|png|gif|webp))/i;
-                const match = responseText.match(urlRegex);
-                
-                if (match && match[0]) {
-                    const imageUrl = match[0];
-                    console.log(`Web image found (Attempt ${i + 1}): ${imageUrl}`);
-                    return imageUrl;
-                } else {
-                    console.warn(`Web search attempt ${i + 1} did not return a valid image URL. Response: "${responseText}"`);
-                }
-            } catch (searchError) {
-                console.error(`Web image search attempt ${i + 1} failed with an error.`, searchError);
-                if (i === MAX_FALLBACK_ATTEMPTS - 1) {
-                    throw searchError;
-                }
-            }
+        if (response.generatedImages && response.generatedImages.length > 0 && response.generatedImages[0].image.imageBytes) {
+            const base64ImageBytes: string = response.generatedImages[0].image.imageBytes;
+            const imageUrl = `data:image/jpeg;base64,${base64ImageBytes}`;
+            return imageUrl;
+        } else {
+            console.error("Image generation failed, no images returned in response:", response);
+            throw new Error("Image generation failed, no images were returned.");
         }
-        throw new Error("All web search attempts failed to produce a valid image URL.");
     });
 };
 

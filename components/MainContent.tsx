@@ -4,7 +4,7 @@ import type { TimelineEvent, Character, Civilization, User, Favorite, Share } fr
 import { EventBubble } from './EventBubble.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 import { Login } from './Login.tsx';
-import { findImageOnWeb } from '../services/geminiService.ts';
+import { generateImage } from '../services/geminiService.ts';
 import { useI18n } from '../contexts/I18nContext.tsx';
 
 interface MainContentProps {
@@ -47,9 +47,9 @@ export const MainContent: React.FC<MainContentProps> = ({
             try {
                 const prompt = isKidsMode
                     ? `A vibrant, colorful, and friendly cartoon or storybook illustration of the historical event: "${currentEvent.title}" (${currentEvent.date}) from the ${civilization.name} civilization. Summary: ${currentEvent.summary}. The style should be fun and engaging for children.`
-                    : `A professional stock photo style, atmospheric, and highly detailed background image visualizing the historical event: "${currentEvent.title}" (${currentEvent.date}) from the ${civilization.name} civilization. Summary: ${currentEvent.summary}. The image should be cinematic and evocative of the time period. Avoid text and overlays.`;
+                    : `A cinematic, atmospheric, and highly detailed image visualizing the historical event: "${currentEvent.title}" (${currentEvent.date}) from the ${civilization.name} civilization. Summary: ${currentEvent.summary}. The image should be evocative of the time period. Avoid text and overlays.`;
 
-                const imageUrl = await findImageOnWeb(prompt, '16:9');
+                const imageUrl = await generateImage(prompt, '16:9');
                 
                 if (!isCancelled) {
                     setBackgroundImage(imageUrl);
@@ -122,7 +122,7 @@ export const MainContent: React.FC<MainContentProps> = ({
                  <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-10">
                     <LoadingSpinner />
                     {isLoading && <p className="mt-4 text-[var(--color-secondary)]">{loadingMessage}</p>}
-                    {isImageLoading && !isLoading && <p className="mt-4 text-[var(--color-secondary)]">{t('mainContent.findingVista')}</p>}
+                    {isImageLoading && !isLoading && <p className="mt-4 text-[var(--color-secondary)]">{t('mainContent.generatingVista')}</p>}
                 </div>
             )}
 

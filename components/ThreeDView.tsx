@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import type { TimelineEvent, Civilization, Hotspot, SceneHotspot, Share } from '../types.ts';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-import { findImageOnWeb, fetchSceneHotspots } from '../services/geminiService.ts';
+import { generateImage, fetchSceneHotspots } from '../services/geminiService.ts';
 import { ChatBubbleIcon } from './Icons.tsx';
 import { useI18n } from '../contexts/I18nContext.tsx';
 
@@ -57,9 +57,9 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
             try {
                 const imagePrompt = isKidsMode
                     ? `A vibrant, colorful, and friendly cartoon or storybook illustration of the historical event: "${currentEvent.title}" from the ${civilization.name} civilization. Style: wide panoramic view, fun and engaging for children.`
-                    : `A photorealistic, atmospheric, and highly detailed background image visualizing the historical event: "${currentEvent.title}" from the ${civilization.name} civilization. Style: epic cinematic wide panoramic shot, professional stock photo quality. Avoid text and overlays.`;
+                    : `A photorealistic, atmospheric, and highly detailed image visualizing the historical event: "${currentEvent.title}" from the ${civilization.name} civilization. Style: epic cinematic wide panoramic shot. Avoid text and overlays.`;
                 
-                const imageUrlPromise = findImageOnWeb(imagePrompt, '16:9');
+                const imageUrlPromise = generateImage(imagePrompt, '16:9');
                 const hotspotsPromise = fetchSceneHotspots(currentEvent, civilization.name, isKidsMode);
 
                 const [imageUrl, rawHotspots] = await Promise.all([imageUrlPromise, hotspotsPromise]);
@@ -112,7 +112,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
                  <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-20">
                     <LoadingSpinner />
                     <p className="mt-4 text-[var(--color-secondary)]">
-                        {isLoadingImage ? t('threeDView.findingVista') : t('threeDView.populatingScene')}
+                        {isLoadingImage ? t('threeDView.generatingVista') : t('threeDView.populatingScene')}
                     </p>
                 </div>
             )}

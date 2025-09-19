@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-// FIX: Added findImageOnWeb import.
-import { fetchWarDetails, findImageOnWeb } from '../services/geminiService.ts';
+import { fetchWarDetails, generateImage } from '../services/geminiService.ts';
 import { ShareButton } from './ShareButton.tsx';
 import type { TimelineEvent, Share } from '../types.ts';
 import { useI18n } from '../contexts/I18nContext.tsx';
@@ -55,8 +54,8 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
                     
                     const imagePrompt = isKidsMode
                         ? `A simple, non-graphic cartoon illustration representing the war: ${warName} from ${civilizationName}. Style: children's history book.`
-                        : `A dramatic and atmospheric, photorealistic representation depicting a key scene from the ${warName} of the ${civilizationName} civilization. Style: epic, stock photo style.`;
-                    const imageUrlPromise = findImageOnWeb(imagePrompt, '16:9');
+                        : `A dramatic and atmospheric, photorealistic representation depicting a key scene from the ${warName} of the ${civilizationName} civilization. Style: epic, cinematic.`;
+                    const imageUrlPromise = generateImage(imagePrompt, '16:9');
 
                     const [detailedText, url] = await Promise.all([detailedTextPromise, imageUrlPromise]);
 

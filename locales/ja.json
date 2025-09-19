@@ -26,7 +26,7 @@
     "exploreCivilization": "{{name}}を探索",
     "selectEvent": "下のタイムラインからイベントを選択して詳細をご覧ください。",
     "generatingVista": "歴史的景観を生成中...",
-    "findingVista": "歴史的な風景を検索中..."
+    "findingVista": "歴史的景観を生成中..."
   },
   "eventBubble": {
     "readDetails": "詳細を読む",
@@ -109,7 +109,7 @@
   "threeDView": {
     "sceneError": "没入型シーンを作成できませんでした。別のイベントをお試しください。",
     "generatingVista": "歴史的景観を生成中...",
-    "findingVista": "歴史的な風景を検索中...",
+    "findingVista": "歴史的景観を生成中...",
     "populatingScene": "シーンにキャラクターを配置中...",
     "interactWith": "{{hotspotName}}と対話する",
     "nothingToSay": "何も言うことはありません。"
