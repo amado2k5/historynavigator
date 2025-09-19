@@ -1,4 +1,3 @@
-
 // FIX: Imported useState and useEffect to resolve 'Cannot find name' errors.
 import React, { useState, useEffect } from 'react';
 import type { TimelineEvent, Character, Civilization, User, Favorite, Share } from '../types.ts';
@@ -22,10 +21,11 @@ interface MainContentProps {
     logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
     isDemoMode: boolean;
+    onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'video') => void;
 }
 
 export const MainContent: React.FC<MainContentProps> = ({ 
-    civilization, currentEvent, character, language, isKidsMode, isLoading, loadingMessage, user, onLogin, isFavorited, toggleFavorite, logShare, track, isDemoMode
+    civilization, currentEvent, character, language, isKidsMode, isLoading, loadingMessage, user, onLogin, isFavorited, toggleFavorite, logShare, track, isDemoMode, onOpenModal
 }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
@@ -99,7 +99,6 @@ export const MainContent: React.FC<MainContentProps> = ({
         return (
              <EventBubble
                 event={currentEvent}
-                character={character}
                 language={language}
                 civilizationName={civilization.name}
                 isKidsMode={isKidsMode}
@@ -108,6 +107,7 @@ export const MainContent: React.FC<MainContentProps> = ({
                 toggleFavorite={() => toggleFavorite({type: 'event', id: currentEvent.id, name: currentEvent.title})}
                 logShare={logShare}
                 track={track}
+                onOpenModal={onOpenModal}
             />
         );
     }

@@ -1,16 +1,11 @@
-
-import React, { useState } from 'react';
-import type { TimelineEvent, Character, User, Share } from '../types.ts';
-import { BookOpenIcon, MapIcon, LightbulbIcon } from './Icons.tsx';
-import { EventDetailsModal } from './EventDetailsModal.tsx';
-import { MapModal } from './MapModal.tsx';
+import React from 'react';
+import type { TimelineEvent, User, Share } from '../types.ts';
+import { BookOpenIcon, MapIcon, LightbulbIcon, FilmIcon } from './Icons.tsx';
 import { FavoriteIcon } from './FavoriteIcon.tsx';
-import { AIPromptModal } from './AIPromptModal.tsx';
 import { ShareButton } from './ShareButton.tsx';
 
 interface EventBubbleProps {
     event: TimelineEvent;
-    character: Character | null;
     language: string;
     civilizationName: string;
     isKidsMode: boolean;
@@ -19,12 +14,10 @@ interface EventBubbleProps {
     toggleFavorite: () => void;
     logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
+    onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'video') => void;
 }
 
-export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, language, civilizationName, isKidsMode, user, isFavorited, toggleFavorite, logShare, track }) => {
-    const [isDetailsOpen, setDetailsOpen] = useState(false);
-    const [isMapOpen, setMapOpen] = useState(false);
-    const [isAIOpen, setAIOpen] = useState(false);
+export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civilizationName, isKidsMode, user, isFavorited, toggleFavorite, logShare, track, onOpenModal }) => {
     
     const generateShareUrl = () => {
         const params = new URLSearchParams({
@@ -63,53 +56,25 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, character, lang
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl">
                     <div className="flex gap-6">
-                        <button onClick={() => { track('open_modal', { type: 'eventDetails' }); setDetailsOpen(true); }} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                        <button onClick={() => onOpenModal('eventDetails')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
                             <BookOpenIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">Read Details</span>
                         </button>
-                        <button onClick={() => { track('open_modal', { type: 'map' }); setMapOpen(true); }} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                         <button onClick={() => onOpenModal('video')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                            <FilmIcon className="w-10 h-10" />
+                            <span className="mt-2 text-sm">Create Video</span>
+                        </button>
+                        <button onClick={() => onOpenModal('map')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
                             <MapIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">View on Map</span>
                         </button>
-                        <button onClick={() => { track('open_modal', { type: 'aiPrompt' }); setAIOpen(true); }} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
+                        <button onClick={() => onOpenModal('aiPrompt')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors">
                             <LightbulbIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">Ask AI</span>
                         </button>
                     </div>
                 </div>
             </div>
-
-            {isDetailsOpen && <EventDetailsModal
-                isOpen={isDetailsOpen}
-                onClose={() => setDetailsOpen(false)}
-                event={event}
-                character={character}
-                language={language}
-                civilizationName={civilizationName}
-                isKidsMode={isKidsMode}
-                logShare={logShare}
-                track={track}
-            />}
-            {isMapOpen && <MapModal
-                isOpen={isMapOpen}
-                onClose={() => setMapOpen(false)}
-                event={event}
-                civilizationName={civilizationName}
-                language={language}
-                isKidsMode={isKidsMode}
-                logShare={logShare}
-                track={track}
-            />}
-             {isAIOpen && <AIPromptModal
-                isOpen={isAIOpen}
-                onClose={() => setAIOpen(false)}
-                event={event}
-                civilizationName={civilizationName}
-                language={language}
-                isKidsMode={isKidsMode}
-                logShare={logShare}
-                track={track}
-            />}
         </>
     );
 };

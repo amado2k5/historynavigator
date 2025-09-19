@@ -18,6 +18,10 @@ import { ViewModeToggle } from './components/ViewModeToggle.tsx';
 import { ThreeDView } from './components/ThreeDView.tsx';
 import { trackEvent } from './services/telemetryService.ts';
 import { SidebarToggle } from './components/SidebarToggle.tsx';
+import { EventDetailsModal } from './components/EventDetailsModal.tsx';
+import { MapModal } from './components/MapModal.tsx';
+import { AIPromptModal } from './components/AIPromptModal.tsx';
+import { VideoModal } from './components/VideoModal.tsx';
 
 export type ModalState = 
     | { type: 'character', name: string }
@@ -25,6 +29,7 @@ export type ModalState =
     | { type: 'topic', name: string }
     | { type: 'eventDetails', name: string }
     | { type: 'map', name: string }
+    | { type: 'video', name: string }
     | { type: 'aiPrompt', name: string, prompt?: string }
     | { type: 'profile' }
     | { type: 'favorites' }
@@ -65,9 +70,24 @@ function App() {
     const prevIsKidsModeRef = useRef(isKidsMode);
     const demoTimeoutRef = useRef<number | null>(null);
     const demoUserRef = useRef<User | null>(null);
+    const lastActionTimestampRef = useRef<number>(0);
 
 
-    // FIX: Moved telemetry logic before its usage to resolve 'used before its declaration' errors.
+    // --- Global Action Throttling ---
+    const isActionAllowed = useCallback(() => {
+        // The tour guide needs to bypass this to run smoothly
+        if (isDemoMode) return true;
+
+        const now = Date.now();
+        if (now - lastActionTimestampRef.current < 1000) { // 1 second cooldown
+            console.warn('Action throttled: An action was attempted less than 1 second after the previous one.');
+            return false;
+        }
+        lastActionTimestampRef.current = now;
+        return true;
+    }, [isDemoMode]);
+
+
     // --- Telemetry Logic ---
     const getTelemetryContext = useCallback((): TelemetryContext => {
         return {
@@ -86,6 +106,7 @@ function App() {
 
 
     const handleCivilizationChange = useCallback(async (name: string) => {
+        if (!isActionAllowed()) return;
         if (name === selectedCivilization?.name && !isDemoMode) return;
 
         // If the name is cleared, reset the view.
@@ -131,7 +152,7 @@ function App() {
         } finally {
             setIsLoading(false);
         }
-    }, [language, isKidsMode, selectedCivilization?.name, track, civilizations, isDemoMode]);
+    }, [language, isKidsMode, selectedCivilization?.name, track, civilizations, isDemoMode, isActionAllowed]);
 
     // --- Demo Mode Logic ---
     const stopDemo = useCallback(() => {
@@ -268,7 +289,8 @@ function App() {
         localStorage.setItem(`shares_${user.name}_${user.provider}`, JSON.stringify(updatedShares));
     };
 
-    const navigateToFavorite = async (favorite: Favorite) => {
+    const navigateToFavorite = useCallback(async (favorite: Favorite) => {
+        if (!isActionAllowed()) return;
         track('navigate_to_favorite', { type: favorite.type, id: favorite.id, name: favorite.name, from: favorite.civilizationName });
         setIsLoading(true);
         setError(null);
@@ -307,7 +329,7 @@ function App() {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [isActionAllowed, track, selectedCivilization, language, isKidsMode]);
 
 
     // --- URL Hash Parsing and State Restoration ---
@@ -407,6 +429,7 @@ function App() {
         if (selectedCivilization && !shareTarget && !isDemoMode) { // Prevent refetch during share link loading and demo
             const civName = selectedCivilization.name;
             const refetchData = async () => {
+                if (!isActionAllowed()) return;
                 setIsLoading(true);
                 setError(null);
                 try {
@@ -424,12 +447,20 @@ function App() {
             refetchData();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [language, isKidsMode]);
+    }, [language, isKidsMode, isActionAllowed]);
 
-    const handleEventSelect = (event: TimelineEvent) => {
+    const handleEventSelect = useCallback((event: TimelineEvent) => {
+        if (!isActionAllowed()) return;
         if (!isDemoMode) track('select_timeline_event', { id: event.id, title: event.title });
         setCurrentEvent(event);
         setSelectedCharacter(null);
+    }, [isActionAllowed, isDemoMode, track]);
+
+    const handleOpenModal = (type: 'eventDetails' | 'map' | 'aiPrompt' | 'video') => {
+        if (currentEvent) {
+            track('open_modal', { type });
+            setActiveModal({ type, name: currentEvent.id });
+        }
     };
     
     const handleCharacterClick = (character: Character) => {
@@ -504,6 +535,7 @@ function App() {
                             logShare={logShare}
                             track={track}
                             isDemoMode={isDemoMode}
+                            onOpenModal={handleOpenModal}
                         />
                     ) : (
                         <ThreeDView
@@ -590,6 +622,56 @@ function App() {
                     civilizationName={selectedCivilization.name}
                     isKidsMode={isKidsMode}
                     track={track}
+                />
+            )}
+            
+            {activeModal?.type === 'eventDetails' && currentEvent && selectedCivilization && (
+                <EventDetailsModal
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    event={currentEvent}
+                    character={selectedCharacter}
+                    language={language}
+                    civilizationName={selectedCivilization.name}
+                    isKidsMode={isKidsMode}
+                    logShare={logShare}
+                    track={track}
+                />
+            )}
+            {activeModal?.type === 'map' && currentEvent && selectedCivilization && (
+                <MapModal
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    event={currentEvent}
+                    civilizationName={selectedCivilization.name}
+                    language={language}
+                    isKidsMode={isKidsMode}
+                    logShare={logShare}
+                    track={track}
+                />
+            )}
+            {activeModal?.type === 'aiPrompt' && currentEvent && selectedCivilization && (
+                <AIPromptModal
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    event={currentEvent}
+                    civilizationName={selectedCivilization.name}
+                    language={language}
+                    isKidsMode={isKidsMode}
+                    initialPrompt={activeModal.prompt}
+                    logShare={logShare}
+                    track={track}
+                />
+            )}
+            {activeModal?.type === 'video' && currentEvent && selectedCivilization && (
+                <VideoModal
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    event={currentEvent}
+                    character={selectedCharacter}
+                    civilizationName={selectedCivilization.name}
+                    language={language}
+                    isKidsMode={isKidsMode}
                 />
             )}
 
