@@ -68,6 +68,29 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
             {renderSection('Major Wars', civilization.majorWars, onWarClick, 'war')}
             {renderSection('Cultural Topics', civilization.culturalTopics, onTopicClick, 'topic')}
             
+            {civilization.sources && civilization.sources.length > 0 && (
+                <div className="mb-6">
+                    <h3 className="text-lg font-bold font-heading mb-3 border-b-2" style={{borderColor: 'var(--color-primary)'}}>Sources</h3>
+                    <ul className="space-y-2 text-sm">
+                        {civilization.sources.map((source, index) => (
+                            source.web?.uri && (
+                                <li key={index} className="leading-tight">
+                                    <a
+                                        href={source.web.uri}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        title={source.web.uri}
+                                        className="text-[var(--color-secondary)] hover:text-[var(--color-accent)] transition-colors duration-200 break-words"
+                                    >
+                                    {source.web.title || source.web.uri}
+                                    </a>
+                                </li>
+                            )
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             {user && favorites.length > 0 && (
                 <div className="mb-6">
                      <h3 className="text-lg font-bold font-heading mb-3 border-b-2" style={{borderColor: 'var(--color-primary)'}}>My Favorites</h3>

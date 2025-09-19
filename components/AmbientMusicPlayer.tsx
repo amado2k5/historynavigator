@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 // FIX: Added .ts extension to the import path.
 import type { TimelineEvent, MusicParameters, MusicLayer } from '../types.ts';
 // FIX: Added .ts extension to the import path.
-import { generateMusicParameters, fetchSoundscapeDescription } from '../services/geminiService.ts';
+import { generateMusicParameters, fetchMusicDescription } from '../services/geminiService.ts';
 // FIX: Added .tsx extension to the import path.
 import { VolumeUpIcon, VolumeOffIcon } from './Icons.tsx';
 
@@ -10,11 +11,12 @@ interface AmbientMusicPlayerProps {
     event: TimelineEvent;
     civilizationName: string;
     isKidsMode: boolean;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
 type AudioSource = OscillatorNode | AudioBufferSourceNode;
 
-export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, civilizationName, isKidsMode }) => {
+export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, civilizationName, isKidsMode, track }) => {
     const [isMuted, setIsMuted] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -142,19 +144,19 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
             
             try {
                 if (isCancelled) return;
-                setLoadingMessage("Crafting sonic atmosphere...");
-                const description = await fetchSoundscapeDescription(event, civilizationName, isKidsMode);
+                setLoadingMessage("Reading historical sheet music...");
+                const description = await fetchMusicDescription(event, civilizationName, isKidsMode);
                 
                 if (isCancelled) return;
-                setLoadingMessage("Composing soundscape...");
+                setLoadingMessage("Composing classical score...");
                 const params = await generateMusicParameters(description, isKidsMode);
                 
                 if (isCancelled) return;
                 playNewSound(params);
 
             } catch(err) {
-                console.error("Failed to generate soundscape:", err);
-                if (!isCancelled) setError("Could not generate soundscape.");
+                console.error("Failed to generate music:", err);
+                if (!isCancelled) setError("Could not generate music.");
             } finally {
                 if (!isCancelled) setIsLoading(false);
             }
@@ -184,6 +186,7 @@ export const AmbientMusicPlayer: React.FC<AmbientMusicPlayerProps> = ({ event, c
         if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
             audioContextRef.current.resume();
         }
+        track(isMuted ? 'music_unmuted' : 'music_muted');
         setIsMuted(!isMuted);
     };
 

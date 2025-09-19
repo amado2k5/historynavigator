@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
@@ -7,6 +8,7 @@ import type { TimelineEvent, MapData } from '../types.ts';
 import { generateMapData, generateImage } from '../services/geminiService.ts';
 // FIX: Added .tsx extension to the import path.
 import { MapPinIcon } from './Icons.tsx';
+import { ShareButton } from './ShareButton.tsx';
 
 interface MapModalProps {
     isOpen: boolean;
@@ -15,15 +17,34 @@ interface MapModalProps {
     civilizationName: string;
     language: string;
     isKidsMode: boolean;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civilizationName, language, isKidsMode }) => {
+export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civilizationName, language, isKidsMode, track }) => {
     const [mapData, setMapData] = useState<MapData | null>(null);
     const [mapImageUrl, setMapImageUrl] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingImage, setIsLoadingImage] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [selectedPoi, setSelectedPoi] = useState<MapData['pointsOfInterest'][0] | null>(null);
+
+     const generateShareUrl = () => {
+        const params = new URLSearchParams({
+            civilization: civilizationName,
+            event: event.id,
+            view: '2D',
+            modal: 'map',
+            id: event.id,
+            lang: language,
+            kids: String(isKidsMode),
+        });
+        return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
+    };
+
+    const handlePoiSelect = (poi: MapData['pointsOfInterest'][0]) => {
+        track('select_poi', { name: poi.name });
+        setSelectedPoi(poi);
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -66,7 +87,16 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="xl">
-            <h2 className="text-2xl font-bold font-heading mb-4" style={{color: 'var(--color-accent)'}}>Map of {event.title}</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Map of {event.title}</h2>
+                <ShareButton
+                    shareUrl={generateShareUrl()}
+                    shareTitle={`Map of ${event.title} - History Navigator`}
+                    shareText={`Explore the map for the event "${event.title}" from the history of ${civilizationName}!`}
+                    onShareClick={() => track('share_content', { type: 'map', id: event.id })}
+                />
+            </div>
+
             {(isLoading || isLoadingImage) && (
                 <div className="flex justify-center items-center h-96 flex-col">
                     <LoadingSpinner />
@@ -86,7 +116,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                             {mapData.pointsOfInterest.map((poi, index) => (
                                 <li key={index}>
                                      <button 
-                                        onClick={() => setSelectedPoi(poi)}
+                                        onClick={() => handlePoiSelect(poi)}
                                         className={`w-full text-left p-2 rounded-md transition-colors flex items-center gap-2 ${selectedPoi?.name === poi.name ? 'bg-[var(--color-primary)]' : 'hover:bg-[var(--color-background-light)]'}`}
                                     >
                                         <MapPinIcon className={`w-5 h-5 flex-shrink-0 ${selectedPoi?.name === poi.name ? 'text-[var(--color-accent)]' : ''}`} />

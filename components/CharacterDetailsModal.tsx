@@ -1,9 +1,12 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-import { fetchCharacterDetails, generateImage } from '../services/geminiService.ts';
+import { fetchCharacterDetails, generateImage, fetchVoiceDescription } from '../services/geminiService.ts';
+import { speak, cancelSpeech } from '../services/voiceService.ts';
+import type { VoiceDescription, TimelineEvent } from '../types.ts';
 import { PlayIcon, PauseIcon } from './Icons.tsx';
+import { ShareButton } from './ShareButton.tsx';
 
 interface CharacterDetailsModalProps {
     isOpen: boolean;
@@ -12,23 +15,35 @@ interface CharacterDetailsModalProps {
     civilizationName: string;
     language: string;
     isKidsMode: boolean;
+    currentEvent: TimelineEvent;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ isOpen, onClose, characterName, civilizationName, language, isKidsMode }) => {
+export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ isOpen, onClose, characterName, civilizationName, language, isKidsMode, currentEvent, track }) => {
     const [details, setDetails] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
     const [isNarrating, setIsNarrating] = useState(false);
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+    const [voiceDescription, setVoiceDescription] = useState<VoiceDescription | null>(null);
 
+    const generateShareUrl = () => {
+        const params = new URLSearchParams({
+            civilization: civilizationName,
+            event: currentEvent.id,
+            view: '2D',
+            modal: 'character',
+            id: characterName,
+            lang: language,
+            kids: String(isKidsMode),
+        });
+        return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
+    };
 
     useEffect(() => {
         const cleanup = () => {
-            if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-            }
+            cancelSpeech();
             setIsNarrating(false);
         };
 
@@ -39,6 +54,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
                 setError(null);
                 setDetails('');
                 setImageUrl(null);
+                setVoiceDescription(null);
                 try {
                     const detailedTextPromise = fetchCharacterDetails(characterName, civilizationName, language, isKidsMode);
                     
@@ -47,19 +63,14 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
                         : `A realistic, historically-inspired portrait of ${characterName} from the ${civilizationName} civilization, reflecting their era and role. Style: cinematic, detailed painting.`;
                     const imageUrlPromise = generateImage(imagePrompt, '4:3');
 
-                    const [detailedText, url] = await Promise.all([detailedTextPromise, imageUrlPromise]);
+                    const voiceContext = `${characterName} from ${civilizationName}, telling their own story.`;
+                    const voiceDescPromise = fetchVoiceDescription(voiceContext, language, isKidsMode);
+
+                    const [detailedText, url, voiceDesc] = await Promise.all([detailedTextPromise, imageUrlPromise, voiceDescPromise]);
 
                     setDetails(detailedText);
                     setImageUrl(url);
-
-                    // Setup narration
-                    const utterance = new SpeechSynthesisUtterance(detailedText);
-                    utterance.onend = () => setIsNarrating(false);
-                    utterance.onerror = (e) => {
-                        console.error("Speech synthesis error", e);
-                        setIsNarrating(false);
-                    };
-                    utteranceRef.current = utterance;
+                    setVoiceDescription(voiceDesc);
 
                 } catch (e) {
                     console.error("Failed to fetch character details or image:", e);
@@ -76,13 +87,21 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
     }, [isOpen, characterName, civilizationName, language, isKidsMode]);
 
     const handleToggleNarration = () => {
-        if (!utteranceRef.current) return;
+        if (!details || !voiceDescription) return;
 
         if (isNarrating) {
-            window.speechSynthesis.cancel();
+            track('narration_stopped', { source: 'characterDetails', character: characterName });
+            cancelSpeech();
             setIsNarrating(false);
         } else {
-            window.speechSynthesis.speak(utteranceRef.current);
+            track('narration_started', { source: 'characterDetails', character: characterName });
+            speak(details, voiceDescription, {
+                onend: () => setIsNarrating(false),
+                onerror: (e) => {
+                    console.error("Speech synthesis error", e);
+                    setIsNarrating(false);
+                }
+            });
             setIsNarrating(true);
         }
     };
@@ -90,18 +109,26 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{characterName}</h2>
-                <button
-                    onClick={handleToggleNarration}
-                    disabled={isLoading || !details}
-                    className="p-2 rounded-full hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0 ml-4"
-                    aria-label={isNarrating ? 'Stop narration' : 'Play narration'}
-                >
-                    {isNarrating
-                        ? <PauseIcon className="w-6 h-6 text-[var(--color-accent)]" />
-                        : <PlayIcon className="w-6 h-6 text-[var(--color-secondary)]" />
-                    }
-                </button>
+                <h2 className="text-2xl font-bold font-heading flex-grow" style={{color: 'var(--color-accent)'}}>{characterName}</h2>
+                 <div className="flex items-center flex-shrink-0 ml-4">
+                    <ShareButton
+                        shareUrl={generateShareUrl()}
+                        shareTitle={`History Navigator: ${characterName}`}
+                        shareText={`Learn about ${characterName} from the history of ${civilizationName}!`}
+                        onShareClick={() => track('share_content', { type: 'character', id: characterName })}
+                    />
+                    <button
+                        onClick={handleToggleNarration}
+                        disabled={isLoading || !details}
+                        className="p-2 rounded-full hover:bg-[var(--color-background-light)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        aria-label={isNarrating ? 'Stop narration' : 'Play narration'}
+                    >
+                        {isNarrating
+                            ? <PauseIcon className="w-6 h-6 text-[var(--color-accent)]" />
+                            : <PlayIcon className="w-6 h-6 text-[var(--color-secondary)]" />
+                        }
+                    </button>
+                </div>
             </div>
             
             <div className="w-full aspect-[4/3] bg-[var(--color-background-light)] rounded-md mb-4 flex items-center justify-center overflow-hidden">

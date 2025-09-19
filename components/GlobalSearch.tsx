@@ -10,12 +10,11 @@ import { SearchIcon } from './Icons.tsx';
 
 interface GlobalSearchProps {
     civilization: Civilization | null;
-    language: string;
-    isKidsMode: boolean;
     onResultClick: (item: any) => void;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const GlobalSearch: React.FC<GlobalSearchProps> = ({ civilization, language, isKidsMode, onResultClick }) => {
+export const GlobalSearch: React.FC<GlobalSearchProps> = ({ civilization, onResultClick, track }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<any[]>([]);
     const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +29,8 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ civilization, langua
 
         if (query.length > 2) {
             const performSearch = async () => {
-                const searchResults = await globalSearch(query, civilization, language, isKidsMode);
+                track('global_search', { query });
+                const searchResults = await globalSearch(query, civilization, 'English', false); // Note: Global search doesn't use language/kids mode from UI yet
                 setResults(searchResults);
                 setIsOpen(true);
             };
@@ -40,7 +40,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ civilization, langua
             setResults([]);
             setIsOpen(false);
         }
-    }, [query, civilization, language, isKidsMode]);
+    }, [query, civilization, track]);
     
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {

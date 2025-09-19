@@ -1,14 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
-import type { TimelineEvent, Civilization, Hotspot, SceneHotspot } from '../types.ts';
+
+import React, { useState, useEffect } from 'react';
+import type { TimelineEvent, Civilization, Hotspot, SceneHotspot, VoiceDescription } from '../types.ts';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
-import { generateImage, fetchSceneHotspots, fetchHotspotDialogue } from '../services/geminiService.ts';
+import { generateImage, fetchSceneHotspots, fetchHotspotDialogue, fetchVoiceDescription } from '../services/geminiService.ts';
+import { speak, cancelSpeech } from '../services/voiceService.ts';
 import { ChatBubbleIcon } from './Icons.tsx';
+import { ShareButton } from './ShareButton.tsx';
 
 interface ThreeDViewProps {
     civilization: Civilization | null;
     currentEvent: TimelineEvent | null;
     language: string;
     isKidsMode: boolean;
+    initialHotspotId?: string;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
 const positionStringToCoords = (posStr: SceneHotspot['position']): { x: number; y: number } => {
@@ -26,15 +31,14 @@ const positionStringToCoords = (posStr: SceneHotspot['position']): { x: number; 
     return positions[posStr] || positions['center'];
 };
 
-export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEvent, language, isKidsMode }) => {
+export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEvent, language, isKidsMode, initialHotspotId, track }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [hotspots, setHotspots] = useState<Hotspot[]>([]);
-    const [activeDialogue, setActiveDialogue] = useState<{ hotspotName: string, text: string } | null>(null);
+    const [activeDialogue, setActiveDialogue] = useState<{ hotspotName: string, text: string, imageUrl: string | null, isLoading: boolean } | null>(null);
     const [isLoadingImage, setIsLoadingImage] = useState(false);
     const [isLoadingHotspots, setIsLoadingHotspots] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [rotation, setRotation] = useState({ x: 0, y: 0 });
-    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     // Main data fetching effect
     useEffect(() => {
@@ -49,30 +53,35 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
             setBackgroundImage(null);
             setHotspots([]);
             setActiveDialogue(null);
-            // Cancel any ongoing speech
-            window.speechSynthesis.cancel();
+            cancelSpeech();
 
             try {
-                // Generate background image
                 const imagePrompt = isKidsMode
                     ? `A vibrant, colorful, and friendly cartoon or storybook illustration of the historical event: "${currentEvent.title}" from the ${civilization.name} civilization. Style: wide panoramic view, fun and engaging for children.`
                     : `A photorealistic, atmospheric, and highly detailed background image visualizing the historical event: "${currentEvent.title}" from the ${civilization.name} civilization. Style: epic cinematic wide panoramic shot. Avoid text and overlays.`;
                 
-                const imageUrl = await generateImage(imagePrompt, '16:9');
+                const imageUrlPromise = generateImage(imagePrompt, '16:9');
+                const hotspotsPromise = fetchSceneHotspots(currentEvent, civilization.name, isKidsMode);
+
+                const [imageUrl, rawHotspots] = await Promise.all([imageUrlPromise, hotspotsPromise]);
+
                 if (isCancelled) return;
                 setBackgroundImage(imageUrl);
                 setIsLoadingImage(false);
 
-                // Fetch hotspots based on the event
-                const rawHotspots = await fetchSceneHotspots(currentEvent, civilization.name, isKidsMode);
-                if (isCancelled) return;
-                
                 const processedHotspots = rawHotspots.map(h => ({
                     name: h.name,
                     description: h.description,
                     positionCoords: positionStringToCoords(h.position)
                 }));
                 setHotspots(processedHotspots);
+
+                if (initialHotspotId) {
+                    const targetHotspot = processedHotspots.find(h => h.name === initialHotspotId);
+                    if (targetHotspot) {
+                        handleHotspotClick(targetHotspot);
+                    }
+                }
 
             } catch (err) {
                 console.error("Failed to generate 3D scene:", err);
@@ -89,7 +98,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
 
         return () => {
             isCancelled = true;
-            window.speechSynthesis.cancel();
+            cancelSpeech();
         };
     }, [currentEvent, civilization, isKidsMode]);
     
@@ -101,31 +110,55 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
         setRotation({ x: 0, y: -xPercent * 10 }); // Rotate up to 10 degrees left/right
     };
 
+    const generateShareUrl = (hotspotName: string) => {
+        const params = new URLSearchParams({
+            civilization: civilization!.name,
+            event: currentEvent!.id,
+            view: '3D',
+            modal: 'hotspot',
+            id: hotspotName,
+            lang: language,
+            kids: String(isKidsMode),
+        });
+        return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
+    };
+
     // Hotspot click handler for dialogue
     const handleHotspotClick = async (hotspot: Hotspot) => {
-        setActiveDialogue({ hotspotName: hotspot.name, text: '...' });
-        window.speechSynthesis.cancel(); // Stop any previous speech
+        if (activeDialogue?.isLoading) return; // Prevent multiple clicks while one is loading
+
+        track('interact_3d_hotspot', { name: hotspot.name });
+        setActiveDialogue({ hotspotName: hotspot.name, text: '...', imageUrl: null, isLoading: true });
+        cancelSpeech(); // Stop any previous speech
 
         try {
-            const dialogue = await fetchHotspotDialogue(hotspot.name, currentEvent!, civilization!.name, language, isKidsMode);
-            setActiveDialogue({ hotspotName: hotspot.name, text: dialogue });
+            const imagePrompt = isKidsMode
+                ? `A friendly, colorful cartoon illustration depicting "${hotspot.name}: ${hotspot.description}". Context: The event of ${currentEvent!.title}. Style: storybook.`
+                : `A photorealistic, historically-inspired image depicting "${hotspot.name}: ${hotspot.description}". Context: The event of ${currentEvent!.title}. Style: cinematic, detailed painting.`;
+            
+            const dialoguePromise = fetchHotspotDialogue(hotspot.name, currentEvent!, civilization!.name, language, isKidsMode);
+            const imageUrlPromise = generateImage(imagePrompt, '1:1');
+            const voiceContext = `${hotspot.name}, described as "${hotspot.description}", speaking during the event "${currentEvent!.title}".`;
+            const voiceDescPromise = fetchVoiceDescription(voiceContext, language, isKidsMode);
+            
+            const [dialogue, imageUrl, voiceDesc] = await Promise.all([dialoguePromise, imageUrlPromise, voiceDescPromise]);
+            
+            setActiveDialogue({ hotspotName: hotspot.name, text: dialogue, imageUrl: imageUrl, isLoading: false });
 
-            const utterance = new SpeechSynthesisUtterance(dialogue);
-            utterance.onend = () => {
-                 // Clear bubble after a short delay
-                setTimeout(() => setActiveDialogue(null), 2000);
-            };
-            utterance.onerror = (e) => {
-                console.error("Speech synthesis error", e);
-                setActiveDialogue(null);
-            };
-            utteranceRef.current = utterance;
-            window.speechSynthesis.speak(utterance);
+            speak(dialogue, voiceDesc, {
+                onend: () => {
+                    setTimeout(() => setActiveDialogue(null), 2000);
+                },
+                onerror: (e) => {
+                    console.error("Speech synthesis error", e);
+                    setActiveDialogue(null);
+                }
+            });
 
         } catch (err) {
             console.error(`Failed to get dialogue for ${hotspot.name}:`, err);
-            setActiveDialogue({ hotspotName: hotspot.name, text: 'I have nothing to say.' });
-             setTimeout(() => setActiveDialogue(null), 2000);
+            setActiveDialogue({ hotspotName: hotspot.name, text: 'I have nothing to say.', imageUrl: null, isLoading: false });
+            setTimeout(() => setActiveDialogue(null), 2000);
         }
     };
 
@@ -180,8 +213,29 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
                                 <p className="text-gray-300">{hotspot.description}</p>
                             </div>
                             {activeDialogue?.hotspotName === hotspot.name && (
-                                <div className="absolute top-full mt-2 w-max max-w-xs p-3 bg-[var(--color-accent)] text-black font-semibold rounded-lg shadow-lg animate-fade-in -translate-x-1/2 left-1/2">
-                                    {activeDialogue.text}
+                                <div className="absolute top-full mt-2 w-52 bg-[var(--color-background)] rounded-lg shadow-lg animate-fade-in -translate-x-1/2 left-1/2 border border-[var(--color-primary)] overflow-hidden">
+                                    {activeDialogue.isLoading ? (
+                                        <div className="w-full h-[220px] flex items-center justify-center">
+                                            <LoadingSpinner />
+                                        </div>
+                                    ) : (
+                                        <div className="relative">
+                                            <div className="absolute top-1 right-1 z-10 bg-black bg-opacity-30 rounded-full">
+                                                <ShareButton 
+                                                    shareUrl={generateShareUrl(hotspot.name)}
+                                                    shareTitle={`History Navigator: ${hotspot.name}`}
+                                                    shareText={`Check out ${hotspot.name} in this 3D scene from the history of ${civilization!.name}!`}
+                                                    onShareClick={() => track('share_content', { type: 'hotspot', id: hotspot.name })}
+                                                />
+                                            </div>
+                                            {activeDialogue.imageUrl && (
+                                                <img src={activeDialogue.imageUrl} alt={hotspot.name} className="w-full h-48 object-cover" />
+                                            )}
+                                            <p className="p-2 text-sm font-semibold text-center text-[var(--color-foreground)]">
+                                                {activeDialogue.text}
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>

@@ -18,10 +18,11 @@ interface MainContentProps {
     onLogin: (provider: string) => void;
     isFavorited: (type: Favorite['type'], id: string) => boolean;
     toggleFavorite: (favorite: Omit<Favorite, 'civilizationName'>) => void;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
 export const MainContent: React.FC<MainContentProps> = ({ 
-    civilization, currentEvent, character, language, isKidsMode, isLoading, user, onLogin, isFavorited, toggleFavorite 
+    civilization, currentEvent, character, language, isKidsMode, isLoading, user, onLogin, isFavorited, toggleFavorite, track
 }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
@@ -102,6 +103,7 @@ export const MainContent: React.FC<MainContentProps> = ({
                 user={user}
                 isFavorited={isFavorited('event', currentEvent.id)}
                 toggleFavorite={() => toggleFavorite({type: 'event', id: currentEvent.id, name: currentEvent.title})}
+                track={track}
             />
         );
     }

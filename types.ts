@@ -1,4 +1,3 @@
-
 export interface TimelineEvent {
     id: string;
     date: string;
@@ -22,13 +21,21 @@ export interface Topic {
     summary: string;
 }
 
+export interface GroundingSource {
+    web?: {
+        uri: string;
+        title: string;
+    };
+}
+
 export interface Civilization {
-    name: string;
+    name:string;
     summary: string;
     timeline: TimelineEvent[];
     keyCharacters: Character[];
     majorWars: War[];
     culturalTopics: Topic[];
+    sources?: GroundingSource[];
 }
 
 export interface MapData {
@@ -84,6 +91,15 @@ export interface Hotspot {
     };
 }
 
+// For Text-to-Speech
+export interface VoiceDescription {
+    gender: 'male' | 'female' | 'neutral';
+    age: 'child' | 'young' | 'middle-aged' | 'elderly';
+    pitch: 'very low' | 'low' | 'medium' | 'high' | 'very high';
+    rate: 'very slow' | 'slow' | 'medium' | 'fast' | 'very fast';
+    accentLanguage: string; // BCP 47 language tag like 'en-US'
+}
+
 // For Authentication and Favorites
 export interface User {
     name: string;
@@ -98,4 +114,14 @@ export interface Favorite {
     id: string; 
     // This is the display name, e.g., event.title or item.name.
     name: string; 
+}
+
+// For Telemetry
+export interface TelemetryContext {
+    user: User | null;
+    civilization: Civilization | null;
+    currentEvent: TimelineEvent | null;
+    viewMode: '2D' | '3D';
+    language: string;
+    isKidsMode: boolean;
 }

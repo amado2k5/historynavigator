@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Header } from './components/Header.tsx';
 import { MainContent } from './components/MainContent.tsx';
 import { Timeline } from './components/Timeline.tsx';
@@ -9,16 +9,29 @@ import { CharacterDetailsModal } from './components/CharacterDetailsModal.tsx';
 import { WarDetailsModal } from './components/WarDetailsModal.tsx';
 import { TopicDetailsModal } from './components/TopicDetailsModal.tsx';
 import { fetchCivilizations, fetchCivilizationData } from './services/geminiService.ts';
-import type { Civilization, TimelineEvent, Character, War, Topic, User, Favorite } from './types.ts';
+import type { Civilization, TimelineEvent, Character, War, Topic, User, Favorite, TelemetryContext } from './types.ts';
 import { themes } from './themes.ts';
 import { ViewModeToggle } from './components/ViewModeToggle.tsx';
 import { ThreeDView } from './components/ThreeDView.tsx';
+import { trackEvent } from './services/telemetryService.ts';
 
 type ModalState = 
     | { type: 'character', name: string }
     | { type: 'war', name: string }
     | { type: 'topic', name: string }
+    | { type: 'eventDetails', name: string }
+    | { type: 'map', name: string }
+    | { type: 'aiPrompt', name: string, prompt?: string }
     | null;
+
+interface ShareTarget {
+    civilizationName: string;
+    eventId: string;
+    viewMode: '2D' | '3D';
+    modalType: ModalState['type'] | 'hotspot' | 'none';
+    modalId: string;
+    prompt?: string;
+}
 
 function App() {
     const [civilizations, setCivilizations] = useState<{ name: string }[]>([]);
@@ -33,6 +46,28 @@ function App() {
     const [viewMode, setViewMode] = useState<'2D' | '3D'>('2D');
     const [user, setUser] = useState<User | null>(null);
     const [favorites, setFavorites] = useState<Favorite[]>([]);
+    const [shareTarget, setShareTarget] = useState<ShareTarget | null>(null);
+    
+    // Refs to track previous state for telemetry
+    const prevLanguageRef = useRef(language);
+    const prevIsKidsModeRef = useRef(isKidsMode);
+
+
+    // --- Telemetry Logic ---
+    const getTelemetryContext = useCallback((): TelemetryContext => {
+        return {
+            user,
+            civilization: selectedCivilization,
+            currentEvent,
+            viewMode,
+            language,
+            isKidsMode,
+        };
+    }, [user, selectedCivilization, currentEvent, viewMode, language, isKidsMode]);
+
+    const track = useCallback((eventName: string, properties: Record<string, any> = {}) => {
+        trackEvent(eventName, getTelemetryContext(), properties);
+    }, [getTelemetryContext]);
 
     // --- Authentication and Favorites Logic ---
 
@@ -71,9 +106,11 @@ function App() {
         const mockUser: User = { name: `${provider} User`, provider, avatar: provider.toLowerCase() };
         setUser(mockUser);
         localStorage.setItem('historyNavigatorUser', JSON.stringify(mockUser));
+        track('login', { provider });
     };
 
     const handleLogout = () => {
+        track('logout');
         setUser(null);
         localStorage.removeItem('historyNavigatorUser');
         setSelectedCivilization(null); // Reset view
@@ -92,8 +129,10 @@ function App() {
 
         if (isFavorited) {
             updatedFavorites = favorites.filter(f => !(f.id === fullFavorite.id && f.type === fullFavorite.type && f.civilizationName === fullFavorite.civilizationName));
+             track('unfavorite_item', { type: fullFavorite.type, id: fullFavorite.id, name: fullFavorite.name });
         } else {
             updatedFavorites = [...favorites, fullFavorite];
+             track('favorite_item', { type: fullFavorite.type, id: fullFavorite.id, name: fullFavorite.name });
         }
 
         setFavorites(updatedFavorites);
@@ -106,6 +145,7 @@ function App() {
     };
 
     const navigateToFavorite = async (favorite: Favorite) => {
+        track('navigate_to_favorite', { type: favorite.type, id: favorite.id, name: favorite.name, from: favorite.civilizationName });
         setIsLoading(true);
         setError(null);
         setActiveModal(null);
@@ -146,7 +186,64 @@ function App() {
     };
 
 
+    // --- URL Hash Parsing and State Restoration ---
+    useEffect(() => {
+        const parseAndSetShareTarget = () => {
+            if (window.location.hash.startsWith('#/share?')) {
+                const params = new URLSearchParams(window.location.hash.substring(8));
+                const civilizationName = params.get('civilization');
+                const eventId = params.get('event');
+                const viewMode = params.get('view') as '2D' | '3D';
+                const modalType = params.get('modal') as ShareTarget['modalType'];
+                const modalId = params.get('id');
+                const lang = params.get('lang');
+                const kids = params.get('kids') === 'true';
+                const prompt = params.get('prompt');
+
+                if (civilizationName && eventId && viewMode && modalType && modalId) {
+                    track('load_from_share_link', {
+                        civilization: civilizationName,
+                        event: eventId,
+                        view: viewMode,
+                        modal: modalType,
+                        id: modalId,
+                    });
+                    setLanguage(lang || 'English');
+                    setIsKidsMode(kids);
+                    setShareTarget({ civilizationName, eventId, viewMode, modalType, modalId, prompt: prompt || undefined });
+                    history.pushState("", document.title, window.location.pathname + window.location.search);
+                }
+            }
+        };
+        parseAndSetShareTarget();
+    }, [track]);
+
     // --- Core App Logic ---
+
+    // This useEffect triggers the civilization loading from a share link
+    useEffect(() => {
+        if (shareTarget && !selectedCivilization && !isLoading) {
+            handleCivilizationChange(shareTarget.civilizationName);
+        }
+    }, [shareTarget, selectedCivilization, isLoading]);
+    
+    // This useEffect waits for the civilization to load, then restores the rest of the state
+    useEffect(() => {
+        if (shareTarget && selectedCivilization?.name === shareTarget.civilizationName) {
+            const event = selectedCivilization.timeline.find(e => e.id === shareTarget.eventId);
+            if (event) {
+                setCurrentEvent(event);
+                setViewMode(shareTarget.viewMode);
+
+                if (shareTarget.modalType !== 'hotspot' && shareTarget.modalType !== 'none') {
+                     setActiveModal({ type: shareTarget.modalType as ModalState['type'], name: shareTarget.modalId, prompt: shareTarget.prompt });
+                }
+
+                setShareTarget(null);
+            }
+        }
+    }, [selectedCivilization, shareTarget]);
+
 
     useEffect(() => {
         const theme = selectedCivilization ? themes[selectedCivilization.name] ?? themes.default : themes.default;
@@ -173,12 +270,17 @@ function App() {
     const handleCivilizationChange = useCallback(async (name: string) => {
         if (!name || name === selectedCivilization?.name) return;
         
+        // Telemetry: Detect if this is a dynamic search or a selection from the list
+        const isDynamicSearch = !civilizations.some(c => c.name === name);
+        track(isDynamicSearch ? 'search_topic' : 'select_civilization', { name });
+        
         setIsLoading(true);
         setError(null);
         setSelectedCivilization(null);
         setCurrentEvent(null);
         setSelectedCharacter(null);
         setViewMode('2D');
+        setActiveModal(null);
 
         try {
             const data = await fetchCivilizationData(name, language, isKidsMode);
@@ -192,10 +294,22 @@ function App() {
         } finally {
             setIsLoading(false);
         }
-    }, [language, isKidsMode, selectedCivilization?.name]);
+    }, [language, isKidsMode, selectedCivilization?.name, track, civilizations]);
     
+    // Effect to track settings changes
     useEffect(() => {
-        if (selectedCivilization) {
+        if (language !== prevLanguageRef.current) {
+            track('setting_changed', { setting: 'language', from: prevLanguageRef.current, to: language });
+            prevLanguageRef.current = language;
+        }
+        if (isKidsMode !== prevIsKidsModeRef.current) {
+            track('setting_changed', { setting: 'kidsMode', from: prevIsKidsModeRef.current, to: isKidsMode });
+            prevIsKidsModeRef.current = isKidsMode;
+        }
+    }, [language, isKidsMode, track]);
+
+    useEffect(() => {
+        if (selectedCivilization && !shareTarget) { // Prevent refetch during share link loading
             const civName = selectedCivilization.name;
             const refetchData = async () => {
                 setIsLoading(true);
@@ -217,20 +331,24 @@ function App() {
     }, [language, isKidsMode]);
 
     const handleEventSelect = (event: TimelineEvent) => {
+        track('select_timeline_event', { id: event.id, title: event.title });
         setCurrentEvent(event);
         setSelectedCharacter(null);
     };
     
     const handleCharacterClick = (character: Character) => {
+        track('open_modal', { type: 'character', name: character.name });
         setSelectedCharacter(character);
         setActiveModal({ type: 'character', name: character.name });
     };
 
     const handleWarClick = (war: War) => {
+        track('open_modal', { type: 'war', name: war.name });
         setActiveModal({ type: 'war', name: war.name });
     };
 
     const handleTopicClick = (topic: Topic) => {
+        track('open_modal', { type: 'topic', name: topic.name });
         setActiveModal({ type: 'topic', name: topic.name });
     };
 
@@ -238,6 +356,7 @@ function App() {
         if (!selectedCivilization) return;
         const { type, id, name, title } = item;
         const itemName = name || title;
+        track('click_global_search_result', { type, id, name: itemName });
         if (type === 'event' && id) {
             const event = selectedCivilization.timeline.find(e => e.id === id);
             if (event) setCurrentEvent(event);
@@ -248,6 +367,12 @@ function App() {
         } else if (type === 'topic' && itemName) {
             setActiveModal({ type: 'topic', name: itemName });
         }
+    };
+
+    const handleViewModeToggle = () => {
+        const newMode = viewMode === '2D' ? '3D' : '2D';
+        track('view_mode_changed', { from: viewMode, to: newMode });
+        setViewMode(newMode);
     };
 
 
@@ -265,11 +390,12 @@ function App() {
                 isLoading={isLoading}
                 user={user}
                 onLogout={handleLogout}
+                track={track}
             />
              {selectedCivilization && currentEvent && user && (
                 <ViewModeToggle 
                     viewMode={viewMode}
-                    onToggle={() => setViewMode(prev => prev === '2D' ? '3D' : '2D')}
+                    onToggle={handleViewModeToggle}
                 />
             )}
             <div className="flex flex-grow overflow-hidden">
@@ -286,6 +412,7 @@ function App() {
                             onLogin={handleLogin}
                             isFavorited={isFavorited}
                             toggleFavorite={toggleFavorite}
+                            track={track}
                         />
                     ) : (
                         <ThreeDView
@@ -293,6 +420,8 @@ function App() {
                             currentEvent={currentEvent}
                             language={language}
                             isKidsMode={isKidsMode}
+                            initialHotspotId={shareTarget?.modalType === 'hotspot' ? shareTarget.modalId : undefined}
+                            track={track}
                         />
                     )}
                     {selectedCivilization && selectedCivilization.timeline?.length > 0 && viewMode === '2D' && (
@@ -332,10 +461,11 @@ function App() {
                     event={currentEvent} 
                     civilizationName={selectedCivilization.name}
                     isKidsMode={isKidsMode}
+                    track={track}
                 />
             )}
 
-            {activeModal?.type === 'character' && selectedCivilization && (
+            {activeModal?.type === 'character' && selectedCivilization && currentEvent && (
                  <CharacterDetailsModal 
                     isOpen={true}
                     onClose={() => setActiveModal(null)}
@@ -343,9 +473,11 @@ function App() {
                     civilizationName={selectedCivilization.name}
                     language={language}
                     isKidsMode={isKidsMode}
+                    currentEvent={currentEvent}
+                    track={track}
                  />
             )}
-            {activeModal?.type === 'war' && selectedCivilization && (
+            {activeModal?.type === 'war' && selectedCivilization && currentEvent && (
                  <WarDetailsModal
                     isOpen={true}
                     onClose={() => setActiveModal(null)}
@@ -353,9 +485,11 @@ function App() {
                     civilizationName={selectedCivilization.name}
                     language={language}
                     isKidsMode={isKidsMode}
+                    currentEvent={currentEvent}
+                    track={track}
                  />
             )}
-            {activeModal?.type === 'topic' && selectedCivilization && (
+            {activeModal?.type === 'topic' && selectedCivilization && currentEvent && (
                  <TopicDetailsModal
                     isOpen={true}
                     onClose={() => setActiveModal(null)}
@@ -363,6 +497,8 @@ function App() {
                     civilizationName={selectedCivilization.name}
                     language={language}
                     isKidsMode={isKidsMode}
+                    currentEvent={currentEvent}
+                    track={track}
                  />
             )}
 

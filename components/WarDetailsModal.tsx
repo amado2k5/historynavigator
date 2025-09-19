@@ -1,8 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
 // FIX: Added generateImage import.
 import { fetchWarDetails, generateImage } from '../services/geminiService.ts';
+import { ShareButton } from './ShareButton.tsx';
+import type { TimelineEvent } from '../types.ts';
 
 interface WarDetailsModalProps {
     isOpen: boolean;
@@ -11,14 +14,29 @@ interface WarDetailsModalProps {
     civilizationName: string;
     language: string;
     isKidsMode: boolean;
+    currentEvent: TimelineEvent;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
-export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClose, warName, civilizationName, language, isKidsMode }) => {
+export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClose, warName, civilizationName, language, isKidsMode, currentEvent, track }) => {
     const [details, setDetails] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
+
+    const generateShareUrl = () => {
+        const params = new URLSearchParams({
+            civilization: civilizationName,
+            event: currentEvent.id,
+            view: '2D',
+            modal: 'war',
+            id: warName,
+            lang: language,
+            kids: String(isKidsMode),
+        });
+        return `${window.location.origin}${window.location.pathname}#/share?${params.toString()}`;
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -55,7 +73,15 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} size="lg">
-            <h2 className="text-2xl font-bold font-heading mb-4" style={{color: 'var(--color-accent)'}}>{warName}</h2>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{warName}</h2>
+                <ShareButton
+                    shareUrl={generateShareUrl()}
+                    shareTitle={`History Navigator: ${warName}`}
+                    shareText={`Learn about the ${warName} from the history of ${civilizationName}!`}
+                    onShareClick={() => track('share_content', { type: 'war', id: warName })}
+                />
+            </div>
 
             <div className="w-full aspect-video bg-[var(--color-background-light)] rounded-md mb-4 flex items-center justify-center overflow-hidden">
                 {isImageLoading && <LoadingSpinner />}

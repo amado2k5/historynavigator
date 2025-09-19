@@ -105,3 +105,9 @@ export const FacebookIcon: React.FC<IconProps> = ({ className }) => (
         <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.128 22 16.991 22 12z" fill="currentColor" />
     </svg>
 );
+
+export const ShareIcon: React.FC<IconProps> = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.542l7.632-4.24m-7.632 9.48l7.632 4.24M21 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM5.25 7.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 16.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+    </svg>
+);

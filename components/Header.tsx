@@ -18,6 +18,7 @@ interface HeaderProps {
     isLoading: boolean;
     user: User | null;
     onLogout: () => void;
+    track: (eventName: string, properties?: Record<string, any>) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -31,7 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
     onSearchResultClick,
     isLoading,
     user,
-    onLogout
+    onLogout,
+    track
 }) => {
     const languageItems = LANGUAGES.map(lang => ({ name: lang }));
 
@@ -44,14 +46,13 @@ export const Header: React.FC<HeaderProps> = ({
                     items={civilizations}
                     selected={selectedCivilization}
                     onChange={onCivilizationChange}
-                    placeholder={isLoading ? "Loading..." : "Select Civilization"}
+                    placeholder={isLoading ? "Loading..." : "Select or search for a topic..."}
                 />
                 
                 <GlobalSearch
                     civilization={selectedCivilization}
-                    language={language}
-                    isKidsMode={isKidsMode}
                     onResultClick={onSearchResultClick}
+                    track={track}
                 />
                 
                 {user ? (
