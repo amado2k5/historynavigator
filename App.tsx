@@ -510,6 +510,8 @@ function App() {
                 track={track}
                 isDemoMode={isDemoMode}
                 demoSearchText={demoSearchText}
+                startDemo={startDemo}
+                stopDemo={stopDemo}
             />
              {selectedCivilization && currentEvent && user && (
                 <ViewModeToggle 
@@ -578,17 +580,6 @@ function App() {
             {selectedCivilization && !isLoading && viewMode === '2D' && (
                  <SidebarToggle isVisible={isSidebarVisible} onToggle={toggleSidebarVisibility} />
             )}
-
-            {!isDemoMode && !isLoading && (
-                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40">
-                     <button
-                        onClick={startDemo}
-                        className="px-6 py-3 bg-[var(--color-accent)] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
-                    >
-                        Take a tour
-                    </button>
-                </div>
-             )}
 
             {isDemoMode && (
                 <TourGuide

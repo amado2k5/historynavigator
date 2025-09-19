@@ -346,6 +346,7 @@ export const fetchTopicDetails = async (topicName: string, civilizationName: str
 
 export const generateImage = async (prompt: string, aspectRatio: '1:1' | '16:9' | '9:16' | '4:3' | '3:4'): Promise<string> => {
     return withCache(['image', prompt, aspectRatio], async () => {
+        // --- Primary Method: AI Image Generation ---
         try {
             const response = await apiCallWithRetry(() => ai.models.generateImages({
                 model: imageModel,
@@ -360,31 +361,43 @@ export const generateImage = async (prompt: string, aspectRatio: '1:1' | '16:9' 
             return `data:image/jpeg;base64,${base64ImageBytes}`;
         } catch (e) {
             console.warn(`AI image generation failed. Attempting fallback with web search.`, e);
-            try {
-                const fallbackPrompt = `Find a URL for a high-quality, non-AI-generated, public domain or Creative Commons licensed image that visually represents: "${prompt}". The image should be directly usable as a src in an <img> tag. Respond with ONLY the URL and nothing else. Pick an image from a reliable source like Wikipedia/Wikimedia Commons if possible.`;
-                const response = await apiCallWithRetry(() => ai.models.generateContent({
-                    model: textModel,
-                    contents: fallbackPrompt,
-                    config: {
-                        tools: [{ googleSearch: {} }],
-                    },
-                }));
-                let imageUrl = response.text.trim();
-                const markdownMatch = imageUrl.match(/!\[.*\]\((.*)\)/);
-                if (markdownMatch && markdownMatch[1]) {
-                    imageUrl = markdownMatch[1];
+            
+            // --- Fallback Method: Web Search for Image URL ---
+            const MAX_FALLBACK_ATTEMPTS = 2;
+            for (let i = 0; i < MAX_FALLBACK_ATTEMPTS; i++) {
+                try {
+                    const attemptSuffix = i > 0 ? ` Please provide a different image source than before.` : '';
+                    const fallbackPrompt = `Find a URL for a high-quality, non-AI-generated, public domain or Creative Commons licensed image that visually represents: "${prompt}". The image must be directly usable as a src in an <img> tag. Respond with ONLY the raw URL and nothing else. Pick an image from a reliable source like Wikipedia, Wikimedia Commons, Unsplash, or Pexels.${attemptSuffix}`;
+                    
+                    const response = await apiCallWithRetry(() => ai.models.generateContent({
+                        model: textModel,
+                        contents: fallbackPrompt,
+                        config: {
+                            tools: [{ googleSearch: {} }],
+                        },
+                    }));
+
+                    // More robustly parse the response to find a URL
+                    const responseText = response.text.trim();
+                    const urlRegex = /(https?:\/\/[^\s"'`)]+\.(?:jpg|jpeg|png|gif|webp))/i;
+                    const match = responseText.match(urlRegex);
+                    
+                    if (match && match[0]) {
+                        const imageUrl = match[0];
+                        console.log(`Fallback image found (Attempt ${i + 1}): ${imageUrl}`);
+                        return imageUrl;
+                    } else {
+                        console.warn(`Fallback attempt ${i + 1} did not return a valid image URL. Response: "${responseText}"`);
+                    }
+                } catch (fallbackError) {
+                    console.error(`Fallback image search attempt ${i + 1} failed with an error.`, fallbackError);
+                    if (i === MAX_FALLBACK_ATTEMPTS - 1) {
+                        throw fallbackError; // Re-throw the final error after all attempts fail
+                    }
                 }
-                if (imageUrl.startsWith('http')) {
-                    console.log(`Fallback image found: ${imageUrl}`);
-                    return imageUrl;
-                } else {
-                    console.error("Fallback did not return a valid URL:", imageUrl);
-                    throw new Error("Fallback did not return a valid URL.");
-                }
-            } catch (fallbackError) {
-                console.error(`Fallback image search also failed.`, fallbackError);
-                throw fallbackError;
             }
+            // If the loop finishes without returning, all attempts failed to produce a valid URL.
+            throw new Error("All fallback attempts failed to produce a valid image URL.");
         }
     });
 };

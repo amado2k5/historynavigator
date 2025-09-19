@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { SearchableSelect } from './SearchableSelect.tsx';
 import type { Civilization, User } from '../types.ts';
@@ -22,6 +23,8 @@ interface HeaderProps {
     track: (eventName: string, properties?: Record<string, any>) => void;
     isDemoMode: boolean;
     demoSearchText: string;
+    startDemo: () => void;
+    stopDemo: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -40,13 +43,32 @@ export const Header: React.FC<HeaderProps> = ({
     onSharesClick,
     track,
     isDemoMode,
-    demoSearchText
+    demoSearchText,
+    startDemo,
+    stopDemo
 }) => {
     const languageItems = LANGUAGES.map(lang => ({ name: lang }));
 
     return (
         <header className="w-full bg-black bg-opacity-40 backdrop-blur-sm p-4 z-30 shadow-bottom flex items-center justify-between flex-wrap gap-4">
-            <h1 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Timeline Creator</h1>
+            <div className="flex items-center gap-4">
+                <h1 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Timeline Creator</h1>
+                {isDemoMode ? (
+                     <button
+                        onClick={stopDemo}
+                        className="px-4 py-2 text-sm bg-red-600 text-white font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
+                    >
+                        Exit Demo
+                    </button>
+                ) : (
+                    <button
+                        onClick={startDemo}
+                        className="px-4 py-2 text-sm bg-[var(--color-accent)] text-black font-bold rounded-full shadow-lg hover:scale-105 transition-transform"
+                    >
+                        Take a tour
+                    </button>
+                )}
+            </div>
             
             <div className="flex items-center gap-4 flex-wrap">
                 <div className="text-right hidden sm:block">
