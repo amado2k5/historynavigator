@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 type IconProps = {
@@ -109,5 +108,35 @@ export const FacebookIcon: React.FC<IconProps> = ({ className }) => (
 export const ShareIcon: React.FC<IconProps> = ({ className }) => (
     <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.542l7.632-4.24m-7.632 9.48l7.632 4.24M21 12a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM5.25 7.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 16.5a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z" />
+    </svg>
+);
+
+export const ChevronLeftIcon: React.FC<IconProps> = ({ className }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+);
+
+export const ChevronRightIcon: React.FC<IconProps> = ({ className }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+);
+
+export const YoutubeIcon: React.FC<IconProps> = ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+    </svg>
+);
+
+export const WikipediaIcon: React.FC<IconProps> = ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.312 1.37C5.4 1.37 1.37 5.4 1.37 12.313c0 1.05.15 2.1.45 3.15l-1.65 6.812 6.81-1.65c1.05.3 2.1.45 3.15.45 6.912 0 10.942-4.032 10.942-10.943S19.223 1.37 12.312 1.37zm-5.7 6.405h1.905l.915 3.39 1.5-3.39h1.995l-2.4 4.65 2.505 4.8h-1.995l-1.59-3.75-1.005 3.75h-1.905l2.49-4.8-2.415-4.65zm7.395 0h3.9v9.45h-1.8v-3.6h-2.1v3.6h-1.815V7.775h1.815v2.925h.015v-2.925zm5.7 0h1.8v9.45H19.72c-1.95 0-1.95-1.38-1.95-1.38V7.775z" />
+    </svg>
+);
+
+export const QuoraIcon: React.FC<IconProps> = ({ className }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M13.78 20.33c.8-.02 1.55-.26 2.18-.7.63-.44.97-1.1.97-1.91 0-.96-.4-1.74-1.2-2.34-.8-.6-1.95-.9-3.45-.9H12v5.85h1.78zm-1.78-7.73h1.68c1.64 0 2.92-.3 3.84-.92.92-.62 1.38-1.52 1.38-2.73 0-1.07-.35-1.93-1.04-2.6-.7-.67-1.6-1-2.7-1H12v7.25zM22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10z" />
     </svg>
 );

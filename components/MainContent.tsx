@@ -14,16 +14,18 @@ interface MainContentProps {
     language: string;
     isKidsMode: boolean;
     isLoading: boolean;
+    loadingMessage: string;
     user: User | null;
     onLogin: (provider: string) => void;
     isFavorited: (type: Favorite['type'], id: string) => boolean;
     toggleFavorite: (favorite: Omit<Favorite, 'civilizationName'>) => void;
     logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
+    isDemoMode: boolean;
 }
 
 export const MainContent: React.FC<MainContentProps> = ({ 
-    civilization, currentEvent, character, language, isKidsMode, isLoading, user, onLogin, isFavorited, toggleFavorite, logShare, track
+    civilization, currentEvent, character, language, isKidsMode, isLoading, loadingMessage, user, onLogin, isFavorited, toggleFavorite, logShare, track, isDemoMode
 }) => {
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
     const [isImageLoading, setIsImageLoading] = useState(false);
@@ -72,14 +74,14 @@ export const MainContent: React.FC<MainContentProps> = ({
     const renderContent = () => {
         if (isLoading) return null; // Full-screen loader is handled by the parent
 
-        if (!user) {
+        if (!user && !isDemoMode) {
              return <Login onLogin={onLogin} />;
         }
 
         if (!civilization) {
             return (
                  <div className="text-center">
-                    <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome, {user.name}</h2>
+                    <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome, {user?.name}</h2>
                     <p className="text-xl" style={{color: 'var(--color-secondary)'}}>Please select a civilization to begin your journey.</p>
                 </div>
             )
@@ -116,7 +118,7 @@ export const MainContent: React.FC<MainContentProps> = ({
             {(isLoading || isImageLoading) && (
                  <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-10">
                     <LoadingSpinner />
-                    {isLoading && <p className="mt-4 text-[var(--color-secondary)]">Loading civilization data...</p>}
+                    {isLoading && <p className="mt-4 text-[var(--color-secondary)]">{loadingMessage}</p>}
                     {isImageLoading && !isLoading && <p className="mt-4 text-[var(--color-secondary)]">Generating historical vista...</p>}
                 </div>
             )}

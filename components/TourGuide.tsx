@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
-import type { Civilization, TimelineEvent, Character, War } from '../types.ts';
+import type { Civilization, TimelineEvent, Character, War, Favorite, Share } from '../types.ts';
 import type { ModalState } from '../App.tsx';
 
 interface TourGuideProps {
@@ -15,6 +16,8 @@ interface TourGuideProps {
     handleWarClick: (war: War) => void;
     handleViewModeToggle: () => void;
     setActiveModal: (modal: ModalState) => void;
+    toggleFavorite: (favorite: Omit<Favorite, 'civilizationName'>) => void;
+    logShare: (shareData: Omit<Share, 'timestamp'>) => void;
 }
 
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -32,6 +35,8 @@ export const TourGuide: React.FC<TourGuideProps> = ({
     handleWarClick,
     handleViewModeToggle,
     setActiveModal,
+    toggleFavorite,
+    logShare,
 }) => {
     const [step, setStep] = useState(0);
     const [tourMessage, setTourMessage] = useState('Welcome! The tour is starting...');
@@ -51,11 +56,12 @@ export const TourGuide: React.FC<TourGuideProps> = ({
 
             switch (step) {
                 case 0:
-                    setTourMessage("Let's start by exploring a classic civilization: Ancient Rome.");
+                    setTourMessage("Welcome! The tour is starting...");
                     await wait(2000);
                     setStep(1);
                     break;
                 case 1:
+                    setTourMessage("Let's start by exploring a classic civilization: Ancient Rome.");
                     await simulateTyping('Ancient Rome');
                     await wait(500);
                     handleCivilizationChange('Ancient Rome');
@@ -79,62 +85,98 @@ export const TourGuide: React.FC<TourGuideProps> = ({
                 case 4:
                     if (currentEvent) {
                         setActiveModal({ type: 'eventDetails', name: currentEvent.id });
-                        await wait(6000);
+                        await wait(5000);
                         setActiveModal(null);
-                        setTourMessage("The right sidebar has more topics to explore.");
+                        setTourMessage("You can save interesting items to your favorites.");
                         await wait(2000);
                         setStep(5);
                     }
                     break;
                 case 5:
-                    if (selectedCivilization?.keyCharacters && selectedCivilization.keyCharacters.length > 0) {
-                        setTourMessage("Let's learn about a key character.");
-                        handleCharacterClick(selectedCivilization.keyCharacters[0]);
-                        await wait(6000);
-                        setActiveModal(null);
+                    if (currentEvent) {
+                        toggleFavorite({ type: 'event', id: currentEvent.id, name: currentEvent.title });
+                        setTourMessage("Let's view your saved favorites.");
+                        await wait(2000);
                         setStep(6);
                     }
                     break;
                 case 6:
-                     if (selectedCivilization?.majorWars && selectedCivilization.majorWars.length > 0) {
-                        setTourMessage("And a major conflict...");
-                        handleWarClick(selectedCivilization.majorWars[0]);
-                        await wait(6000);
-                        setActiveModal(null);
-                        setStep(7);
-                    }
+                    setActiveModal({ type: 'favorites' });
+                    await wait(5000);
+                    setActiveModal(null);
+                    setTourMessage("Sharing discoveries is easy with a unique link.");
+                    await wait(2000);
+                    setStep(7);
                     break;
                 case 7:
-                    if (viewMode === '2D') {
-                        setTourMessage("Now for the immersive 3D view!");
-                        handleViewModeToggle();
-                        await wait(5000); // Wait for scene to generate
+                     if (currentEvent) {
+                        logShare({ 
+                            url: 'demo://share/123', 
+                            title: `Timeline Creator: ${currentEvent.title}`, 
+                            text: 'A demo share from the tour!' 
+                        });
+                        setTourMessage("Your share history is also saved to your profile.");
+                        await wait(2000);
                         setStep(8);
                     }
                     break;
                 case 8:
+                    setActiveModal({ type: 'shares' });
+                    await wait(5000);
+                    setActiveModal(null);
+                    setTourMessage("The right sidebar has more topics to explore.");
+                    await wait(2000);
+                    setStep(9);
+                    break;
+                case 9:
+                    if (selectedCivilization?.keyCharacters && selectedCivilization.keyCharacters.length > 0) {
+                        setTourMessage("Let's learn about a key character.");
+                        handleCharacterClick(selectedCivilization.keyCharacters[0]);
+                        await wait(5000);
+                        setActiveModal(null);
+                        setStep(10);
+                    }
+                    break;
+                case 10:
+                     if (selectedCivilization?.majorWars && selectedCivilization.majorWars.length > 0) {
+                        setTourMessage("And a major conflict...");
+                        handleWarClick(selectedCivilization.majorWars[0]);
+                        await wait(5000);
+                        setActiveModal(null);
+                        setStep(11);
+                    }
+                    break;
+                case 11:
+                    if (viewMode === '2D') {
+                        setTourMessage("Now for the immersive 3D view!");
+                        handleViewModeToggle();
+                        await wait(5000); // Wait for scene to generate
+                        setStep(12);
+                    }
+                    break;
+                case 12:
                     if (viewMode === '3D') {
                         setTourMessage("You can click on hotspots to interact with the scene.");
                         await wait(6000);
                         handleViewModeToggle();
                         setTourMessage("Let's try a dynamic search for a modern topic.");
                         await wait(2000);
-                        setStep(9);
+                        setStep(13);
                     }
                     break;
-                case 9:
+                case 13:
                     handleCivilizationChange(''); // Clear current selection
                     setDemoSearchText('');
                     await wait(1000);
-                    setStep(10);
+                    setStep(14);
                     break;
-                case 10:
+                case 14:
                     await simulateTyping('Human Space Exploration');
                     await wait(500);
                     handleCivilizationChange('Human Space Exploration');
-                    setStep(11);
+                    setStep(15);
                     break;
-                 case 11: // Wait for search to load
+                 case 15: // Wait for search to load
                     if (selectedCivilization?.name === 'Human Space Exploration') {
                         setTourMessage("The tour will now restart. You can exit anytime.");
                         await wait(4000);
@@ -150,7 +192,7 @@ export const TourGuide: React.FC<TourGuideProps> = ({
         tourScript();
 
         return () => { isCancelled = true; };
-    }, [step, isLoading, selectedCivilization, currentEvent, viewMode]);
+    }, [step, isLoading, selectedCivilization, currentEvent, viewMode, simulateTyping, handleCivilizationChange, handleEventSelect, setActiveModal, toggleFavorite, logShare, handleCharacterClick, handleWarClick, handleViewModeToggle]);
 
     return (
         <>

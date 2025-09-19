@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Header } from './components/Header.tsx';
 import { MainContent } from './components/MainContent.tsx';
@@ -12,12 +11,13 @@ import { ProfileModal } from './components/ProfileModal.tsx';
 import { FavoritesModal } from './components/FavoritesModal.tsx';
 import { SharesModal } from './components/SharesModal.tsx';
 import { TourGuide } from './components/TourGuide.tsx';
-import { fetchCivilizations, fetchCivilizationData } from './services/geminiService.ts';
+import { fetchCivilizations, fetchCivilizationData, fetchTopicCategory } from './services/geminiService.ts';
 import type { Civilization, TimelineEvent, Character, War, Topic, User, Favorite, Share, TelemetryContext } from './types.ts';
 import { themes } from './themes.ts';
 import { ViewModeToggle } from './components/ViewModeToggle.tsx';
 import { ThreeDView } from './components/ThreeDView.tsx';
 import { trackEvent } from './services/telemetryService.ts';
+import { SidebarToggle } from './components/SidebarToggle.tsx';
 
 export type ModalState = 
     | { type: 'character', name: string }
@@ -48,6 +48,7 @@ function App() {
     const [language, setLanguage] = useState<string>('English');
     const [isKidsMode, setIsKidsMode] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [loadingMessage, setLoadingMessage] = useState<string>('Loading civilization data...');
     const [error, setError] = useState<string | null>(null);
     const [activeModal, setActiveModal] = useState<ModalState>(null);
     const [viewMode, setViewMode] = useState<'2D' | '3D'>('2D');
@@ -57,11 +58,14 @@ function App() {
     const [shareTarget, setShareTarget] = useState<ShareTarget | null>(null);
     const [isDemoMode, setIsDemoMode] = useState(false);
     const [demoSearchText, setDemoSearchText] = useState('');
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
     
     // Refs to track previous state for telemetry
     const prevLanguageRef = useRef(language);
     const prevIsKidsModeRef = useRef(isKidsMode);
     const demoTimeoutRef = useRef<number | null>(null);
+    const demoUserRef = useRef<User | null>(null);
+
 
     // FIX: Moved telemetry logic before its usage to resolve 'used before its declaration' errors.
     // --- Telemetry Logic ---
@@ -106,6 +110,14 @@ function App() {
         setViewMode('2D');
         setActiveModal(null);
 
+        // Pre-fetch category for loading message
+        try {
+            const category = await fetchTopicCategory(name);
+            setLoadingMessage(`Loading ${category} data...`);
+        } catch {
+            setLoadingMessage(`Loading ${name} data...`);
+        }
+
         try {
             const data = await fetchCivilizationData(name, language, isKidsMode);
             setSelectedCivilization(data);
@@ -130,16 +142,29 @@ function App() {
         track('stop_demo_tour');
         setIsDemoMode(false);
         setDemoSearchText('');
-        // Reset state to the beginning, using handleCivilizationChange to clear it
+
+        // Log out the demo user if one was created for the tour
+        if (demoUserRef.current && user?.provider === 'tour') {
+            setUser(null);
+            demoUserRef.current = null;
+        }
+
+        // Reset state to the beginning
         if (selectedCivilization) {
             handleCivilizationChange(''); 
         }
         setActiveModal(null);
         setViewMode('2D');
-    }, [selectedCivilization, handleCivilizationChange, track]);
+    }, [selectedCivilization, handleCivilizationChange, track, user]);
 
     const startDemo = () => {
         track('start_demo_tour');
+        // Create a mock user if not logged in to showcase user features
+        if (!user) {
+            const mockDemoUser: User = { name: 'Demo User', provider: 'tour', avatar: 'tour' };
+            demoUserRef.current = mockDemoUser;
+            setUser(mockDemoUser);
+        }
         setIsDemoMode(true);
         // Set a 3-minute timeout to automatically stop the demo
         demoTimeoutRef.current = window.setTimeout(() => {
@@ -429,6 +454,11 @@ function App() {
         setViewMode(newMode);
     };
 
+    const toggleSidebarVisibility = () => {
+        track(isSidebarVisible ? 'sidebar_hidden' : 'sidebar_shown');
+        setIsSidebarVisible(prev => !prev);
+    };
+
 
     return (
         <div className="flex flex-col h-screen bg-[var(--color-background)] text-[var(--color-foreground)]">
@@ -466,12 +496,14 @@ function App() {
                             language={language}
                             isKidsMode={isKidsMode}
                             isLoading={isLoading}
+                            loadingMessage={loadingMessage}
                             user={user}
                             onLogin={handleLogin}
                             isFavorited={isFavorited}
                             toggleFavorite={toggleFavorite}
                             logShare={logShare}
                             track={track}
+                            isDemoMode={isDemoMode}
                         />
                     ) : (
                         <ThreeDView
@@ -495,9 +527,10 @@ function App() {
                         />
                     )}
                 </div>
-                {selectedCivilization && !isLoading && viewMode === '2D' && (
+                {selectedCivilization && !isLoading && viewMode === '2D' && isSidebarVisible && (
                     <RightSidebar
                         civilization={selectedCivilization}
+                        currentEvent={currentEvent}
                         onCharacterClick={handleCharacterClick}
                         onWarClick={handleWarClick}
                         onTopicClick={handleTopicClick}
@@ -509,6 +542,10 @@ function App() {
                     />
                 )}
             </div>
+            
+            {selectedCivilization && !isLoading && viewMode === '2D' && (
+                 <SidebarToggle isVisible={isSidebarVisible} onToggle={toggleSidebarVisibility} />
+            )}
 
             {!isDemoMode && !isLoading && (
                 <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40">
@@ -535,6 +572,8 @@ function App() {
                     handleWarClick={handleWarClick}
                     handleViewModeToggle={handleViewModeToggle}
                     setActiveModal={setActiveModal}
+                    toggleFavorite={toggleFavorite}
+                    logShare={logShare}
                 />
             )}
 

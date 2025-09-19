@@ -1,10 +1,11 @@
-
 import React from 'react';
-import type { Civilization, Character, War, Topic, User, Favorite } from '../types.ts';
+import type { Civilization, Character, War, Topic, User, Favorite, TimelineEvent } from '../types.ts';
 import { FavoriteIcon } from './FavoriteIcon.tsx';
+import { YoutubeIcon, WikipediaIcon, QuoraIcon } from './Icons.tsx';
 
 interface RightSidebarProps {
     civilization: Civilization;
+    currentEvent: TimelineEvent | null;
     onCharacterClick: (character: Character) => void;
     onWarClick: (war: War) => void;
     onTopicClick: (topic: Topic) => void;
@@ -16,7 +17,7 @@ interface RightSidebarProps {
 }
 
 export const RightSidebar: React.FC<RightSidebarProps> = ({ 
-    civilization, onCharacterClick, onWarClick, onTopicClick, user, favorites, isFavorited, toggleFavorite, onFavoriteClick
+    civilization, currentEvent, onCharacterClick, onWarClick, onTopicClick, user, favorites, isFavorited, toggleFavorite, onFavoriteClick
 }) => {
     
     const renderSection = <T extends { name: string }>(
@@ -55,8 +56,40 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
         return acc;
     }, {} as Record<string, Favorite[]>);
 
+    const renderRelatedLinks = () => {
+        if (!currentEvent) return null;
+
+        const query = encodeURIComponent(`${civilization.name} ${currentEvent.title}`);
+        const links = [
+            { name: 'YouTube', url: `https://www.youtube.com/results?search_query=${query}`, icon: YoutubeIcon },
+            { name: 'Wikipedia', url: `https://en.wikipedia.org/wiki/Special:Search?search=${query}`, icon: WikipediaIcon },
+            { name: 'Quora', url: `https://www.quora.com/search?q=${query}`, icon: QuoraIcon },
+        ];
+
+        return (
+            <div className="mt-6 pt-6 border-t-2" style={{borderColor: 'var(--color-primary)'}}>
+                <h3 className="text-lg font-bold font-heading mb-3">Related Links</h3>
+                <ul className="space-y-2 text-sm">
+                    {links.map(link => (
+                        <li key={link.name}>
+                            <a
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 text-[var(--color-secondary)] hover:text-[var(--color-accent)] transition-colors duration-200 py-1 group"
+                            >
+                                <link.icon className="w-5 h-5 text-[var(--color-primary)] group-hover:text-[var(--color-accent)] transition-colors" />
+                                <span>Explore on {link.name}</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    };
+
     return (
-        <aside className="w-72 bg-black bg-opacity-20 backdrop-blur-sm p-4 z-30 shadow-left overflow-y-auto flex-shrink-0">
+        <aside className="w-72 bg-black bg-opacity-20 backdrop-blur-sm p-4 z-30 shadow-left overflow-y-auto flex-shrink-0 animate-fade-in">
             <h2 className="text-xl font-bold font-heading mb-4" style={{ color: 'var(--color-accent)' }}>
                 {civilization.name}
             </h2>
@@ -116,6 +149,8 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({
                      </div>
                 </div>
             )}
+            
+            {renderRelatedLinks()}
         </aside>
     );
 };

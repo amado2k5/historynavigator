@@ -184,6 +184,30 @@ export const fetchCivilizations = async (): Promise<{ name: string }[]> => {
     return Promise.resolve(fixedCivilizationList.sort().map(name => ({ name })));
 };
 
+export const fetchTopicCategory = async (topicName: string): Promise<string> => {
+    const sanitizedName = sanitizeInput(topicName);
+    return withCache(['topicCategory', sanitizedName], async () => {
+        if (isRateLimited('fetchCategory', 1000)) { // 1 sec cooldown
+            return sanitizedName; // fallback to the name itself
+        }
+        const prompt = `Classify the topic "${sanitizedName}" into a concise, title-cased category. Examples: "Civilization", "Public Figure", "Location", "Historical Event", "Technology", "Organization", "Art", "Concept". If a specific category is not obvious or it's a product/brand, respond with just the topic name itself, title-cased. Your response should be the category name ONLY. Do not add any explanation.`;
+        
+        try {
+            const response = await ai.models.generateContent({
+                model: textModel,
+                contents: prompt,
+            });
+            let category = response.text.trim().replace(/["'.]/g, '');
+            // Title case it for consistency
+            category = category.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+            return category;
+        } catch (e) {
+            console.warn(`Could not fetch category for "${sanitizedName}", falling back to topic name.`);
+            return sanitizedName; // Fallback
+        }
+    });
+};
+
 
 export const fetchCivilizationData = async (civilizationName: string, language: string, isKidsMode: boolean): Promise<Civilization> => {
     const sanitizedName = sanitizeInput(civilizationName);
