@@ -1,6 +1,6 @@
 import React from 'react';
 import type { TimelineEvent, User, Share } from '../types.ts';
-import { BookOpenIcon, MapIcon, LightbulbIcon, FilmIcon } from './Icons.tsx';
+import { BookOpenIcon, MapIcon, LightbulbIcon, VolumeUpIcon } from './Icons.tsx';
 import { FavoriteIcon } from './FavoriteIcon.tsx';
 import { ShareButton } from './ShareButton.tsx';
 
@@ -14,7 +14,7 @@ interface EventBubbleProps {
     toggleFavorite: () => void;
     logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
-    onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'video') => void;
+    onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'audio') => void;
 }
 
 export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civilizationName, isKidsMode, user, isFavorited, toggleFavorite, logShare, track, onOpenModal }) => {
@@ -41,7 +41,7 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
                     <div className="absolute top-4 right-4 z-10 flex items-center">
                          <ShareButton
                             shareUrl={generateShareUrl()}
-                            shareTitle={`Timeline Creator: ${event.title}`}
+                            shareTitle={`TimelineThis: ${event.title}`}
                             shareText={`Explore the event "${event.title}" from the history of ${civilizationName}!`}
                             onShareClick={() => track('share_content', { type: 'eventBubble', id: event.id })}
                             onLogShare={({ url, title, text }) => logShare({ url, title, text })}
@@ -60,9 +60,9 @@ export const EventBubble: React.FC<EventBubbleProps> = ({ event, language, civil
                             <BookOpenIcon className="w-10 h-10" />
                             <span className="mt-2 text-sm">Read Details</span>
                         </button>
-                         <button onClick={() => onOpenModal('video')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
-                            <FilmIcon className="w-10 h-10" />
-                            <span className="mt-2 text-sm">Create Video</span>
+                         <button onClick={() => onOpenModal('audio')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
+                            <VolumeUpIcon className="w-10 h-10" />
+                            <span className="mt-2 text-sm">Create Audio</span>
                         </button>
                         <button onClick={() => onOpenModal('map')} className="flex flex-col items-center text-gray-200 hover:text-[var(--color-accent)] transition-colors p-2">
                             <MapIcon className="w-10 h-10" />

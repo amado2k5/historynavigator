@@ -95,7 +95,7 @@ export const MapModal: React.FC<MapModalProps> = ({ isOpen, onClose, event, civi
                 <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Map of {event.title}</h2>
                 <ShareButton
                     shareUrl={generateShareUrl()}
-                    shareTitle={`Map of ${event.title} - Timeline Creator`}
+                    shareTitle={`Map of ${event.title} - TimelineThis`}
                     shareText={`Explore the map for the event "${event.title}" from the history of ${civilizationName}!`}
                     onShareClick={() => track('share_content', { type: 'map', id: event.id })}
                     onLogShare={({ url, title, text }) => logShare({ url, title, text })}

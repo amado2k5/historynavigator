@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
@@ -78,7 +79,7 @@ export const WarDetailsModal: React.FC<WarDetailsModalProps> = ({ isOpen, onClos
                 <h2 className="text-2xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>{warName}</h2>
                 <ShareButton
                     shareUrl={generateShareUrl()}
-                    shareTitle={`Timeline Creator: ${warName}`}
+                    shareTitle={`TimelineThis: ${warName}`}
                     shareText={`Learn about the ${warName} from the history of ${civilizationName}!`}
                     onShareClick={() => track('share_content', { type: 'war', id: warName })}
                     onLogShare={({ url, title, text }) => logShare({ url, title, text })}

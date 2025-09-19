@@ -21,7 +21,10 @@ import { SidebarToggle } from './components/SidebarToggle.tsx';
 import { EventDetailsModal } from './components/EventDetailsModal.tsx';
 import { MapModal } from './components/MapModal.tsx';
 import { AIPromptModal } from './components/AIPromptModal.tsx';
-import { VideoModal } from './components/VideoModal.tsx';
+import { AudioModal } from './components/AudioModal.tsx';
+import { Footer } from './components/Footer.tsx';
+import { LanguageModal } from './components/LanguageModal.tsx';
+import { LANGUAGES } from './constants.ts';
 
 // --- Responsive Hook ---
 const useMediaQuery = (query: string) => {
@@ -46,11 +49,12 @@ export type ModalState =
     | { type: 'topic', name: string }
     | { type: 'eventDetails', name: string }
     | { type: 'map', name: string }
-    | { type: 'video', name: string }
+    | { type: 'audio', name: string }
     | { type: 'aiPrompt', name: string, prompt?: string }
     | { type: 'profile' }
     | { type: 'favorites' }
     | { type: 'shares' }
+    | { type: 'language' }
     | null;
 
 interface ShareTarget {
@@ -234,7 +238,7 @@ function App() {
     useEffect(() => {
         // Persist user login
         try {
-            const savedUser = localStorage.getItem('timelineCreatorUser');
+            const savedUser = localStorage.getItem('timelineThisAppUser');
             if (savedUser) {
                 setUser(JSON.parse(savedUser));
                 setShowLoginPrompt(false);
@@ -243,7 +247,7 @@ function App() {
             }
         } catch (e) {
             console.error("Failed to parse user from localStorage", e);
-            localStorage.removeItem('timelineCreatorUser');
+            localStorage.removeItem('timelineThisAppUser');
         }
     }, []);
 
@@ -276,7 +280,7 @@ function App() {
         const mockUser: User = { name: `${provider} User`, provider, avatar: provider.toLowerCase() };
         setUser(mockUser);
         setShowLoginPrompt(false);
-        localStorage.setItem('timelineCreatorUser', JSON.stringify(mockUser));
+        localStorage.setItem('timelineThisAppUser', JSON.stringify(mockUser));
         track('login', { provider });
     };
     
@@ -289,7 +293,7 @@ function App() {
         track('logout');
         setUser(null);
         setShowLoginPrompt(true);
-        localStorage.removeItem('timelineCreatorUser');
+        localStorage.removeItem('timelineThisAppUser');
         setSelectedCivilization(null); // Reset view
         setCurrentEvent(null);
     };
@@ -501,7 +505,7 @@ function App() {
         setSelectedCharacter(null);
     }, [isActionAllowed, isDemoMode, track]);
 
-    const handleOpenModal = (type: 'eventDetails' | 'map' | 'aiPrompt' | 'video') => {
+    const handleOpenModal = (type: 'eventDetails' | 'map' | 'aiPrompt' | 'audio') => {
         if (currentEvent) {
             track('open_modal', { type });
             setActiveModal({ type, name: currentEvent.id });
@@ -523,6 +527,11 @@ function App() {
         if (!isDemoMode) track('open_modal', { type: 'topic', name: topic.name });
         setActiveModal({ type: 'topic', name: topic.name });
     };
+    
+    const handleLanguageSelect = (lang: string) => {
+        setLanguage(lang);
+        setActiveModal(null);
+    };
 
     const handleViewModeToggle = () => {
         const newMode = viewMode === '2D' ? '3D' : '2D';
@@ -542,8 +551,7 @@ function App() {
                 civilizations={civilizations}
                 selectedCivilization={selectedCivilization}
                 onCivilizationChange={handleCivilizationChange}
-                language={language}
-                onLanguageChange={setLanguage}
+                onLanguageIconClick={() => setActiveModal({ type: 'language' })}
                 isKidsMode={isKidsMode}
                 onKidsModeToggle={() => setIsKidsMode(!isKidsMode)}
                 isLoading={isLoading}
@@ -625,6 +633,8 @@ function App() {
                 )}
             </div>
             
+            <Footer />
+
             {selectedCivilization && !isLoading && viewMode === '2D' && (
                  <SidebarToggle isVisible={isSidebarVisible} onToggle={toggleSidebarVisibility} />
             )}
@@ -702,8 +712,8 @@ function App() {
                     track={track}
                 />
             )}
-            {activeModal?.type === 'video' && currentEvent && selectedCivilization && (
-                <VideoModal
+            {activeModal?.type === 'audio' && currentEvent && selectedCivilization && (
+                <AudioModal
                     isOpen={true}
                     onClose={() => setActiveModal(null)}
                     event={currentEvent}
@@ -711,6 +721,8 @@ function App() {
                     civilizationName={selectedCivilization.name}
                     language={language}
                     isKidsMode={isKidsMode}
+                    logShare={logShare}
+                    track={track}
                 />
             )}
 
@@ -778,6 +790,15 @@ function App() {
                     isOpen={true}
                     onClose={() => setActiveModal(null)}
                     shares={shares}
+                />
+            )}
+            {activeModal?.type === 'language' && (
+                <LanguageModal
+                    isOpen={true}
+                    onClose={() => setActiveModal(null)}
+                    languages={LANGUAGES}
+                    currentLanguage={language}
+                    onSelectLanguage={handleLanguageSelect}
                 />
             )}
 

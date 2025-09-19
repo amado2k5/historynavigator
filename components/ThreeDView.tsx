@@ -225,7 +225,7 @@ export const ThreeDView: React.FC<ThreeDViewProps> = ({ civilization, currentEve
                                             <div className="absolute top-1 right-1 z-10 bg-black bg-opacity-30 rounded-full">
                                                 <ShareButton 
                                                     shareUrl={generateShareUrl(hotspot.name)}
-                                                    shareTitle={`Timeline Creator: ${hotspot.name}`}
+                                                    shareTitle={`TimelineThis: ${hotspot.name}`}
                                                     shareText={`Check out ${hotspot.name} in this 3D scene from the history of ${civilization!.name}!`}
                                                     onShareClick={() => track('share_content', { type: 'hotspot', id: hotspot.name })}
                                                     onLogShare={({ url, title, text }) => logShare({ url, title, text })}

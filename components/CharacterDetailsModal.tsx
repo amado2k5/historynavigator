@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
@@ -114,7 +115,7 @@ export const CharacterDetailsModal: React.FC<CharacterDetailsModalProps> = ({ is
                  <div className="flex items-center flex-shrink-0 ml-4">
                     <ShareButton
                         shareUrl={generateShareUrl()}
-                        shareTitle={`Timeline Creator: ${characterName}`}
+                        shareTitle={`TimelineThis: ${characterName}`}
                         shareText={`Learn about ${characterName} from the history of ${civilizationName}!`}
                         onShareClick={() => track('share_content', { type: 'character', id: characterName })}
                         onLogShare={({ url, title, text }) => logShare({ url, title, text })}

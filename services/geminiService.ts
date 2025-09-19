@@ -402,16 +402,19 @@ export const generateImage = async (prompt: string, aspectRatio: '1:1' | '16:9' 
     });
 };
 
+// FIX: Added generateVideo function to resolve missing export error.
 export const generateVideo = async (event: TimelineEvent, character: Character | null, civilizationName: string, language: string, isKidsMode: boolean): Promise<string> => {
     return withCache(['video', event.id, character?.name, civilizationName, language, isKidsMode], async () => {
         const prefix = getPromptPrefix(language, isKidsMode);
         const perspective = character ? ` from the perspective of ${character.name}` : '';
-        const kidModeStyle = isKidsMode ? ` The style should be a colorful and friendly animation, like a storybook illustration brought to life.` : ` The style should be cinematic, photorealistic, and historically evocative.`;
-        const prompt = `${prefix}Generate a short, looping, silent video visualizing the historical event: "${event.title}" (${event.date}) for the context of ${civilizationName}${perspective}. Event summary: ${event.summary}.${kidModeStyle}`;
-        const videoModel = 'veo-2.0-generate-001';
+        const kidModeStyle = isKidsMode
+            ? `The video should be a simple, friendly, and colorful animated cartoon suitable for children.`
+            : `The video should be a cinematic, photorealistic depiction of the event.`;
+
+        const prompt = `${prefix}Create a short video (around 15 seconds) about the historical event: "${event.title}" (${event.date}) within the context of ${civilizationName}${perspective}. Event summary: ${event.summary}. ${kidModeStyle}`;
 
         let operation = await apiCallWithRetry(() => ai.models.generateVideos({
-            model: videoModel,
+            model: 'veo-2.0-generate-001',
             prompt: prompt,
             config: {
                 numberOfVideos: 1
@@ -419,22 +422,36 @@ export const generateVideo = async (event: TimelineEvent, character: Character |
         }));
 
         while (!operation.done) {
-            await new Promise(resolve => setTimeout(resolve, 10000));
+            await sleep(10000); // Polling every 10 seconds
             operation = await apiCallWithRetry(() => ai.operations.getVideosOperation({ operation: operation }));
         }
 
         const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
         if (!downloadLink) {
-            throw new Error("Video generation failed: no download link provided.");
+            throw new Error("Video generation completed, but no download link was provided.");
         }
 
         const response = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
         if (!response.ok) {
-            throw new Error(`Failed to download video: ${response.statusText}`);
+            throw new Error(`Failed to download video file: ${response.statusText}`);
         }
 
         const videoBlob = await response.blob();
         return URL.createObjectURL(videoBlob);
+    });
+};
+
+export const generateAudioScript = async (event: TimelineEvent, character: Character | null, civilizationName:string, language: string, isKidsMode: boolean): Promise<string> => {
+    return withCache(['audioScript', event.id, character?.name, civilizationName, language, isKidsMode], () => {
+        const prefix = getPromptPrefix(language, isKidsMode);
+        const perspective = character ? ` from the perspective of ${character.name}` : '';
+        const kidModeStyle = isKidsMode
+            ? ` The script should be simple, engaging, and told in a friendly storytelling style suitable for a 5-year-old. It can be a short story or a simple explanation.`
+            : ` The script could be a dramatic first-person monologue, a short dialogue between two people witnessing the event, or a formal news report from that era. Be creative and evocative.`;
+
+        const prompt = `${prefix}You are a historical scriptwriter. Create a short audio script for the historical event: "${event.title}" (${event.date}) for the context of ${civilizationName}${perspective}. Event summary: ${event.summary}. The script should be a few paragraphs long (about 100-150 words).${kidModeStyle} The output should be only the script text, without any labels like "Script:" or character names if it's a monologue.`;
+
+        return generateTextWithFallback(prompt);
     });
 };
 

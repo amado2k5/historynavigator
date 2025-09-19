@@ -21,7 +21,8 @@ interface MainContentProps {
     logShare: (shareData: Omit<Share, 'timestamp'>) => void;
     track: (eventName: string, properties?: Record<string, any>) => void;
     isDemoMode: boolean;
-    onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'video') => void;
+    // FIX: Changed 'video' to 'audio' to match the expected prop type from App.tsx and EventBubble.tsx.
+    onOpenModal: (type: 'eventDetails' | 'map' | 'aiPrompt' | 'audio') => void;
     showLoginPrompt: boolean;
 }
 

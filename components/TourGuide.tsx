@@ -113,7 +113,7 @@ export const TourGuide: React.FC<TourGuideProps> = ({
                      if (currentEvent) {
                         logShare({ 
                             url: 'demo://share/123', 
-                            title: `Timeline Creator: ${currentEvent.title}`, 
+                            title: `timelineThis.app: ${currentEvent.title}`, 
                             text: 'A demo share from the tour!' 
                         });
                         setTourMessage("Your share history is also saved to your profile.");

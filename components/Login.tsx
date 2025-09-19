@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { GoogleIcon, AppleIcon, XIcon, FacebookIcon } from './Icons.tsx';
 
@@ -16,7 +15,10 @@ const providers = [
 export const Login: React.FC<LoginProps> = ({ onLogin }) => {
     return (
         <div className="text-center bg-black bg-opacity-50 backdrop-blur-sm p-8 rounded-xl border animate-fade-in" style={{borderColor: 'var(--color-primary)'}}>
-            <h2 className="text-4xl font-bold font-heading mb-2" style={{color: 'var(--color-accent)'}}>Welcome to Timeline Creator</h2>
+            <div className="flex flex-col items-center justify-center gap-3 mb-4">
+                <h2 className="text-4xl font-bold font-heading" style={{color: 'var(--color-accent)'}}>Welcome to</h2>
+                <img src="timelineThisLogo.png" alt="TimelineThis Logo" className="h-44" />
+            </div>
             <p className="text-xl text-[var(--color-secondary)] mb-8">Sign in to save your discoveries and personalize your journey.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 {providers.map(provider => (

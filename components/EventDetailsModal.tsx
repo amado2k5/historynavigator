@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { Modal } from './Modal.tsx';
 import { LoadingSpinner } from './LoadingSpinner.tsx';
@@ -121,7 +122,7 @@ export const EventDetailsModal: React.FC<EventDetailsModalProps> = ({ isOpen, on
                 <div className="flex items-center flex-shrink-0 ml-4">
                     <ShareButton 
                         shareUrl={generateShareUrl()}
-                        shareTitle={`Timeline Creator: ${event.title}`}
+                        shareTitle={`TimelineThis: ${event.title}`}
                         shareText={`Check out this event from the history of ${civilizationName}: ${event.title}`}
                         onShareClick={() => track('share_content', { type: 'eventDetails', id: event.id })}
                         onLogShare={({ url, title, text }) => logShare({ url, title, text })}
