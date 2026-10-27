@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+
+/* Main-site theme, light and dark (DESIGN §1). Values mirror islam.museum's palette. */
+:root {
+  --tb-bg: #f7f3ea;
+  --tb-bg-raised: #fffdf8;
+  --tb-fg: #1b1b1f;
+  --tb-muted: #6b6660;
+  --tb-line: #d8d2c4;
+  --tb-accent: #8c6d3b;
+  --tb-accent-soft: #b8932f;
+  --tb-sea: #eef2f5;
+  color-scheme: light;
+}
+.dark {
+  --tb-bg: #0f1220;
+  --tb-bg-raised: #1a1e30;
+  --tb-fg: #e8e4d8;
+  --tb-muted: #a09a8e;
+  --tb-line: #3a3f55;
+  --tb-accent: #b8932f;
+  --tb-accent-soft: #d4af3f;
+  --tb-sea: #141a28;
+  color-scheme: dark;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* full viewport, no page scroll (DESIGN §1) */
+}
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  background: var(--tb-bg);
+  color: var(--tb-fg);
+}
+[dir='rtl'] body {
+  font-family: 'Geeza Pro', 'Noto Naskh Arabic', Georgia, serif;
+}
+
+.tb-panel { overflow-y: auto; scrollbar-width: thin; }
+.tb-strip { overflow-x: auto; scrollbar-width: thin; }
+.tb-dot { transition: transform .15s ease, background-color .15s ease; }
+.tb-dot:focus-visible { outline: 2px solid var(--tb-accent-soft); outline-offset: 2px; }
