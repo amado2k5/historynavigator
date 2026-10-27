@@ -1,0 +1,835 @@
+{
+ "generated": "2026-10-27T20:10:24.194Z",
+ "lang": "en",
+ "topics": [],
+ "records": [
+  {
+   "id": "event/al-jadd-ibn-qays-asks-to-stay-behind",
+   "kind": "event",
+   "date": {
+    "earliest": 630.7473117175575,
+    "latest": 630.8321868347425,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "استئذان الجد بن قيس في التخلف",
+    "en": "al-Jadd ibn Qays asks leave to stay behind"
+   },
+   "summary": {
+    "ar": "سأل النبي الجد بن قيس من بني سلمة هل له في قتال بني الأصفر، أي الروم، فاعتذر بأنه شديد الإعجاب بالنساء ويخشى الفتنة؛ فأعرض عنه النبي وأذن له. ويقول ابن إسحاق إن آية سورة التوبة نزلت فيه، ويشرحها بأن سقوطه في الفتنة بتخلفه أكبر مما خافه.",
+    "en": "Al-Jadd ibn Qays of Banu Salima asked the Prophet whether he had any part in fighting the Banu al-Asfar, meaning the Byzantines, and excused himself as a man too fond of women who feared temptation; the Prophet turned away from him and gave him leave. Ibn Ishaq says a verse of Sura al-Tawba was revealed about him, explaining that his falling into temptation by staying behind was greater than what he feared."
+   },
+   "href": "/event/al-jadd-ibn-qays-asks-to-stay-behind/",
+   "sources": [
+    "source/ibn-hisham-saqqa"
+   ],
+   "status": "draft",
+   "image": {
+    "id": "media/illus-event-battle-of-the-trench",
+    "alt": {
+     "en": "A long shallow ditch across a desert plain north of a palm oasis at sunrise; no people. The scene is illustrative and does not show the ditch's exact line.",
+     "ar": "خندق طويل ضحل يمتد عبر سهل صحراوي شمال واحة نخل عند الشروق؛ بلا أشخاص. المشهد تصويري ولا يدل على مواضع الخندق.",
+     "ur": "صحرائی میدان میں طلوعِ آفتاب کے وقت کھجور کے نخلستان کے شمال میں ایک لمبی اور اتھلی خندق؛ کوئی لوگ نہیں۔ منظر تصویری ہے اور خندق کی ٹھیک لکیر نہیں دکھاتا۔"
+    },
+    "licence": "CC0",
+    "credit": "islam.museum"
+   },
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   }
+  },
+  {
+   "id": "event/death-of-umm-kulthum-bint-muhammad",
+   "kind": "event",
+   "date": {
+    "earliest": 630.9991991622005,
+    "latest": 631.9985352197195,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "وفاة أم كلثوم بنت النبي",
+    "en": "The death of Umm Kulthum bint Muhammad"
+   },
+   "summary": {
+    "ar": "في سنة 9هـ توفيت أم كلثوم بنت النبي زوج عثمان بن عفان؛ فحزن عليها النبي حزناً شديداً وقال لعثمان: «لو كانت عندي ثالثة لزوجتكها»، ولذلك لُقب عثمان بذي النورين لزواجه من ابنتين للنبي تباعاً.",
+    "en": "In 9 AH Umm Kulthum, the Prophet's daughter and wife of Uthman ibn Affan, died; the Prophet grieved her deeply and told Uthman, 'Had I had a third daughter I would have given her to you in marriage' — whence Uthman was called Dhu al-Nurayn, the possessor of the two lights."
+   },
+   "href": "/event/death-of-umm-kulthum-bint-muhammad/",
+   "sources": [
+    "source/mubarakpuri-raheeq"
+   ],
+   "status": "draft",
+   "image": {
+    "id": "media/illus-event-battle-of-the-trench",
+    "alt": {
+     "en": "A long shallow ditch across a desert plain north of a palm oasis at sunrise; no people. The scene is illustrative and does not show the ditch's exact line.",
+     "ar": "خندق طويل ضحل يمتد عبر سهل صحراوي شمال واحة نخل عند الشروق؛ بلا أشخاص. المشهد تصويري ولا يدل على مواضع الخندق.",
+     "ur": "صحرائی میدان میں طلوعِ آفتاب کے وقت کھجور کے نخلستان کے شمال میں ایک لمبی اور اتھلی خندق؛ کوئی لوگ نہیں۔ منظر تصویری ہے اور خندق کی ٹھیک لکیر نہیں دکھاتا۔"
+    },
+    "licence": "CC0",
+    "credit": "islam.museum"
+   },
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   }
+  },
+  {
+   "id": "event/delegation-of-tayy",
+   "kind": "event",
+   "date": {
+    "earliest": 630.9991991622005,
+    "latest": 631.9985352197195,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "قدوم زيد الخيل في وفد طيء",
+    "en": "Zayd al-Khayl comes with the delegation of Tayy"
+   },
+   "summary": {
+    "ar": "قدم وفد طيء وفيهم سيدهم زيد الخيل، فعرض عليهم النبي الإسلام فأسلموا وحسن إسلامهم؛ وقال النبي، فيما رواه ابن إسحاق عن رجال من طيء، إنه ما ذُكر له رجل من العرب بفضل ثم جاءه إلا رآه دون ما يُقال فيه إلا زيد الخيل، وسمّاه زيد الخير وقطع له فيداً وأرضين وكتب له بذلك. وفي رجوعه أصابته الحمى بماء يقال له فردة فمات، وحرّقت امرأته كتبه.",
+    "en": "The delegation of Tayy came with their chief Zayd al-Khayl; the Prophet offered them Islam and they became good Muslims. The Prophet said, as Ibn Ishaq heard from men of Tayy, that every Arab praised to him fell short of the praise when he came, except Zayd al-Khayl, who exceeded it; he renamed him Zayd al-Khayr, granted him Fayd and other lands and wrote it for him. On the way home fever struck him at a water called Farda and he died, and his wife burned the Prophet's writs."
+   },
+   "href": "/event/delegation-of-tayy/",
+   "sources": [
+    "source/ibn-hisham-saqqa",
+    "source/mubarakpuri-raheeq"
+   ],
+   "status": "draft",
+   "image": {
+    "id": "media/illus-event-battle-of-the-trench",
+    "alt": {
+     "en": "A long shallow ditch across a desert plain north of a palm oasis at sunrise; no people. The scene is illustrative and does not show the ditch's exact line.",
+     "ar": "خندق طويل ضحل يمتد عبر سهل صحراوي شمال واحة نخل عند الشروق؛ بلا أشخاص. المشهد تصويري ولا يدل على مواضع الخندق.",
+     "ur": "صحرائی میدان میں طلوعِ آفتاب کے وقت کھجور کے نخلستان کے شمال میں ایک لمبی اور اتھلی خندق؛ کوئی لوگ نہیں۔ منظر تصویری ہے اور خندق کی ٹھیک لکیر نہیں دکھاتا۔"
+    },
+    "licence": "CC0",
+    "credit": "islam.museum"
+   },
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   }
+  },
+  {
+   "id": "event/fatima-asks-for-servant-and-tasbih",
+   "kind": "event",
+   "date": {
+    "earliest": 2.0006570976815965,
+    "latest": 11.999493487172003,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "طلب فاطمة وعلي خادماً من السبي، وتعليمهما التسبيح",
+    "en": "Fatima and Ali ask for a servant and are taught the tasbih"
+   },
+   "summary": {
+    "ar": "شكا علي وفاطمة ما يلقيانه من الطحن والعمل، وطلبا من النبي خادماً من السبي، فأبى أن يعطيهما، وقال إنه يبيع السبي وينفق أثمانه على أهل الصفة الذين لا يجد ما ينفق عليهم. ثم علّمهما التسبيح والتحميد والتكبير عند كل صلاة وعند النوم (ص 82-83). ويرى الصلابي في هذا ترتيب النبي للأولويات في الأزمة الاقتصادية.",
+    "en": "Ali and Fatima complained of the work of grinding and asked the Prophet for a servant from the captives; he refused, saying he would sell the captives and spend the price on the people of the Suffa, and then taught them the glorifications to say after each prayer and on going to bed (pp. 82-83)."
+   },
+   "href": "/event/fatima-asks-for-servant-and-tasbih/",
+   "sources": [
+    "source/sallabi-ali-vol1"
+   ],
+   "status": "draft",
+   "image": {
+    "id": "media/illus-event-battle-of-the-trench",
+    "alt": {
+     "en": "A long shallow ditch across a desert plain north of a palm oasis at sunrise; no people. The scene is illustrative and does not show the ditch's exact line.",
+     "ar": "خندق طويل ضحل يمتد عبر سهل صحراوي شمال واحة نخل عند الشروق؛ بلا أشخاص. المشهد تصويري ولا يدل على مواضع الخندق.",
+     "ur": "صحرائی میدان میں طلوعِ آفتاب کے وقت کھجور کے نخلستان کے شمال میں ایک لمبی اور اتھلی خندق؛ کوئی لوگ نہیں۔ منظر تصویری ہے اور خندق کی ٹھیک لکیر نہیں دکھاتا۔"
+    },
+    "licence": "CC0",
+    "credit": "islam.museum"
+   },
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   }
+  },
+  {
+   "id": "event/adil-aziz-shuffle-582",
+   "kind": "event",
+   "date": {
+    "earliest": 1186.0003285488408,
+    "latest": 1186.99966460636,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "نقل العادل إلى حلب والملك العزيز إلى مصر",
+    "en": "the Ayyubid shuffle — al-Adil to Aleppo, al-Aziz to Egypt"
+   },
+   "summary": {
+    "ar": "نقل صلاح الدين أخاه العادل من مصر فولّاه حلب وأعمالها، ونقل ابنه الملك العزيز عثمان إلى مصر فجعله نائبه عليها {cite:kamil-ibn-al-athir p. 139}.",
+    "en": "Saladin moved his brother al-Adil from Egypt to govern Aleppo, and set his son al-Malik al-Aziz Uthman over Egypt in his place {cite:kamil-ibn-al-athir p. 139}."
+   },
+   "href": "/event/adil-aziz-shuffle-582/",
+   "sources": [
+    "source/kamil-ibn-al-athir"
+   ],
+   "status": "draft",
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   },
+   "card": {
+    "id": "period/crusades-ayyubid-mamluk|place/aleppo",
+    "src": "media/time-browser/cards/card-period-crusades-ayyubid-mamluk-place-aleppo.svg"
+   }
+  },
+  {
+   "id": "event/conquest-of-al-anbar",
+   "kind": "event",
+   "date": {
+    "earliest": 633.000609184309,
+    "latest": 633.9999452418281,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "فتح الأنبار وغارة سوق بغداذ",
+    "en": "The Conquest of al-Anbar and the Raid on Baghdad's Market"
+   },
+   "summary": {
+    "ar": "عند البلاذري: سار خالد إلى الأنبار فتحصن أهلها ثم أتاه من دلّه على سوق بغداذ وهو السوق العتيق الذي كان عند قرن الصراط فبعث خالد المثنى بن حارثة فأغار عليه فملأ المسلمون أيديهم من الصفراء والبيضاء وما خف محمله من المتاع ثم باتوا بالسيلحين وأتوا الأنبار وخالد بها فحصروا أهلها وحرقوا في نواحيها وأنما سميت الأنبار لأن أهراء العجم كانت بها وكان أصحاب النعمان وصنائعه يعطون أرزاقهم منها فلما رأى أهل الأنبار ما نزل بهم صالحوا خالداً على شيء رضي بهم فأقرهم. ويقال إن خالداً قدم المثنى إلى بغداذ ثم سار بعده فتولى الغارة عليها وليس ذلك بثبت. وعن الشعبي: لأهل الأنبار عهد وعقد. وحدث البلاذري مشايخ من أهل الأنبار أنهم صولحوا في خلافة عمر على طسوجهم على أربع مائة ألف درهم وألف عباءة قطوانية في كل سنة وتولى الصلح جرير بن عبد الله البجلي ويقال صالحهم على ثمانين ألفاً والله أعلم.",
+    "en": "In al-Baladhuri: Khalid marched to al-Anbar whose people fortified; a guide told him of Baghdad's market — the old market at Qarn al-Sarat — so he sent al-Muthanna ibn Haritha raiding on it and the Muslims filled their hands with gold, silver and light goods, then overnighted at al-Saylahin and came to al-Anbar where Khalid was; they besieged its people and burned through its outskirts — al-Anbar being named for the Persians' granaries there, from which al-Nu'man's retainers and clients drew their rations — so when they saw what befell them they made peace with Khalid on terms he accepted from them. It is also said Khalid sent al-Muthanna ahead to Baghdad then marched after and himself led the raid — not established. Via al-Sha'bi: Anbar's people have a covenant and contract. Shaykhs of Anbar told al-Baladhuri they were pacified in Umar's caliphate on their canals: four hundred thousand dirhams and a thousand Qatawani cloaks yearly, Jarir ibn Abdallah al-Bajali conducting the peace — or, it is said, on eighty thousand; God knows best."
+   },
+   "href": "/event/conquest-of-al-anbar/",
+   "sources": [
+    "source/futuh-buldan-maarif-1407"
+   ],
+   "status": "draft",
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   },
+   "card": {
+    "id": "period/rashidun|place/al-anbar",
+    "src": "media/time-browser/cards/card-period-rashidun-place-al-anbar.svg"
+   }
+  },
+  {
+   "id": "person/muhammad",
+   "kind": "person",
+   "date": {
+    "earliest": 570.0013689535035,
+    "latest": 632.4366003408377,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "محمد",
+    "en": "Muhammad"
+   },
+   "summary": {
+    "ar": "نبي الإسلام (نحو 570–632م)، الذي يؤمن المسلمون بنزول القرآن عليه، ومؤسس أول مجتمع إسلامي في المدينة المنورة. توفي في المدينة المنورة في ربيع الأول سنة 11 هـ وهو ابن ثلاث وستين سنة {cite:mubarakpuri-raheeq p.444}، وكُفّن في ثلاثة أثواب يمانية بيض، وغسّله علي، وأعان العباس والفضل وقثم وأسامة وشقران {cite:mubarakpuri-raheeq p.445-446}.",
+    "en": "The Prophet of Islam (c. 570–632 CE), through whom Muslims believe the Qur'an was revealed, and the founder of the first Muslim community in Medina."
+   },
+   "href": "/person/muhammad/",
+   "sources": [
+    "source/mubarakpuri-raheeq",
+    "source/ibn-ishaq-guillaume",
+    "source/assabile-omar-abdelkafy"
+   ],
+   "status": "published",
+   "image": {
+    "id": "media/illus-event-battle-of-the-trench",
+    "alt": {
+     "en": "A long shallow ditch across a desert plain north of a palm oasis at sunrise; no people. The scene is illustrative and does not show the ditch's exact line.",
+     "ar": "خندق طويل ضحل يمتد عبر سهل صحراوي شمال واحة نخل عند الشروق؛ بلا أشخاص. المشهد تصويري ولا يدل على مواضع الخندق.",
+     "ur": "صحرائی میدان میں طلوعِ آفتاب کے وقت کھجور کے نخلستان کے شمال میں ایک لمبی اور اتھلی خندق؛ کوئی لوگ نہیں۔ منظر تصویری ہے اور خندق کی ٹھیک لکیر نہیں دکھاتا۔"
+    },
+    "licence": "CC0",
+    "credit": "islam.museum"
+   },
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   }
+  },
+  {
+   "id": "person/muhammad-mutawalli-al-shaarawi",
+   "kind": "person",
+   "date": {
+    "earliest": 1911.2828463281244,
+    "latest": 1998.460543337614,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "محمد متولي الشعراوي",
+    "en": "Muhammad Mutawalli al-Sha'rawi"
+   },
+   "summary": {
+    "ar": "مفسّر وعالم دين مصري، اشتهر بخواطره التلفزيونية في تفسير القرآن الكريم التي وصلت بلغة مبسطة إلى ملايين المشاهدين، وتولى وزارة الأوقاف وشؤون الأزهر بين سنتي 1976 و1978، ولقّبه بعضهم بإمام الدعاة.",
+    "en": "Egyptian Qur'an commentator and religious scholar, famed for his televised reflections (khawatir) on the Qur'an, which reached millions of viewers in simple language; he served as Minister of Endowments and al-Azhar Affairs from 1976 to 1978, and some called him the Imam of the Preachers."
+   },
+   "href": "/person/muhammad-mutawalli-al-shaarawi/",
+   "sources": [
+    "source/al-aalam",
+    "source/al-isra-wal-miraj-azhar",
+    "source/qadiyat-al-sunna-azhar"
+   ],
+   "status": "published",
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   },
+   "card": {
+    "id": "period/modern-era|place/cairo",
+    "src": "media/time-browser/cards/card-period-modern-era-place-cairo.svg"
+   }
+  },
+  {
+   "id": "person/nazli-fazl",
+   "kind": "person",
+   "date": {
+    "earliest": 1853.00101987036,
+    "latest": 1913.9906363580044,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "نازلي فاضل",
+    "en": "Princess Nazli Fazl"
+   },
+   "summary": {
+    "ar": "أميرة مصرية من الأسرة العلوية (1853-1913)، ابنة الأمير مصطفى فاضل باشا. أقامت في قصرها بالقاهرة منذ ثمانينيات القرن التاسع عشر أحد أوائل الصالونات الأدبية التي تديرها امرأة في العالم العربي، وكان من روّاده محمد عبده وسعد زغلول وقاسم أمين، ثم أقامت صالونا ثانيا في المرسى بتونس بعد زواجها الثاني سنة 1900.",
+    "en": "Egyptian princess of the Muhammad Ali dynasty (1853–1913), daughter of Prince Mustafa Fazl Pasha. From the 1880s she hosted at her Cairo palace one of the first literary salons run by a woman in the Arab world, frequented by Muhammad Abduh, Saad Zaghloul and Qasim Amin; after her second marriage in 1900 she held a second salon at La Marsa in Tunis."
+   },
+   "href": "/person/nazli-fazl/",
+   "sources": [
+    "source/wikipedia-nazli-fazl-en",
+    "source/wikipedia-nazli-fazl-ar",
+    "source/wikipedia-nazli-fazl-fr"
+   ],
+   "status": "published",
+   "map": {
+    "id": "cluster-istanbul",
+    "src": "media/time-browser/maps/cluster-istanbul.svg"
+   },
+   "card": {
+    "id": "period/colonial-era|place/istanbul",
+    "src": "media/time-browser/cards/card-period-colonial-era-place-istanbul.svg"
+   }
+  },
+  {
+   "id": "person/hussein-bin-ali-al-hashimi",
+   "kind": "person",
+   "date": {
+    "earliest": 1853.00101987036,
+    "latest": 1931.4228902715001,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "الحسين بن علي الهاشمي",
+    "en": "Hussein bin Ali al-Hashimi"
+   },
+   "summary": {
+    "ar": "الحسين بن علي الهاشمي (وُلد في إسطنبول سنة 1853 – توفي في عمان في 4 يونيو 1931)، شريف مكة وأميرها من نوفمبر 1908، من ذرية الحسن بن علي عبر فرع بني قتادة الذين حكموا مكة منذ 1201. أعلن الثورة العربية الكبرى على الدولة العثمانية في 10 يونيو 1916 بعد مراسلاته مع المندوب السامي البريطاني مكماهون، وصار ملكًا على الحجاز، ورفض التصديق على معاهدة فرساي احتجاجًا على وعد بلفور، وأصدر في 1917 و1918 مراسيم لحماية اللاجئين الأرمن. وبعد إلغاء تركيا الخلافة في 3 مارس 1924 أُعلن خليفة، لكن بريطانيا وفرنسا والوهابيين عارضوا خلافته؛ وفي أكتوبر 1924 تنازل لابنه علي بعد تقدم ابن سعود، ونُفي إلى قبرص في يونيو 1925، ثم أُعيد إلى عمان أواخر 1930 وتوفي فيها ودُفن في الحرم الشريف بالقدس. ابنه عبد الله صار ملكًا على الأردن وابنه فيصل ملكًا على العراق.",
+    "en": "Hussein bin Ali al-Hashimi (born at Istanbul in 1853 – died at Amman on 4 June 1931) was Sharif and Emir of Mecca from November 1908, a descendant of Hasan ibn Ali through the Banu Qatadah branch that had ruled Mecca since 1201. After his correspondence with the British high commissioner McMahon he proclaimed the Great Arab Revolt against the Ottoman Empire on 10 June 1916 and became King of the Hejaz; he refused to ratify the Treaty of Versailles in protest at the Balfour Declaration, and in 1917 and 1918 issued decrees protecting Armenian refugees. After Turkey abolished the caliphate on 3 March 1924 he was proclaimed Caliph, a claim opposed by Britain, France and the Wahhabis; in October 1924, as Ibn Saud advanced, he abdicated to his son Ali, was exiled to Cyprus in June 1925, was brought back to Amman in late 1930, died there and was buried at the Haram al-Sharif in Jerusalem. His son Abdullah became King of Jordan and his son Faisal King of Iraq."
+   },
+   "href": "/person/hussein-bin-ali-al-hashimi/",
+   "sources": [
+    "source/wikipedia-hussein-bin-ali-en",
+    "source/wikipedia-hussein-bin-ali-ar",
+    "source/wikipedia-hussein-bin-ali-fr"
+   ],
+   "status": "published",
+   "map": {
+    "id": "cluster-istanbul",
+    "src": "media/time-browser/maps/cluster-istanbul.svg"
+   },
+   "card": {
+    "id": "period/colonial-era|place/istanbul",
+    "src": "media/time-browser/cards/card-period-colonial-era-place-istanbul.svg"
+   }
+  },
+  {
+   "id": "place/armenia",
+   "kind": "place",
+   "title": {
+    "ar": "أرمينية",
+    "en": "Armenia"
+   },
+   "summary": {
+    "ar": "أرمينية عند البلاذري على تقسيمين: فشمشاط وقاليقلا وخلاط وأرجيش وباجنيس أرمينية الرابعة، وكورة البسفرجان ودبيل وسراج طير وبغروند الثالثة، وجرزان الثانية، والسيسجان وأران الأولى — ويقال شمشاط وحدها الرابعة، وقاليقلا وخلاط وأرجيش وباجنيس الثالثة، وسراج طير وبغروند ودبيل والبسفرجان الثانية، والسيسجان وأران وتفليس الأولى؛ وكانت جرزان وأران في أيدي الخزر وسائر أرمينية في أيدي الروم يتولاها صاحب أرميناقس، وكانت في أيدي الفرس حتى ظهر الإسلام وقد أقرّ أنوشروان ملوك جبل القبق على ممالكهم على الأتاوة.",
+    "en": "Armenia in al-Baladhuri on two schemata: Shimshat, Qaliqala, Khilat, Arjish and Bajunays as the fourth Armenia; the Busfurrajan district, Dabil, Siraj Tayr and Baghrawand the third; Jurzan the second; and Sisajan and Arran the first — or, it is said, Shimshat alone the fourth; Qaliqala, Khilat, Arjish and Bajunays the third; Siraj Tayr, Baghrawand, Dabil and Busfurrajan the second; and Sisajan, Arran and Tiflis the first; Jurzan and Arran were in Khazar hands and the rest of Armenia in Roman hands under the lord of the Armeniakoi, while it had lain in Persian hands until Islam appeared, Anushirwan having confirmed the kings of Jabal al-Qabq on their kingdoms for tribute."
+   },
+   "href": "/place/armenia/",
+   "sources": [
+    "source/futuh-buldan-maarif-1407",
+    "source/encyclopaedia-of-islam-2"
+   ],
+   "status": "published",
+   "card": {
+    "id": "period/pre-islamic-arabia|place/arjish",
+    "src": "media/time-browser/cards/card-period-pre-islamic-arabia-place-arjish.svg"
+   }
+  },
+  {
+   "id": "place/al-andalus",
+   "kind": "place",
+   "title": {
+    "ar": "الأندلس",
+    "en": "al-Andalus"
+   },
+   "summary": {
+    "ar": "عند البلاذري عن الواقدي: غزاها طارق بن زياد عامل موسى بن نصير أولاً في سنة اثنتين وتسعين فلقيه أليان والي مجازها فآمنه على الحمل في السفن فحاربه أهلها ففتحها وكان ملكها فيما يزعمون من الأشبان وأصلهم من أصبهان.",
+    "en": "In al-Baladhuri via al-Waqidi: Tariq ibn Ziyad, Musa ibn Nusayr's agent, raided it first in year 92; Alyan, governor of its strait, met him and was granted safety for ferrying him and his companions over in ships — its people fought him and he opened it; its king, they allege, was of the Ashban whose origin is Isfahan."
+   },
+   "href": "/place/al-andalus/",
+   "sources": [
+    "source/futuh-buldan-maarif-1407",
+    "source/encyclopaedia-of-islam-2"
+   ],
+   "status": "published",
+   "map": {
+    "id": "cluster-tulaytula",
+    "src": "media/time-browser/maps/cluster-tulaytula.svg"
+   },
+   "card": {
+    "id": "no-period|place/alhama-granada",
+    "src": "media/time-browser/cards/card-no-period-place-alhama-granada.svg"
+   }
+  },
+  {
+   "id": "place/al-fayyum",
+   "kind": "place",
+   "title": {
+    "ar": "الفيوم",
+    "en": "Al-Fayyum"
+   },
+   "summary": {
+    "ar": "الفيوم من أعمال مصر العليا؛ وجّه إليها عمرو بن العاص خارجة بن حذافة العدوي مع الأشمونين وإخميم والبشرودات وقرى الصعيد فصالح أهل قراها على مثل حكم الفسطاط.",
+    "en": "Al-Fayyum, among Upper Egypt's districts; Amr ibn al-As sent Kharija ibn Hudhafa al-Adawi to it together with al-Ashmunayn, Ikhmim, al-Bashrudat and the Sa'id's villages — their people compounding on Fustat's terms."
+   },
+   "href": "/place/al-fayyum/",
+   "sources": [
+    "source/khitat-maqrizi-1998",
+    "source/futuh-buldan-maarif-1407",
+    "source/farghani-elements-astronomy"
+   ],
+   "status": "published",
+   "card": {
+    "id": "period/rashidun|place/al-awsiyya-al-kubra",
+    "src": "media/time-browser/cards/card-period-rashidun-place-al-awsiyya-al-kubra.svg"
+   }
+  },
+  {
+   "id": "polity/emirate-of-hijaz",
+   "kind": "polity",
+   "title": {
+    "ar": "الإمارة بالحجاز (حكومة مكة)",
+    "en": "The emirate of the Hijaz (the government of Mecca)"
+   },
+   "summary": {
+    "ar": "زعامة مكة وولاية البيت من إسماعيل إلى قريش في عرض الرحيق المختوم: إسماعيل ثم ابناه، ثم جرهم زهاء عشرين قرناً، ثم خزاعة ثلاثمائة سنة، ثم قصي وقريش منذ نحو سنة 440م؛ حكومة خليط من الصدارة الدنيوية والزعامة الدينية، تحكم بين العرب باسم الدين وتشرف على مصالح الوافدين إلى البيت، لها دوائر تشبه البرلمان، لكنها ضعيفة كما وضح يوم غزو الأحباش.",
+    "en": "The leadership of Mecca and custody of the House from Ismail to Quraysh in al-Raheeq al-Makhtum's account: Ismail and his sons, then Jurhum for about twenty centuries, then Khuza'a for three hundred years, then Qusayy and Quraysh from about 440 CE; a government mixing worldly primacy and religious leadership, ruling among the Arabs in religion's name and overseeing the pilgrims' affairs, with parliament-like offices, yet weak, as the Abyssinian invasion showed."
+   },
+   "href": "/polity/emirate-of-hijaz/",
+   "sources": [
+    "source/mubarakpuri-raheeq",
+    "source/qalb-jazirat-al-arab",
+    "source/ibn-hisham-sira"
+   ],
+   "status": "draft",
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   },
+   "card": {
+    "id": "period/pre-islamic-arabia|place/mecca",
+    "src": "media/time-browser/cards/card-period-pre-islamic-arabia-place-mecca.svg"
+   }
+  },
+  {
+   "id": "polity/indonesia",
+   "kind": "polity",
+   "title": {
+    "ar": "إندونيسيا",
+    "en": "Indonesia"
+   },
+   "summary": {
+    "ar": "دولة في جنوب شرق آسيا، أرخبيل يبلغ عدد جزره 17508 جزيرة بحسب كتاب الزيارة، وعدد سكانها نحو 238 مليون نسمة، وعاصمتها جاكرتا في جزيرة جاوة {cite:rihla-imam-akbar-indonesia-azhar p. 24}. شعارها الوحدة في التنوع، ولغتها الرسمية الباسا {cite:rihla-imam-akbar-indonesia-azhar p. 26}. دخل إليها الإسلام، بحسب الكتاب، في أواخر القرن الثاني وأوائل الثالث الهجري على يد التجار العرب {cite:rihla-imam-akbar-indonesia-azhar p. 26}، وتعد بلداً ذا علاقات تاريخية بمصر تتضمن تبادلاً تجارياً وعلمياً وثقافياً {cite:rihla-imam-akbar-indonesia-azhar p. 40}.",
+    "en": "A country in Southeast Asia: an archipelago of 17,508 islands by the book's count, about 238 million people, capital Jakarta on Java. The book gives Islam's arrival in the late 2nd or early 3rd century AH through Arab traders and places it within the Shafi'i and Ash'ari tradition; it describes long-standing Egyptian-Indonesian ties."
+   },
+   "href": "/polity/indonesia/",
+   "sources": [
+    "source/rihla-imam-akbar-indonesia-azhar"
+   ],
+   "status": "draft",
+   "card": {
+    "id": "no-period|place/jakarta",
+    "src": "media/time-browser/cards/card-no-period-place-jakarta.svg"
+   }
+  },
+  {
+   "id": "period/crusades-ayyubid-mamluk",
+   "kind": "period",
+   "date": {
+    "earliest": 1095.0005133575637,
+    "latest": 1517.9989322162355,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "الحروب الصليبية والأيوبيون والمماليك",
+    "en": "The Crusades, Ayyubids and Mamluks"
+   },
+   "summary": {
+    "ar": "عصر الإمارات الصليبية والأيوبيين بقيادة صلاح الدين والمماليك في مصر والشام، وينتهي بالفتح العثماني.",
+    "en": "The age of the Crusader states, Saladin's Ayyubids and the Mamluk sultanate in Egypt and Syria, ending with the Ottoman conquest."
+   },
+   "href": "/period/crusades-ayyubid-mamluk/",
+   "sources": [
+    "source/hodgson-1974",
+    "source/hourani-1991"
+   ],
+   "status": "draft",
+   "card": {
+    "id": "period/buyid-seljuk-fatimid-era|no-place",
+    "src": "media/time-browser/cards/card-period-buyid-seljuk-fatimid-era-no-place.svg"
+   }
+  },
+  {
+   "id": "period/abbasid-early",
+   "kind": "period",
+   "date": {
+    "earliest": 749.999589313949,
+    "latest": 862.0018891558032,
+    "precision": "year"
+   },
+   "title": {
+    "ar": "العصر العباسي المبكر",
+    "en": "The Early Abbasid Caliphate"
+   },
+   "summary": {
+    "ar": "القرن الأول من الحكم العباسي من بغداد، حين ازدهرت الترجمة والعلم والتجارة والفنون.",
+    "en": "The first century of Abbasid rule from Baghdad, when translation, scholarship, trade and the arts flourished."
+   },
+   "href": "/period/abbasid-early/",
+   "sources": [
+    "source/hodgson-1974",
+    "source/hourani-1991"
+   ],
+   "status": "draft",
+   "card": {
+    "id": "period/abbasid-early|no-place",
+    "src": "media/time-browser/cards/card-period-abbasid-early-no-place.svg"
+   }
+  },
+  {
+   "id": "work/hassan-poem-qawmi-ulaika",
+   "kind": "work",
+   "title": {
+    "ar": "قصيدة حسان «قومي أولئك إن تسألي كرام»",
+    "en": "Hassan ibn Thabit's poem 'Those are my people, if you ask, noble'"
+   },
+   "summary": {
+    "ar": "قصيدة على روي الميم لحسان بن ثابت تروي تاريخ الأنصار: ملوكاً في أرضهم، ثم نزولهم يثرب وفتحهم حصون اليهود في النخيل، ثم استقبالهم النبي وقتالهم عنه؛ أنشد ابن هشام بعض أبياتها عن أبي زيد الأنصاري بروايات مغايرة، وتنتهي عندها في طبعة 1936 أجزاء السيرة الثمانية عشر الأولى.",
+    "en": "A mim-rhymed poem by Hassan ibn Thabit telling the Ansar's story: kings in their own land, their settlement at Yathrib and the conquest of the Jewish forts among the palms, then their welcome of the Prophet and their fighting for him; Ibn Hisham gives variant readings from Abu Zayd al-Ansari, and the 1936 editors mark here the end of the sira's eighteenth traditional part."
+   },
+   "href": "/work/hassan-poem-qawmi-ulaika/",
+   "sources": [
+    "source/ibn-hisham-saqqa"
+   ],
+   "status": "draft",
+   "image": {
+    "id": "media/illus-event-battle-of-the-trench",
+    "alt": {
+     "en": "A long shallow ditch across a desert plain north of a palm oasis at sunrise; no people. The scene is illustrative and does not show the ditch's exact line.",
+     "ar": "خندق طويل ضحل يمتد عبر سهل صحراوي شمال واحة نخل عند الشروق؛ بلا أشخاص. المشهد تصويري ولا يدل على مواضع الخندق.",
+     "ur": "صحرائی میدان میں طلوعِ آفتاب کے وقت کھجور کے نخلستان کے شمال میں ایک لمبی اور اتھلی خندق؛ کوئی لوگ نہیں۔ منظر تصویری ہے اور خندق کی ٹھیک لکیر نہیں دکھاتا۔"
+    },
+    "licence": "CC0",
+    "credit": "islam.museum"
+   },
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   }
+  },
+  {
+   "id": "work/fann-al-harb",
+   "kind": "work",
+   "title": {
+    "ar": "فن الحرب",
+    "en": "The Art of War"
+   },
+   "summary": {
+    "ar": "كتاب «فن الحرب» لسون تزو، كما يقدّمه طارق السويدان في دورة الإدارة العملية: أقدم كتاب باقٍ بين أيدي الناس في علم الإدارة، كتاب عسكري يعلّم القائد قواعد إدارة الجيش والتعامل مع الخصوم، وبُنيت عليه لاحقاً كتب في الإدارة منها «فن الحرب في مجال الأعمال».",
+    "en": "Sun Tzu's The Art of War, as presented in Tareq al-Suwaidan's Practical Administration course: the oldest surviving book on management — a military book teaching a commander the rules of running an army and handling opponents, on which later management books such as The Art of War in Business were built."
+   },
+   "href": "/work/fann-al-harb/",
+   "sources": [
+    "source/assabile-tareq-al-suwaidan"
+   ],
+   "status": "published",
+   "card": {
+    "id": "no-period|no-place",
+    "src": "media/time-browser/cards/card-no-period-no-place.svg"
+   }
+  },
+  {
+   "id": "work/one-minute-manager-meets-the-monkey",
+   "kind": "work",
+   "title": {
+    "ar": "المدير بدقيقة واحدة يلتقي القرد",
+    "en": "The One Minute Manager Meets the Monkey"
+   },
+   "summary": {
+    "ar": "كتاب مشترك لكين بلانشارد ووليم أونكن عن «قوانين القرود» في التفويض؛ يروي طارق السويدان أن دور النشر رفضت فكرة أونكن حتى كتب بلانشارد مقدمة الكتاب فانتشر واشتهر مؤلفه.",
+    "en": "Kenneth Blanchard and William Oncken's joint book on the 'monkey laws' of delegation; Tareq al-Suwaidan recounts that publishers rejected Oncken's idea until Blanchard wrote the book's foreword, after which it spread and made its author famous."
+   },
+   "href": "/work/one-minute-manager-meets-the-monkey/",
+   "sources": [
+    "source/assabile-tareq-al-suwaidan"
+   ],
+   "status": "published",
+   "card": {
+    "id": "no-period|no-place",
+    "src": "media/time-browser/cards/card-no-period-no-place.svg"
+   }
+  },
+  {
+   "id": "concept/mirath",
+   "kind": "concept",
+   "title": {
+    "ar": "الميراث",
+    "en": "Inheritance (mirath)"
+   },
+   "summary": {
+    "ar": "يحذّر الشيخ عمر عبد الكافي من حرمان وارث من ميراثه، ويقول إن من منع وارثا من إرثه منعه الله من إرثه في الجنة يوم القيامة (needs_source) {cite:assabile-omar-abdelkafy tafsir-al-quran-al-qareem/ep02 00:23:30}. ويذكّر بأن الله هو الذي حدّد الحدود وفرض الفرائض ووزّع المواريث، فليس للمرء أن يتدخل في توزيعها {cite:assabile-omar-abdelkafy tafsir-al-quran-al-qareem/ep02 00:23:30}.",
+    "en": "Sheikh Omar Abdelkafy warns against denying an heir his inheritance, and says that whoever keeps an heir from his inheritance will be kept by God from his own inheritance in Paradise on the Day of Resurrection (needs_source) {cite:assabile-omar-abdelkafy tafsir-al-quran-al-qareem/ep02 00:23:30}. He reminds listeners that God is the one who set the limits, laid down the obligatory shares and distributed the estates, so a person has no right to interfere in their distribution {cite:assabile-omar-abdelkafy tafsir-al-quran-al-qareem/ep02 00:23:30}."
+   },
+   "href": "/concept/mirath/",
+   "sources": [
+    "source/assabile-omar-abdelkafy"
+   ],
+   "status": "published",
+   "card": {
+    "id": "period/prophetic-era|no-place",
+    "src": "media/time-browser/cards/card-period-prophetic-era-no-place.svg"
+   }
+  },
+  {
+   "id": "concept/ihsan",
+   "kind": "concept",
+   "title": {
+    "ar": "الإحسان",
+    "en": "Ihsan (excellence in worship)"
+   },
+   "summary": {
+    "ar": "المرتبة الثالثة في حديث جبريل بعد الإسلام والإيمان، وقد عرّفها النبي بأن يعبد الإنسان الله كأنه يراه، فإن لم يكن يراه فإنه يراه. ويبسط ابن رجب في شرح حديث شداد بن أوس «إن الله كتب الإحسان على كل شيء» معناها من مقام المراقبة في العبادة إلى حكم مكتوب على كل شيء يصل إلى إحسان القتلة والذبحة {cite:ibn-rajab-jami-ulum-hikam p.361-363}، ويبين أن لفظ الكتابة يقتضي الوجوب عند أكثر الفقهاء والأصوليين {cite:ibn-rajab-jami-ulum-hikam p.361}. وورد التعريف في حديث جبريل في صحيح البخاري {cite:sahih-al-bukhari 50}",
+    "en": "The third level named in the hadith of Jibril after islam and iman, defined by the Prophet as worshipping God as though you see Him, for even if you do not see Him, He sees you. In his commentary on Shaddad ibn Aws's hadith 'God has prescribed ihsan upon everything' Ibn Rajab extends it from the station of watchful worship to a ruling written upon all things — reaching excellence even in execution and slaughter — noting that the wording of 'writing' entails obligation for most jurists and usul scholars."
+   },
+   "href": "/concept/ihsan/",
+   "sources": [
+    "source/sahih-al-bukhari",
+    "source/tanzil-quran",
+    "source/ibn-rajab-jami-ulum-hikam"
+   ],
+   "status": "published",
+   "card": {
+    "id": "period/prophetic-era|no-place",
+    "src": "media/time-browser/cards/card-period-prophetic-era-no-place.svg"
+   }
+  },
+  {
+   "id": "object/al-hajar-al-aswad",
+   "kind": "object",
+   "title": {
+    "ar": "الحجر الأسود",
+    "en": "The Black Stone"
+   },
+   "summary": {
+    "ar": "الحجر الأسود المرصّع في الركن الشرقي للكعبة؛ تستلمه الطائفة ابتداءً للطواف، وسرقه القرامطة سنين وأعيد سنة 339هـ.",
+    "en": "The Black Stone set in the eastern corner of the Kaaba; pilgrims touch it to open the tawaf, stolen by the Qarmatians and returned in 339 AH."
+   },
+   "href": "/object/al-hajar-al-aswad/",
+   "sources": [
+    "source/wikidata"
+   ],
+   "status": "draft",
+   "image": {
+    "id": "media/photo-al-hajar-al-aswad",
+    "src": "https://upload.wikimedia.org/wikipedia/commons/f/f3/The_Blackstone.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "alt": {
+     "ar": "صورة القطعة «الحجر الأسود» من ويكيميديا كومنز",
+     "en": "Photograph of The Black Stone from Wikimedia Commons",
+     "ur": "ویکیمیڈیا کامنز سے «Photo: The Black Stone» کی تصویر"
+    },
+    "licence": "CC-BY-SA",
+    "credit": "Museum photo"
+   }
+  },
+  {
+   "id": "object/manat",
+   "kind": "object",
+   "title": {
+    "ar": "مناة",
+    "en": "Manāt"
+   },
+   "summary": {
+    "ar": "منصوب على شاطئ البحر في حي قديد بين مكة والمدينة يعظمه الأوس والخزرج وأهل يثرب.",
+    "en": "Manāt — a pre-Islamic Arabian idol."
+   },
+   "href": "/object/manat/",
+   "sources": [
+    "source/mubarakpuri-raheeq",
+    "source/akhbar-makka-al-azraqi",
+    "source/mukhtasar-sirat-al-rasul"
+   ],
+   "status": "draft",
+   "card": {
+    "id": "no-period|place/qudayd",
+    "src": "media/time-browser/cards/card-no-period-place-qudayd.svg"
+   }
+  },
+  {
+   "id": "object/al-lat",
+   "kind": "object",
+   "title": {
+    "ar": "اللات",
+    "en": "al-Lāt"
+   },
+   "summary": {
+    "ar": "صنم من صخر أبيض منحوت فوقه بناء له ستر بالطائف يعظمه ثقيف وأهلها.",
+    "en": "al-Lāt — a pre-Islamic Arabian idol."
+   },
+   "href": "/object/al-lat/",
+   "sources": [
+    "source/mubarakpuri-raheeq",
+    "source/akhbar-makka-al-azraqi",
+    "source/mukhtasar-sirat-al-rasul"
+   ],
+   "status": "draft",
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   },
+   "card": {
+    "id": "no-period|place/taif",
+    "src": "media/time-browser/cards/card-no-period-place-taif.svg"
+   }
+  },
+  {
+   "id": "building/amud-al-sawari",
+   "kind": "building",
+   "title": {
+    "ar": "عمود الصواري",
+    "en": "Amud al-Sawari (Pompey's Pillar)"
+   },
+   "summary": {
+    "ar": "عمود مرتفع في الهواء بظاهر الإسكندرية، تحته قاعدة وفوقه قاعدة؛ يقال إنه لا نظير له من العمد في علوه ولا في استدارته، وتُحكى عنه حكايات مسطورة ومستفيضة على الألسنة {cite:umari-masalik-1924 p. 240}.",
+    "en": "The lofty column outside Alexandria, a base beneath it and a base above, said to have no equal among columns for height or roundness; tales about it are written in books and current on every tongue {cite:umari-masalik-1924 p. 240}."
+   },
+   "href": "/building/amud-al-sawari/",
+   "sources": [
+    "source/umari-masalik-1924",
+    "source/khitat-maqrizi-1998"
+   ],
+   "status": "published",
+   "card": {
+    "id": "no-period|place/iskandariyya",
+    "src": "media/time-browser/cards/card-no-period-place-iskandariyya.svg"
+   }
+  },
+  {
+   "id": "building/dar-al-anmat",
+   "kind": "building",
+   "title": {
+    "ar": "دار الأنماط",
+    "en": "Dar al-Anmat"
+   },
+   "summary": {
+    "ar": "دار بفسطاط مصر كانت تُباع فيها قماش النساء وفاخر اللباس والأمتعة يُجلب إليها من كل أرض، ويجلس على حوانيتها أهل الفراغ واللهو؛ عدّها ابن فضل الله العمري من عجائب المباني وغرائب الآثار {cite:umari-masalik-1924 p. 234}.",
+    "en": "A Fustat emporium where women's fabrics and luxury dress were sold, drawn from every land, its benches sat by the leisured and the pleasure-seekers — counted by al-Umari among the marvels of building {cite:umari-masalik-1924 p. 234}."
+   },
+   "href": "/building/dar-al-anmat/",
+   "sources": [
+    "source/umari-masalik-1924",
+    "source/khitat-maqrizi-1998"
+   ],
+   "status": "published",
+   "card": {
+    "id": "period/crusades-ayyubid-mamluk|place/al-fustat",
+    "src": "media/time-browser/cards/card-period-crusades-ayyubid-mamluk-place-al-fustat.svg"
+   }
+  },
+  {
+   "id": "practice/salah",
+   "kind": "practice",
+   "title": {
+    "ar": "الصلاة",
+    "en": "Salah (the prescribed prayer)"
+   },
+   "summary": {
+    "ar": "الصلاة المفروضة خمس مرات في اليوم والليلة، وهي من أركان الإسلام الخمسة؛ ورد الأمر بإقامتها في القرآن وبأنها كتاب موقوت على المؤمنين، وفي الحديث أن ما عداها من الصلوات تطوع.",
+    "en": "The prescribed prayer, five times in the day and night, one of the five pillars of Islam; the Qur'an commands establishing it and calls it a timed obligation on the believers, and the hadith adds that other prayers are voluntary."
+   },
+   "href": "/practice/salah/",
+   "sources": [
+    "source/sahih-ibn-khuzayma",
+    "source/tanzil-quran",
+    "source/assabile-omar-abdelkafy"
+   ],
+   "status": "published",
+   "card": {
+    "id": "period/prophetic-era|no-place",
+    "src": "media/time-browser/cards/card-period-prophetic-era-no-place.svg"
+   }
+  },
+  {
+   "id": "group/banu-saida",
+   "kind": "group",
+   "title": {
+    "ar": "بنو ساعدة",
+    "en": "Banu Sa'ida"
+   },
+   "summary": {
+    "ar": "بطن من الخزرج، بنو ساعدة بن كعب بن الخزرج الأكبر، أصحاب السقيفة المشهورة؛ تفرقوا في أربع منازل بالمدينة: بنو الحارث وبنو ثعلبة بين السوق وبني ضمرة شرقي السوق مما يلي الشام، وقرية عند بئر بضاعة وسط بيوتهم، وبنو أبي خزيمة — رهط سعد بن عبادة — بجرار سعد حيث تقع سقيفتهم في ترجيح السمهودي، وبنو وقش وبنو عنان بدار «بني طريف» بين الماضة وجرار سعد. ابتنوا أطم «معرث» وهو آخر أطم بُني بالمدينة — قدم النبي وهم يبنونه فاستأذنوه في إتمامه فأذن لهم {cite:samhudi-wafa-al-wafa p. 220-222}. وهم الرابعة في دور الأنصار في فضل الصحيح {cite:sahih-al-bukhari 3807}.",
+    "en": "A clan of the Khazraj, Banu Sa'ida ibn Ka'b, owners of the famous saqifa; they settled in four Medinan quarters: Banu al-Harith and Banu Tha'laba between the market and Banu Damra; a village around Bi'r Buda'a; Banu Abi Khazima — Sa'd ibn Ubada's sept — at Jirar Sa'd, where al-Samhudi places their saqifa; and Banu Waqf and Banu Annan in the 'Banu Tarif' quarter. They built the utm 'Mu'rith', the last tower built in Medina — the Prophet arrived while they were building it and gave them leave to finish {cite:samhudi-wafa-al-wafa p. 220-222}."
+   },
+   "href": "/group/banu-saida/",
+   "sources": [
+    "source/samhudi-wafa-al-wafa",
+    "source/sahih-al-bukhari"
+   ],
+   "status": "draft",
+   "image": {
+    "id": "media/illus-event-battle-of-the-trench",
+    "alt": {
+     "en": "A long shallow ditch across a desert plain north of a palm oasis at sunrise; no people. The scene is illustrative and does not show the ditch's exact line.",
+     "ar": "خندق طويل ضحل يمتد عبر سهل صحراوي شمال واحة نخل عند الشروق؛ بلا أشخاص. المشهد تصويري ولا يدل على مواضع الخندق.",
+     "ur": "صحرائی میدان میں طلوعِ آفتاب کے وقت کھجور کے نخلستان کے شمال میں ایک لمبی اور اتھلی خندق؛ کوئی لوگ نہیں۔ منظر تصویری ہے اور خندق کی ٹھیک لکیر نہیں دکھاتا۔"
+    },
+    "licence": "CC0",
+    "credit": "islam.museum"
+   },
+   "map": {
+    "id": "cluster-isfahan",
+    "src": "media/time-browser/maps/cluster-isfahan.svg"
+   }
+  },
+  {
+   "id": "exhibit/path-fatimid-cairo",
+   "kind": "exhibit",
+   "title": {
+    "ar": "القاهرة الفاطمية",
+    "en": "Fatimid Cairo"
+   },
+   "summary": {
+    "ar": "مسار في دولة الفاطميين: جوهر يدخل مصر ويبني القاهرة، والمعز ينزل بقصره فيها، والجامع الأزهر والحاكم، ثم الأيوبيون.",
+    "en": "A trail through the Fatimid state; Jawhar enters Egypt and lays out Cairo, al-Mu'izz lodges in his palace there, then al-Azhar, al-Hakim and the Ayyubids."
+   },
+   "href": "/exhibit/path-fatimid-cairo/",
+   "sources": [
+    "source/khitat-maqrizi-1998",
+    "source/wikidata"
+   ],
+   "status": "published",
+   "card": {
+    "id": "no-period|no-place",
+    "src": "media/time-browser/cards/card-no-period-no-place.svg"
+   }
+  }
+ ]
+}
