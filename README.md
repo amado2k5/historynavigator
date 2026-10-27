@@ -1,29 +1,43 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# History Navigator — Islam Museum Time Browser client
 
-# Run and deploy your AI Studio app
+A clean, static, **AI-free** client for the Islam Museum Time Browser. It reads prepared
+JSON records from `https://islam.museum/time-browser-data/<lang>/index.json` and shows them
+on a timeline. There is no model call, no generation, no voice, no video and no telemetry —
+the earlier AI-Studio code (Gemini, voice, telemetry, AI prompt modal, AI image calls) was
+removed, not flagged off.
 
-This contains everything you need to run your app locally and deploy it.
+Record shape and data URL: `time-browser-plan/DESIGN.md` §2–§3 in `amado2k5/islam-museum`.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1Sn4u0pgk47YCApZCWtMc_bLtV_TCtTKg
+## Stack
 
-## Run Locally
+- React 19, Vite 8, TypeScript 5.9 (typescript-eslint caps TS at <6.1 today)
+- Tailwind CSS 4 via `@tailwindcss/vite`
+- Vitest + Testing Library, ESLint 10 flat config
 
-**Prerequisites:** Node.js
+## Run
 
-1.  Install dependencies:
-    `npm install`
-2.  Create a `.env.local` file in the root of your project.
-3.  Add your Gemini API key to the `.env.local` file:
-    `GEMINI_API_KEY=YOUR_GEMINI_API_KEY`
-4.  Run the app:
-    `npm run dev`
+```sh
+npm install
+npm run dev        # opens the client; if the real feed is not live yet it falls back to
+                   # /time-browser-data/<lang>/index.json then /sample/index.json
+npm test           # vitest
+npm run lint
+npm run build      # tsc -b && vite build
+```
 
-## Deployment
+## Layout (DESIGN §1)
 
-When deploying this application to a cloud service (like Google Cloud Run, Vercel, Netlify, etc.), you **must** configure the same environment variable in that service's settings. The application will not work without it.
+- Full viewport, no page scroll; only panels scroll.
+- Phone: bottom timeline strip + bottom sheet. Tablet/desktop: timeline across the bottom,
+  detail panel on the side.
+- Keyboard: arrows (RTL-aware), Home/End move between stops.
+- Languages: العربية / English / اردو. RTL is set on the document.
+- Deep links: `#<kind>/<slug>`.
 
--   **`GEMINI_API_KEY`**: Your API key for the Gemini API.
+## Data
 
-Go to your deployment provider's project settings (look for a section on "Environment Variables" or "Secrets") and add the variable above with its corresponding value. This is a critical step for the deployed application to function correctly.
+- `index.json` per language under `DATA_BASE` (`src/services/data.ts`, one constant).
+- The client normalizes the TB1 index shape (`{base, topics}`) onto the UI record.
+- Stops with no real image show their prepared SVG card or cluster map; media paths resolve
+  against the origin that served `index.json`.
+- Draft records show a visible "draft" label.
