@@ -37,6 +37,7 @@ function normalize(ix: TimeBrowserIndex | RawTBIndex): TimeBrowserIndex {
     image: r.image,
     map: r.map,
     card: r.card,
+    // TB1 `derived` flag is informational for now — the strip already shows the date.
     kids: r.kids?.length ? { en: r.kids.join('\n') } : undefined,
     perspectives: r.perspectives,
   }));
