@@ -82,6 +82,9 @@ export interface RawTBRecord {
   sources: string[];
   draft: boolean;
   kids: string[];
+  /** TB1 derived-position flag (D9/D11): true when the timelineKey came from a
+   * linked period rather than the record's own or a founded date. */
+  derived?: boolean;
   image?: { id: string; src: string; alt: Localized; credit?: string; licence?: string };
   map?: { id: string; src: string; alt?: Localized };
   card?: { id: string; src: string };
