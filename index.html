@@ -1,77 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TimelineThis</title>
-    <base href="/" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;700&family=Noto+Serif+JP:wght@400;700&family=Orbitron:wght@400;700&family=Fredoka+One&display=swap" rel="stylesheet">
-    <style>
-      :root {
-        /* Default theme. Will be dynamically overridden. */
-        --color-background: #0a0f1f;
-        --color-background-light: #1e293b;
-        --color-foreground: #e2e8f0;
-        --color-primary: #475569;
-        --color-secondary: #94a3b8;
-        --color-accent: #f59e0b;
-        --font-heading: 'Cinzel', serif;
-        --font-body: 'Inter', sans-serif;
-      }
-      html {
-        /* Add a transition for smooth theme changes */
-        transition: background-color 0.5s ease, color 0.5s ease;
-      }
-      body {
-        font-family: var(--font-body);
-        background-color: var(--color-background);
-        color: var(--color-foreground);
-        transition: font-family 0.5s ease;
-      }
-      .font-heading {
-        font-family: var(--font-heading);
-      }
-      @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      .animate-fade-in {
-        animation: fadeIn 0.5s ease-out forwards;
-      }
-      @keyframes pulse {
-        0%, 100% {
-          transform: scale(1);
-          opacity: 0.9;
-        }
-        50% {
-          transform: scale(1.3);
-          opacity: 1;
-        }
-      }
-      .animate-pulse-hotspot {
-        animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.1.1/",
-    "react": "https://aistudiocdn.com/react@^19.1.1",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.20.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.0.3",
-    "vite": "https://aistudiocdn.com/vite@^7.1.6",
-    "path": "https://aistudiocdn.com/path@^0.12.7"
-  }
-}
-</script>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Time Browser — Islam Museum</title>
+    <meta name="description" content="Browse the Islam Museum knowledge graph on a timeline. Static client, no AI." />
+  </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
