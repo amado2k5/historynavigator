@@ -1,0 +1,72 @@
+[
+ {
+  "slug": "person-mehmed-ii-birth",
+  "subject": "person/mehmed-ii",
+  "node": "person/mehmed-ii#birth",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: the town of the birthplace around 1431 CE. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: the town of the birthplace around 1431 CE. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-conquest-constantinople-857",
+  "subject": "person/mehmed-ii",
+  "node": "event/conquest-constantinople-857",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Conquest of Constantinople in 857 AH\", in Constantinople, around 1453 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Conquest of Constantinople in 857 AH\", in Constantinople, around 1453 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-siege-of-belgrade-1456",
+  "subject": "person/mehmed-ii",
+  "node": "event/siege-of-belgrade-1456",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Siege of Belgrade\", in Belgrade, around 1455 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Siege of Belgrade\", in Belgrade, around 1455 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-conquest-of-trebizond-1461",
+  "subject": "person/mehmed-ii",
+  "node": "event/conquest-of-trebizond-1461",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Conquest of Trebizond\", in Ṭrābazanda, around 1461 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Conquest of Trebizond\", in Ṭrābazanda, around 1461 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-siege-of-negroponte-1470",
+  "subject": "person/mehmed-ii",
+  "node": "event/siege-of-negroponte-1470",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Siege of Negroponte\", in Negroponte, around 1470 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Siege of Negroponte\", in Negroponte, around 1470 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-siege-of-shkodra-1474",
+  "subject": "person/mehmed-ii",
+  "node": "event/siege-of-shkodra-1474",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Siege of Shkodra\", in Shkodra, around 1474 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Siege of Shkodra\", in Shkodra, around 1474 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-siege-of-theodoro-1475",
+  "subject": "person/mehmed-ii",
+  "node": "event/siege-of-theodoro-1475",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Siege of Theodoro\", in Theodoro, around 1475 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Siege of Theodoro\", in Theodoro, around 1475 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-ottoman-invasion-of-otranto-1480",
+  "subject": "person/mehmed-ii",
+  "node": "event/ottoman-invasion-of-otranto-1480",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Ottoman invasion of Otranto\", in Otranto, around 1479 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Ottoman invasion of Otranto\", in Otranto, around 1479 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-siege-of-rhodes-1480",
+  "subject": "person/mehmed-ii",
+  "node": "event/siege-of-rhodes-1480",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Siege of Rhodes\", in Rhodes, around 1479 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Siege of Rhodes\", in Rhodes, around 1479 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "person-mehmed-ii-death",
+  "subject": "person/mehmed-ii",
+  "node": "person/mehmed-ii#death",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: Istanbul around 1481 CE, quiet and calm. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: Istanbul around 1481 CE, quiet and calm. No people, no faces, no human figures, no text, no letters, no modern objects."
+ }
+]

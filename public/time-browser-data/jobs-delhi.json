@@ -1,0 +1,65 @@
+[
+ {
+  "slug": "event-timur-delhi-801",
+  "subject": "place/delhi",
+  "node": "event/timur-delhi-801",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Timur Takes Delhi in 801 AH\", in Delhi, around 1398 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Timur Takes Delhi in 801 AH\", in Delhi, around 1398 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-battle-of-panipat-932",
+  "subject": "place/delhi",
+  "node": "event/battle-of-panipat-932",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"First Battle of Panipat\", in Panipat, around 1525 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"First Battle of Panipat\", in Panipat, around 1525 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-humayun-returns-to-delhi-962",
+  "subject": "place/delhi",
+  "node": "event/humayun-returns-to-delhi-962",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Humayun returns to Delhi, 962 AH\", in Delhi, around 1554 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Humayun returns to Delhi, 962 AH\", in Delhi, around 1554 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-founding-of-shahjahanabad-1638",
+  "subject": "place/delhi",
+  "node": "event/founding-of-shahjahanabad-1638",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Founding of Shahjahanabad\", in Delhi, around 1638 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Founding of Shahjahanabad\", in Delhi, around 1638 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-red-fort-inaugurated-1648",
+  "subject": "place/delhi",
+  "node": "event/red-fort-inaugurated-1648",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Inauguration of the Red Fort, Delhi\", in Delhi, around 1648 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Inauguration of the Red Fort, Delhi\", in Delhi, around 1648 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-jama-masjid-delhi-completed-1656",
+  "subject": "place/delhi",
+  "node": "event/jama-masjid-delhi-completed-1656",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Completion of the Jama Masjid of Delhi\", in Delhi, around 1656 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Completion of the Jama Masjid of Delhi\", in Delhi, around 1656 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-aurangzeb-coronation-delhi-1659",
+  "subject": "place/delhi",
+  "node": "event/aurangzeb-coronation-delhi-1659",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Coronation of Aurangzeb at Delhi\", in Delhi, around 1659 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Coronation of Aurangzeb at Delhi\", in Delhi, around 1659 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-nadir-shah-sack-of-delhi-1739",
+  "subject": "place/delhi",
+  "node": "event/nadir-shah-sack-of-delhi-1739",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Nadir Shah sacks Delhi\", in Delhi, around 1739 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Nadir Shah sacks Delhi\", in Delhi, around 1739 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-siege-of-delhi-1857",
+  "subject": "place/delhi",
+  "node": "event/siege-of-delhi-1857",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Siege of Delhi\", in Delhi, around 1857 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Siege of Delhi\", in Delhi, around 1857 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ }
+]
