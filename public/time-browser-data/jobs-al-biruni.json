@@ -1,0 +1,51 @@
+[
+ {
+  "slug": "person-al-biruni-muhammad-ibn-ahmad-birth",
+  "subject": "person/al-biruni-muhammad-ibn-ahmad",
+  "node": "person/al-biruni-muhammad-ibn-ahmad#birth",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: the town of Kath around 973 CE. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: the town of Kath around 973 CE. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-al-biruni-flees-to-bukhara",
+  "subject": "person/al-biruni-muhammad-ibn-ahmad",
+  "node": "event/al-biruni-flees-to-bukhara",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Al-Biruni takes refuge at Bukhara\", in Bukhara, around 997 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Al-Biruni takes refuge at Bukhara\", in Bukhara, around 997 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-al-biruni-at-qabus-court-gurgan",
+  "subject": "person/al-biruni-muhammad-ibn-ahmad",
+  "node": "event/al-biruni-at-qabus-court-gurgan",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Al-Biruni at Qābūs's court, Gurgān\", in Jurjan, around 1000 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Al-Biruni at Qābūs's court, Gurgān\", in Jurjan, around 1000 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-mahmud-summons-al-biruni-to-ghazna",
+  "subject": "person/al-biruni-muhammad-ibn-ahmad",
+  "node": "event/mahmud-summons-al-biruni-to-ghazna",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"Maḥmūd takes al-Bīrūnī to Ghazna\", in Ghazna, around 1017 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"Maḥmūd takes al-Bīrūnī to Ghazna\", in Ghazna, around 1017 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-qanun-al-masudi-dedicated",
+  "subject": "person/al-biruni-muhammad-ibn-ahmad",
+  "node": "event/qanun-al-masudi-dedicated",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"The Masʿūdic Canon dedicated\", in Ghazna, around 1029 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"The Masʿūdic Canon dedicated\", in Ghazna, around 1029 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "event-tahqiq-ma-lil-hind-composed",
+  "subject": "person/al-biruni-muhammad-ibn-ahmad",
+  "node": "event/tahqiq-ma-lil-hind-composed",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: a historical setting evocative of \"The book on India composed\", in Ghazna, around 1029 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: a historical setting evocative of \"The book on India composed\", in Ghazna, around 1029 CE, architecture and landscape only. No people, no faces, no human figures, no text, no letters, no modern objects."
+ },
+ {
+  "slug": "person-al-biruni-muhammad-ibn-ahmad-death",
+  "subject": "person/al-biruni-muhammad-ibn-ahmad",
+  "node": "person/al-biruni-muhammad-ibn-ahmad#death",
+  "prompt": "Painted museum illustration, cinematic soft light, muted historical palette, wide landscape view: Ghazna around 1051 CE, quiet and calm. No people, no faces, no human figures, no text, no letters, no modern objects.",
+  "kidsPrompt": "Bright friendly picture-book illustration for children, simple shapes, warm cheerful colours, wide view: Ghazna around 1051 CE, quiet and calm. No people, no faces, no human figures, no text, no letters, no modern objects."
+ }
+]
