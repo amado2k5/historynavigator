@@ -55,6 +55,7 @@ export interface TimeBrowserRecord {
   map?: StopMap;
   card?: { id: string; src: string };
   kids?: Localized;
+  related?: string[];
   perspectives?: Perspective[];
   /** 'draft' records render with a visible label (DESIGN §1) */
   status?: 'draft' | 'published' | 'reviewed' | 'verified';
@@ -81,7 +82,13 @@ export interface RawTBRecord {
   href: string; // "/<lang>/<class>/<slug>/"
   sources: string[];
   draft: boolean;
-  kids: string[];
+  /** TB1 post-#2433: kids-mode text per lang (empty while content is written). */
+  kids?: Partial<Record<Lang, string>> | null;
+  /** TB1 post-#2433: related stop ids (graph edges). */
+  related?: string[];
+  /** TB1 derived-position flag (D9/D11): true when the timelineKey came from a
+   * linked period rather than the record's own or a founded date. */
+  derived?: boolean;
   image?: { id: string; src: string; alt: Localized; credit?: string; licence?: string };
   map?: { id: string; src: string; alt?: Localized };
   card?: { id: string; src: string };

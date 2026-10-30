@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/i18n.ts","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/components/detailpanel.tsx","./src/components/header.tsx","./src/components/stopmedia.tsx","./src/components/timelinestrip.test.tsx","./src/components/timelinestrip.tsx","./src/services/data.test.ts","./src/services/data.ts","./src/test/setup.ts"],"version":"5.9.3"}
